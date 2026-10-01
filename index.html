@@ -8,20 +8,13 @@
 <style>
 /* Layout: cabeçalho fixo com abas por minicaso; cada minicaso é uma trilha de passos (explicação → controle → diagnóstico), com um painel de conceitos ao lado. */
 :root{
+  color-scheme:light;
   --bg:#f6f4ef; --surface:#ffffff; --fg:#17202b; --muted:#5b6672; --line:#d9d6cf;
   --navy:#0b2545; --navy-ink:#ffffff; --terra:#b5462b; --terra-tint:#fbf0ea; --navy-tint:#e9eef5;
   --good:#1f6f43; --good-tint:#e6f3ea; --bad:#a3302a; --bad-tint:#fbe9e7; --warn:#8a5a00; --warn-tint:#fff3d6;
   --display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --ui:"Source Sans 3", "Segoe UI", Helvetica, Arial, sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#14181e; --surface:#1d232b; --fg:#ebe9e3; --muted:#a3acb6; --line:#333b45;
-  --navy:#9db8dc; --navy-ink:#0b1320; --terra:#e3876b; --terra-tint:#2d211c; --navy-tint:#1f2a3a;
-  --good:#6cc48e; --good-tint:#16281d; --bad:#f08a80; --bad-tint:#331b19; --warn:#f0c060; --warn-tint:#33290f; color-scheme:dark } }
-:root[data-theme="dark"]{
-  --bg:#14181e; --surface:#1d232b; --fg:#ebe9e3; --muted:#a3acb6; --line:#333b45;
-  --navy:#9db8dc; --navy-ink:#0b1320; --terra:#e3876b; --terra-tint:#2d211c; --navy-tint:#1f2a3a;
-  --good:#6cc48e; --good-tint:#16281d; --bad:#f08a80; --bad-tint:#331b19; --warn:#f0c060; --warn-tint:#33290f; color-scheme:dark }
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-size:16px;line-height:1.5}
@@ -207,6 +200,24 @@ details.reader summary{cursor:pointer;font-weight:700;color:var(--navy)}
 .mco .mcl{flex:0 0 24px;height:24px;border-radius:50%;background:var(--navy-tint);color:var(--navy);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
 .mco.good{border-color:var(--good);box-shadow:inset 4px 0 0 var(--good)} .mco.good .mcl{background:var(--good);color:#fff}
 .mco.bad{border-color:var(--warn);box-shadow:inset 4px 0 0 var(--warn)} .mco.bad .mcl{background:var(--warn);color:#fff}
+.fio{display:flex;gap:10px;align-items:flex-start;background:#fff8e6;border:1px solid #f0d58a;border-radius:6px;padding:10px 14px;margin:0 0 12px;font-size:14px;color:var(--fg)}
+.fio .fl{flex:0 0 auto;font:700 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--warn);padding-top:2px}
+.dados{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:4px;padding:10px 14px;margin:0 0 12px}
+.dados .pl{font:700 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--navy);margin-bottom:4px}
+.dados dl{display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:3px 12px;margin:0;font-size:14px}
+.dados dt{color:var(--muted);font-weight:600}.dados dd{margin:0}
+@media (max-width:560px){.dados dl{grid-template-columns:1fr}}
+ul.bl{margin:0;padding-left:18px;display:grid;gap:5px}
+ul.bl li{font-size:15px;line-height:1.45}
+details.calcw{margin:12px 0;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+details.calcw summary{cursor:pointer;padding:10px 14px;font:700 12px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--navy);list-style:none}
+details.calcw summary::-webkit-details-marker{display:none}
+details.calcw summary::after{content:"ocultar";float:right;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+details.calcw:not([open]) summary::after{content:"mostrar"}
+table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res{font-weight:700;color:var(--navy);white-space:nowrap}
+.diag{font-size:15px}
+.mcq{font-family:var(--display);font-size:17px;margin:0 0 8px}
+.mcb{margin-top:14px}
 </style>
 </head>
 <body>
@@ -232,6 +243,29 @@ function Phi(z){const t=1/(1+0.2316419*Math.abs(z));const d=0.3989423*Math.exp(-
 
 // ============ definição dos minicasos ============
 const CASES=[];
+const FIO={
+ vitta:["Até aqui: a decisão (aceitar ou não o giro 2,0) e a aposta do grupo. Agora: a primeira conta, o retorno de cada empresa, para ver se o benchmark de Marcos faz sentido.",
+        "Até aqui: a Vitta rende 17,6% e a DistriMax, 16%; o giro baixo vem das fábricas. Agora: o que o cliente paga para ter, para saber se os 110 dias de estoque são desperdício ou promessa.",
+        "Até aqui: o estoque é o custo da promessa (produto 5, acesso 4). Agora: o plano de Marcos, frente a frente, para separar o que cria valor do que destrói."],
+ autopar:["Até aqui: a meta de −25% e a proposta de Carla. Agora: converter os 90 dias em reais e descobrir de quem é cada espera.",
+        "Até aqui: R$ 180 mi em quatro esperas, e só a reserva está nas mãos de Carla. Agora: o que a proposta dela libera e o que ela faz com a promessa de 98%.",
+        "Até aqui: cortar a reserva libera R$ 25 mi e derruba a disponibilidade. Agora: a alternativa pelas esperas sem função, ciclo e obsoleto."],
+ bompreco:["Até aqui: três propostas que liberam os mesmos R$ 90 mi. Agora: separar o que muda o desenho do que muda só quem paga.",
+        "Até aqui: só a reposição automática faz a mercadoria esperar menos. Agora: quanto cada opção rende por ano, depois de pagar quem carrega a espera.",
+        "Até aqui: A perde 7,2 por ano, B ganha 7,8, C ganha 0,9. Agora: em que condição A deixaria de ser ruim, e por que o São Bento não é essa condição."],
+ embalagens:["Até aqui: dois projetos em unidades diferentes, R$ por ano contra R$ de uma vez. Agora: a régua, para pô-los na mesma unidade.",
+        "Até aqui: B vale 25 e A vale 13. Agora: por que o payback, a métrica de Ricardo, não enxerga B.",
+        "Até aqui: o payback não vê capital liberado. Agora: quanto o S&OP precisa liberar de fato para B continuar valendo mais."],
+ vida:["Até aqui: lucro recorde e um plano de mais 120 lojas. Agora: o que cresceu mais, e onde o capital novo foi parar.",
+        "Até aqui: o capital cresceu 80%, mais que receita e lucro. Agora: o retorno médio, que é o número que Rogério vai usar.",
+        "Até aqui: a média (16,7%) ainda está acima de 12%, mas caiu. Agora: o retorno do capital novo, que é a pergunta de Beatriz."]};
+const FIO2={contra:'Até aqui: as três perguntas interpretadas. Agora: a interpretação precisa sobreviver a quem discorda.',nota:'Até aqui: a objeção respondida. Agora: fechar a decisão em quatro escolhas.',apres:'Até aqui: a decisão fechada. Agora: a parte que a ferramenta não faz: contar a decisão como uma ponte entre operação e finanças.'};
+function fio(t){return el('div',{class:'fio'},el('span',{class:'fl'},'Fio'),el('span',{},t))}
+function dados(rows){return el('div',{class:'dados'},el('div',{class:'pl'},'Dados do caso usados aqui'),el('dl',{},...rows.flatMap(([k,v])=>[el('dt',{},k),el('dd',{},v)])))}
+function bl(items){return el('ul',{class:'bl'},...items.map(t=>el('li',{},t)))}
+function calcBox(title,rows){const tb=el('table',{class:'calc'});tb.append(el('tr',{},el('th',{},'O quê'),el('th',{},'Como se calcula'),el('th',{class:'num'},'Resultado')));rows.forEach(([a,b,c])=>tb.append(el('tr',{},el('td',{},a),el('td',{class:'how'},b),el('td',{class:'num res'},c))));return el('details',{class:'calcw',open:''},el('summary',{},title),el('div',{class:'tscroll'},tb))}
+
+
 const GRUPO={vitta:1,autopar:null,bompreco:2,embalagens:3,vida:4};
 const gl=c=>GRUPO[c.id]?'Grupo '+GRUPO[c.id]:'Plenária';
 
@@ -239,7 +273,7 @@ const gl=c=>GRUPO[c.id]?'Grupo '+GRUPO[c.id]:'Plenária';
 const home={id:'home',tab:'Início',render(root){
   root.append(el('div',{class:'home'},
     el('div',{class:'casehead'},el('h2',{},'Cinco empresas, cinco decisões'),
-      el('p',{class:'lead'},'Cada minicaso é uma trilha: a aposta do grupo, as contas, o contra-argumento de quem discorda e, no fim, uma nota executiva ao Conselho. Em cada passo vocês leem o conceito, mexem nos números e veem o diagnóstico mudar. A pergunta de fundo é sempre a mesma: que decisão de operação muda qual número de finanças, e quanto isso vale?')),
+      el('p',{class:'lead'},'Cada minicaso é uma trilha de sete passos: o problema, as três perguntas do caso, o contra-argumento, a decisão e a apresentação. As contas a ferramenta faz na sua frente; o que ela pede do grupo é interpretar os números e contar a decisão como uma ponte entre operação e finanças.')),
     el('div',{class:'cards'},...CASES.slice(1).map((c,i)=>el('button',{class:'card',onclick:()=>go(i+1)},el('div',{class:'n'},'MINICASO '+(i+1)+' · '+gl(c).toUpperCase()),el('h3',{},c.empresa),el('p',{},c.tema)))),
     el('div',{class:'howto'},el('strong',{},'Como usar na salinha'),
       el('ol',{},el('li',{},'Leiam o minicaso impresso primeiro. A ferramenta não substitui a leitura; ela ajuda a fazer e a entender as contas.'),
@@ -247,14 +281,355 @@ const home={id:'home',tab:'Início',render(root){
         el('li',{},'Abram o minicaso do grupo. Os passos seguem as perguntas do enunciado. Cada passo libera o seguinte.'),
         el('li',{},'Mexam nos controles. O diagnóstico muda na hora, e é assim que vocês testam a premissa: o que precisa ser verdade para a recomendação se inverter?'),
         el('li',{},'O painel Conceitos, ao lado, traz a teoria do ponto de aprendizagem. Use quando travar.'),
-        el('li',{},'Cada minicaso tem quatro fases: o problema (o que está em jogo e quem pensa o quê), a análise (as três perguntas do caso, com tutoria), as possibilidades (o mapa das opções e o contra-argumento) e a decisão (quatro escolhas e uma frase do grupo).'),
-        el('li',{},'As perguntas do caso ficam sempre visíveis ao lado. Em cada pergunta, peçam as dicas uma de cada vez, escrevam a conclusão do grupo e só então comparem com o raciocínio do professor.'),
+        el('li',{},'Cada minicaso tem quatro fases: o problema (o que está em jogo, quem pensa o quê e a aposta do grupo), a análise (as três perguntas do caso: mexam nos números, vejam a conta e escolham a interpretação), a decisão (o contra-argumento e quatro escolhas) e a apresentação (a ponte entre operação e finanças, com as palavras do grupo).'),
+        el('li',{},'Toda pergunta é de múltipla escolha, e o comentário do professor aparece ao marcar. O valor do trabalho está na interpretação e na apresentação: é nelas que a sala vai julgar o grupo.'),
         el('li',{},'Na apresentação, o grupo conta o caso e a decisão como uma ponte entre operação e finanças, em quatro elos: operação, capital e margem, indicador, valor. O passo “A apresentação” monta as telas, e o botão “Apresentar em tela cheia” as projeta.'),
         el('li',{},'Para entregar, use o botão de exportar no topo do minicaso do grupo.')),
       el('small',{class:'note'},'Os números são os do caderno de minicasos. O que o grupo escreve fica guardado só neste navegador; para entregar, use o botão de exportar no topo do minicaso do grupo.'))));
 }};
 
 // ---------- 1 · Vitta ----------
+// ===== VITTA =====
+const STEPS_vitta=[
+  {t:'Pergunta 1 · O retorno de cada empresa',
+   explain:'Retorno sobre o capital = margem × giro. Os valores do caso já estão nos controles; mexa neles para ver quando uma empresa ultrapassa a outra.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Receita da Vitta','R$ 1.100 mi'],['Lucro operacional da Vitta','R$ 176 mi'],['Capital preso da Vitta','R$ 1.000 mi (670 fábricas · 150 estoque · 180 a receber)'],['DistriMax','margem de 4%, giro de 4,0 (sem fábrica)']]));
+    r.append(el('div',{class:'controls'},slider('Margem da Vitta',S,'mV',4,25,0.5,v=>pct(v,1),rerender),slider('Giro da Vitta',S,'gV',0.5,4,0.1,v=>fmt(v,1),rerender),slider('Margem da DistriMax',S,'mD',1,12,0.5,v=>pct(v,1),rerender),slider('Giro da DistriMax',S,'gD',1,6,0.1,v=>fmt(v,1),rerender)));
+    const rv=S.mV*S.gV, rd=S.mD*S.gD;
+    r.append(el('div',{class:'kpis'},kpi('Retorno Vitta',pct(rv)),kpi('Retorno DistriMax',pct(rd)),kpi('Diferença',(rv>=rd?'+':'')+fmt(rv-rd)+' p.p.',rv>=rd?'good':'bad')));
+    r.append(isoChart([{x:S.gV,y:S.mV,l:'Vitta'},{x:S.gD,y:S.mD,l:'DistriMax'}],[10,15,20]));
+    r.append(calcBox('A conta',[
+      ['Margem da Vitta','lucro ÷ receita = 176 ÷ 1.100','16%'],
+      ['Giro da Vitta','receita ÷ capital = 1.100 ÷ 1.000','1,1'],
+      ['Retorno da Vitta',`margem × giro = ${pct(S.mV,1)} × ${fmt(S.gV,1)}`,pct(rv)],
+      ['Retorno da DistriMax',`margem × giro = ${pct(S.mD,1)} × ${fmt(S.gD,1)}`,pct(rd)],
+      ['Peso das fábricas no capital','670 ÷ 1.000','67%'],
+      ['Peso do estoque no capital','150 ÷ 1.000','15%']]));
+    r.append(diag(rv>=rd?'good':'warn',rv>=rd?'O que os números dizem':'Atenção ao que você mudou',bl(rv>=rd?[
+      `A Vitta gira a um quarto da velocidade da DistriMax (${fmt(S.gV,1)} contra ${fmt(S.gD,1)}) e ainda assim rende mais: ${pct(rv)} contra ${pct(rd)}.`,
+      'A margem alta paga pelo giro baixo. As duas empresas estão perto da mesma linha de retorno no gráfico.',
+      'O giro baixo vem das fábricas (67% do capital), não do estoque (15%). Uma distribuidora não tem fábrica.',
+      'Marcos comparou só o giro: metade da conta. Giro baixo não é ineficiência quando a margem paga por ele.']:[
+      `Com estes valores a DistriMax rende mais (${pct(rd)} contra ${pct(rv)}).`,
+      'A comparação só faz sentido com margem e giro juntos. Volte aos valores do caso (16% × 1,1 e 4% × 4,0) para seguir.'])));
+    return r;
+   }},
+  {t:'Pergunta 2 · Promessa e cadeia',
+   explain:'Antes de julgar se 110 dias de estoque é muito, é preciso saber o que o cliente da Vitta paga para ter. Classifique as duas empresas.',
+   body(s,S,rerender){
+    const r=el('div',{class:'quiz'});
+    r.append(dados([['Vitta','40 lançamentos por ano; promessa: nenhuma farmácia sem produto na prateleira; 110 dias de estoque'],['DistriMax','sabonete, pasta de dente, fralda; demanda previsível; 25 dias de estoque']]));
+    r.append(quiz('Em que atributo a Vitta é 5?',S,'q2a',['Preço','Produto','Acesso','Serviço'],'Produto',rerender,'Produto: 40 lançamentos por ano. O acesso (prateleira cheia) é o 4.','Releia a seção A empresa e a promessa: o que o cliente da Vitta paga para ter?'));
+    r.append(quiz('Que cadeia o produto da Vitta pede (Fisher)?',S,'q2b',['Eficiente','Responsiva'],'Responsiva',rerender,'Demanda imprevisível e ciclo curto pedem cadeia responsiva: estoque e capacidade de sobra para não perder a janela do lançamento.','Um lançamento tem demanda previsível? Se não, a cadeia precisa de folga.'));
+    if(S.q2a==='Produto'&&S.q2b==='Responsiva') r.append(diag('good','O que isso significa',bl([
+      'A Vitta é 5 em produto (novidade) e 4 em acesso (prateleira cheia). Produto inovador pede cadeia responsiva.',
+      'Os 110 dias de estoque são o custo dessa promessa, não desperdício. E são R$ 150 mi: 15% do capital.',
+      'Pode haver estoque sem função dentro dos 110 dias. A resposta é procurá-lo, não cortar o total pela metade.',
+      'A DistriMax é 5 em preço, com produto funcional e cadeia eficiente. As duas estão certas, cada uma para o seu produto.'])));
+    return r;
+   }},
+  {t:'Pergunta 3 · O plano de Marcos, frente a frente',
+   explain:'Cada frente libera capital e custa margem, por um motivo de operação diferente. Ligue e desligue as frentes e ajuste o custo de margem que você acredita. O retorno de cada combinação aparece abaixo.',
+   body(s,S,rerender){
+    const fr=[{k:'f1',c:'c1',n:'Terceirizar metade da produção',cap:285,why:'o terceirizado cobra a própria margem e a Vitta perde velocidade de lançamento'},
+              {k:'f2',c:'c2',n:'Cortar catálogo (400→250) e estoque (110→55 dias)',cap:75,why:'menos lançamentos a preço cheio; faltas nas semanas de pico'},
+              {k:'f3',c:'c3',n:'Encurtar o prazo das farmácias (60→30 dias)',cap:90,why:'as farmácias só aceitam com desconto ou bonificação'}];
+    const r=el('div');
+    r.append(dados([['Hoje','capital de R$ 1.000 mi; margem de 16%; retorno de 16% × 1,1 = 17,6%'],['Regra de cada frente','capital = 1.000 − o que a frente libera; margem = 16% − o custo da frente; retorno = margem × (1.100 ÷ capital)']]));
+    const base=16*1.1;
+    fr.forEach(f=>{
+      const row=el('div',{class:'controls',style:'align-items:end;border-bottom:1px solid var(--line);padding-bottom:10px'});
+      row.append(el('div',{class:'ctl'},el('label',{},f.n),el('button',{class:'chip','aria-pressed':String(S[f.k]),onclick:()=>{S[f.k]=!S[f.k];rerender()}},S[f.k]?'Ligada':'Desligada'),el('small',{class:'note'},'Libera '+money(f.cap)+'. Custa margem porque '+f.why+'.')));
+      row.append(slider('Custo de margem (pontos)',S,f.c,0,8,0.5,v=>fmt(v,1)+' p.p.',rerender));
+      const cap=1000-f.cap, g=1100/cap, m=16-S[f.c], ret=m*g;
+      row.append(el('div',{class:'ctl'},el('label',{},'Sozinha'),el('div',{class:'val'},`1.100 ÷ ${fmt(cap,0)} = giro ${fmt(g,2)} · margem ${pct(m,0)} · retorno ${pct(ret)}`),el('div',{class:ret>base?'feedback show ok':'feedback show ko'},ret>base?'Cria valor (acima de 17,6%)':'Destrói valor (abaixo de 17,6%)')));
+      r.append(row);
+    });
+    const on=fr.filter(f=>S[f.k]); const lib=on.reduce((a,f)=>a+f.cap,0); const cap=1000-lib; const g=1100/cap; const cm=on.reduce((a,f)=>a+S[f.c],0); const m=16-cm; const ret=m*g;
+    const emp=on.length?base/g:null;
+    r.append(el('div',{class:'kpis'},kpi('Capital',money(cap)),kpi('Giro',fmt(g,2)),kpi('Margem',pct(m,1)),kpi('Retorno',pct(ret),ret>=base?'good':'bad')));
+    if(on.length){r.append(calcBox('A conta da combinação ligada',[
+      ['Capital liberado',on.map(f=>fmt(f.cap,0)).join(' + '),money(lib)],
+      ['Capital que sobra','1.000 − '+fmt(lib,0),money(cap)],
+      ['Giro novo','1.100 ÷ '+fmt(cap,0),fmt(g,2)],
+      ['Custo de margem',on.map(f=>fmt(S[f.c],1)).join(' + ')+' pontos',fmt(cm,1)+' p.p.'],
+      ['Margem nova','16 − '+fmt(cm,1),pct(m,1)],
+      ['Retorno novo',`${pct(m,1)} × ${fmt(g,2)}`,pct(ret)],
+      ['Retorno de hoje','16% × 1,1','17,6%'],
+      ['Margem de empate','17,6% ÷ '+fmt(g,2),pct(emp,1)],
+      ['Custo máximo de margem para empatar','16 − '+fmt(emp,1),fmt(16-emp,1)+' p.p.']]));}
+    r.append(diag(on.length===0?'warn':ret>=base?'good':'bad',on.length===0?'Nenhuma frente ligada':ret>=base?'Esta combinação cria valor':'Esta combinação destrói valor',bl(on.length===0?['Ligue ao menos uma frente. O retorno de hoje é 17,6% (16% × 1,1).']:[
+      `Retorno de ${pct(ret)} contra 17,6% hoje: ${ret>=base?'cria':'destrói'} valor.`,
+      `Com este giro (${fmt(g,2)}), a combinação empata se a margem cair até ${pct(emp,1)}: custo total de até ${fmt(16-emp,1)} pontos. Você estimou ${fmt(cm,1)}.`,
+      ...(on.length===1&&on[0].k==='f1'?['A terceirização mexe em como a Vitta produz, algo que o cliente não compra. É a frente a estudar; a estimativa de Lúcia (4 pontos) é a que decide.']:[]),
+      ...(on.length===3?['O plano completo pede que a Vitta gire como distribuidora (2,0) sem ter a margem de ninguém (7%).']:[]),
+      'Cortes que mexem na promessa (catálogo, prateleira, prazo) são os que destroem valor: o capital que liberam vale menos do que a margem que custam.'])));
+    return r;
+   }}];
+
+// ===== AUTOPAR =====
+const STEPS_autopar=[
+  {t:'Pergunta 1 · De dias para reais, e de quem é cada espera',
+   explain:'Cada dia de estoque é R$ 2 milhões parados. Converta as quatro formas e escolha quem decide cada uma.',
+   body(s,S,rerender){
+    const forms=[['Ciclo',30,'Compras (Henrique)'],['Trânsito',20,'Compras e logística'],['Segurança',25,'Planejamento (Carla) e comercial'],['Obsoleto',15,'Comercial (Paula)']];
+    const opts=['Compras (Henrique)','Compras e logística','Planejamento (Carla) e comercial','Comercial (Paula)'];
+    const r=el('div');
+    r.append(dados([['Custo das peças vendidas','R$ 730 mi por ano'],['Um dia de estoque','730 ÷ 365 = R$ 2 mi'],['Estoque','90 dias'],['Meta do CFO','−25% em doze meses']]));
+    const tb=el('table');tb.append(el('tr',{},el('th',{},'Forma'),el('th',{class:'num'},'Dias'),el('th',{class:'num'},'× R$ 2 mi'),el('th',{},'Quem decide')));
+    forms.forEach(([n,d,o])=>{const sel=el('select',{onchange:e=>{S.owners[n]=e.target.value;rerender()}},el('option',{value:''},'Escolha…'),...opts.map(x=>el('option',{value:x,selected:S.owners[n]===x?'':null},x)));if(S.owners[n])sel.value=S.owners[n];
+      tb.append(el('tr',{},el('td',{},n),el('td',{class:'num'},d),el('td',{class:'num'},'R$ '+fmt(d*2,0)+' mi'),el('td',{class:S.owners[n]?(S.owners[n]===o?'ok':'no'):''},sel)));});
+    tb.append(el('tr',{class:'total'},el('td',{},'Total'),el('td',{class:'num'},'90'),el('td',{class:'num'},'R$ 180 mi'),el('td',{},'Meta: 25% × 180 = R$ 45 mi')));
+    r.append(el('div',{class:'tscroll'},tb));
+    const all=forms.every(([n,,o])=>S.owners[n]===o);
+    const any=forms.some(([n])=>S.owners[n]);
+    if(any) r.append(diag(all?'good':'warn',all?'Quatro esperas, quatro donos':'Confira os donos',bl(all?[
+      'Só a segurança está nas mãos de Carla. O ciclo é de Henrique (compras); o trânsito, de compras e logística; o obsoleto, de Paula (comercial).',
+      'A meta foi dada “à supply chain”, mas três das quatro alavancas estão em outras áreas.',
+      'Por isso a proposta de Carla cai no único parâmetro que alguém controla sozinho: a reserva.']:[
+      'Pense em qual decisão cria cada espera: o lote (compras), a viagem (logística), a promessa de 98% (planejamento e comercial), o portfólio (comercial).'])));
+    return r;
+   }},
+  {t:'Pergunta 2 · A proposta de Carla',
+   explain:'Carla quer cortar o parâmetro de reserva. Mova o corte e veja quanto libera e o que acontece com a disponibilidade prometida às oficinas.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Reserva de hoje','25 dias = R$ 50 mi, dimensionada para 98% de disponibilidade'],['Tabela da reserva (caso)','85% → 50 · 90% → 62 · 95% → 80 · 98% → 100 · 99% → 113']]));
+    r.append(el('div',{class:'controls'},slider('Corte da reserva de segurança',S,'cut',0,100,5,v=>pct(v,0),rerender)));
+    const dias=25*S.cut/100; const lib=dias*2; const z98=2.054; const z=z98*(1-S.cut/100); const disp=Phi(z)*100; const n=Math.max(1,Math.round(1/(1-disp/100)));
+    r.append(el('div',{class:'kpis'},kpi('Capital liberado',money(lib),lib>=45?'good':'bad'),kpi('Meta',money(45)),kpi('Disponibilidade',pct(disp,0),disp>=97?'good':'bad'),kpi('Faltas',`1 em ${n}`)));
+    r.append(calcBox('A conta',[
+      ['Dias de reserva cortados',`${pct(S.cut,0)} × 25 dias`,fmt(dias,1)+' dias'],
+      ['Capital liberado',`${fmt(dias,1)} dias × R$ 2 mi`,money(lib)],
+      ['Meta','25% × R$ 180 mi','R$ 45 mi'],
+      ['Reserva que sobra (98% = 100)',`100 − ${pct(S.cut,0)}`,fmt(100-S.cut,0)],
+      ['Disponibilidade com essa reserva','pela curva da tabela do caso','≈ '+pct(disp,0)],
+      ['Reposições com falta','1 ÷ (1 − '+pct(disp,0)+')','1 em '+n]]));
+    r.append(diag(lib>=45?'warn':'bad',lib>=45?'Cumpre a meta, e derruba a promessa':'Não cumpre a meta',bl([
+      `Cortar ${pct(S.cut,0)} da reserva libera ${money(lib)}: ${lib>=45?'cumpre':'não cumpre'} os R$ 45 mi.`,
+      `A disponibilidade cai de 98% para cerca de ${pct(disp,0)}: falta peça em uma a cada ${n} reposições.`,
+      'Quem percebe primeiro é o mecânico com o carro no elevador; depois Paula, quando as oficinas pararem de ligar.',
+      'O caixa melhora no trimestre; a receita cai no seguinte.'])));
+    return r;
+   }},
+  {t:'Pergunta 3 · A alternativa que cumpre a meta sem tocar na reserva',
+   explain:'Ataque as esperas sem função. Henrique diz que os fornecedores aceitam entregar todo mês; o obsoleto pode ser vendido a atacadistas. Monte a combinação.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Entregas hoje','a cada 2 meses: lote de 60 dias, ciclo médio de 30 dias (metade do lote)'],['Obsoleto','15 dias = R$ 30 mi no balanço; atacadistas pagam metade']]));
+    const freqSel=el('select',{onchange:e=>{S.freq=+e.target.value;rerender()}},el('option',{value:2},'A cada 2 meses (hoje)'),el('option',{value:1},'Mensal (com o mesmo desconto)'));freqSel.value=String(S.freq);
+    r.append(el('div',{class:'controls'},el('div',{class:'ctl'},el('label',{},'Frequência de entrega dos fornecedores'),freqSel),
+      el('div',{class:'ctl'},el('label',{},'Obsoleto'),el('button',{class:'chip','aria-pressed':String(S.sell),onclick:()=>{S.sell=!S.sell;rerender()}},S.sell?'Vender aos atacadistas':'Manter no armazém')),
+      slider('Recuperação na venda do obsoleto',S,'recov',0,100,10,v=>pct(v,0),rerender),
+      slider('Corte adicional da reserva',S,'reserveCut',0,100,5,v=>pct(v,0),rerender)));
+    const ciclo=S.freq===1?15:30; const cicloLib=(30-ciclo)*2;
+    const obsBal=S.sell?30:0, obsCash=S.sell?30*S.recov/100:0, perda=obsBal-obsCash;
+    const resLib=50*S.reserveCut/100; const disp=Phi(2.054*(1-S.reserveCut/100))*100;
+    const cash=cicloLib+obsCash+resLib, bal=cicloLib+obsBal+resLib;
+    r.append(el('div',{class:'kpis'},kpi('Caixa liberado',money(cash),cash>=45?'good':'bad'),kpi('Estoque a menos no balanço',money(bal)),kpi('Perda no resultado',money(perda),perda>0?'bad':''),kpi('Disponibilidade',pct(disp,0),disp>=97?'good':'bad')));
+    r.append(calcBox('A conta',[
+      ['Ciclo médio',S.freq===1?'lote de 30 dias ÷ 2':'lote de 60 dias ÷ 2',ciclo+' dias'],
+      ['Caixa do ciclo',`(30 − ${ciclo}) dias × R$ 2 mi`,money(cicloLib)],
+      ['Caixa do obsoleto',S.sell?`${pct(S.recov,0)} × R$ 30 mi`:'não vendido',money(obsCash)],
+      ['Perda contábil do obsoleto',S.sell?`30 − ${fmt(obsCash,0)}`:'—',money(perda)],
+      ['Caixa da reserva',`${pct(S.reserveCut,0)} × R$ 50 mi`,money(resLib)],
+      ['Caixa total',`${fmt(cicloLib,0)} + ${fmt(obsCash,0)} + ${fmt(resLib,0)}`,money(cash)],
+      ['Meta','25% × 180','R$ 45 mi'],
+      ['Disponibilidade','pela curva da reserva','≈ '+pct(disp,0)]]));
+    const ok=cash>=45&&S.reserveCut===0;
+    r.append(diag(ok?'good':cash>=45?'warn':'bad',ok?'Meta cumprida sem tocar na reserva':cash>=45?'Meta cumprida, mas com a reserva':'Ainda falta',bl([
+      S.freq===1?'Entregas mensais cortam o lote de 60 para 30 dias e o ciclo médio de 30 para 15: R$ 30 mi de caixa, sem mexer no serviço.':'Entregas a cada 2 meses mantêm 30 dias de ciclo: R$ 60 mi parados por causa do tamanho do lote.',
+      S.sell?`O obsoleto sai por ${pct(S.recov,0)} dos R$ 30 mi: R$ ${fmt(obsCash,0)} mi de caixa e R$ ${fmt(perda,0)} mi de perda no resultado. A perda já tinha acontecido quando as peças deixaram de vender; a venda só a reconhece.`:'O obsoleto continua parado: R$ 30 mi no balanço que já não valem isso.',
+      ...(S.reserveCut>0?[`Cortar ${pct(S.reserveCut,0)} da reserva derruba a disponibilidade para ${pct(disp,0)}.`]:[]),
+      ...(ok?['Luís precisa de Henrique (fornecedores), de Paula (liquidar) e do CFO (aceitar a perda contábil no trimestre).']:[]),
+      ...(cash<45?[`Faltam ${money(45-cash)} para a meta.`]:[])])));
+    return r;
+   }}];
+
+// ===== BOM PREÇO =====
+const STEPS_bompreco=[
+  {t:'Pergunta 1 · Desenho ou financiamento?',
+   explain:'Para cada proposta, responda: a mercadoria passa a esperar menos na loja, ou só muda quem financia a espera?',
+   body(s,S,rerender){
+    const r=el('div',{class:'quiz'});
+    r.append(dados([['Hoje','mercadoria fica 45 dias na loja; fornecedores pagos em 30 dias'],['Pedido do Conselho','R$ 90 mi fora do capital de giro = 30 dias de compras (30 × R$ 3 mi por dia)']]));
+    const items=[['A','Alongar o prazo (Fernanda)','Financiamento','A mercadoria fica os mesmos 45 dias; quem espera 30 dias a mais é o fornecedor.'],['B','Reposição automática (João)','Desenho','Sem pedido semanal e sem depósito cheio, a mercadoria fica 15 dias em vez de 45.'],['C','Risco sacado (Cláudio)','Financiamento','A mercadoria fica o mesmo tempo; quem espera é o banco, que desconta juros do fornecedor.']];
+    items.forEach(([k,n,ans,why])=>r.append(quiz(k+' · '+n,S.cls,k,['Desenho','Financiamento'],ans,rerender,why,'Pergunte: o produto passou a ficar menos tempo na loja?')));
+    if(Object.values(S.cls).every(v=>v)&&items.every(([k,,a])=>S.cls[k]===a)) r.append(diag('good','O que isso significa',bl([
+      'Só B muda o desenho: a mercadoria passa de 45 para 15 dias na loja.',
+      'A e C liberam o mesmo capital trocando quem paga a espera: o fornecedor em A, o banco em C.',
+      'O indicador de capital de giro melhora igual nas três. O que as separa é o resultado por ano, na próxima pergunta.'])));
+    return r;
+   }},
+  {t:'Pergunta 2 · Quanto cada opção rende por ano',
+   explain:'Os R$ 90 mi liberados deixam de custar o custo de capital da rede. Cada opção tem um custo anual. Mude as taxas e veja o resultado de cada uma e o payback de B.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Ganho, igual nas três','R$ 90 mi deixam de custar o custo de capital da rede'],['Custo de A','o fornecedor carrega R$ 90 mi ao custo de capital dele e repassa no preço'],['Custo de B','R$ 20 mi uma vez + manutenção por ano'],['Custo de C','o banco cobra a taxa dele sobre os R$ 90 mi']]));
+    r.append(el('div',{class:'controls'},slider('Custo de capital da rede',S,'rede',6,20,0.5,v=>pct(v,1),rerender),slider('Custo de capital do fornecedor',S,'forn',6,30,1,v=>pct(v,0),rerender),slider('Taxa do banco (risco sacado)',S,'banco',6,20,0.5,v=>pct(v,1),rerender),slider('Custo anual da reposição automática',S,'bAnual',0,10,0.5,v=>money(v,1),rerender),slider('Investimento da reposição automática',S,'bInv',0,40,1,v=>money(v,0),rerender)));
+    const g=90*S.rede/100; const cA=90*S.forn/100, cC=90*S.banco/100; const a=g-cA, b=g-S.bAnual, c=g-cC;
+    r.append(barChart([['A',a],['B',b],['C',c]]));
+    r.append(el('div',{class:'kpis'},kpi('A · prazo',(a>=0?'+':'')+fmt(a,1)+'/ano',a>=0?'good':'bad'),kpi('B · reposição',(b>=0?'+':'')+fmt(b,1)+'/ano',b>=0?'good':'bad'),kpi('C · risco sacado',(c>=0?'+':'')+fmt(c,1)+'/ano',c>=0?'good':'bad'),kpi('Payback de B',b>0?fmt(S.bInv/b,1)+' anos':'não se paga',b>0?'good':'bad')));
+    r.append(calcBox('A conta (R$ mi por ano)',[
+      ['Ganho, nas três','90 × '+pct(S.rede,1),fmt(g,1)],
+      ['A · custo','90 × '+pct(S.forn,0)+' (repassado no preço)',fmt(cA,1)],
+      ['A · resultado',`${fmt(g,1)} − ${fmt(cA,1)}`,(a>=0?'+':'')+fmt(a,1)],
+      ['B · custo','manutenção',fmt(S.bAnual,1)],
+      ['B · resultado',`${fmt(g,1)} − ${fmt(S.bAnual,1)}`,(b>=0?'+':'')+fmt(b,1)],
+      ['B · payback',`${fmt(S.bInv,0)} ÷ ${fmt(b,1)}`,b>0?fmt(S.bInv/b,1)+' anos':'—'],
+      ['C · custo','90 × '+pct(S.banco,1),fmt(cC,1)],
+      ['C · resultado',`${fmt(g,1)} − ${fmt(cC,1)}`,(c>=0?'+':'')+fmt(c,1)]]));
+    const best=[['A',a],['B',b],['C',c]].sort((x,y)=>y[1]-x[1])[0][0];
+    r.append(diag(best==='B'?'good':'warn',`A melhor opção com estas taxas é ${best}`,bl([
+      `A ganha ${fmt(g,1)} e paga ${fmt(cA,1)} no preço: ${a>=0?'cria':'destrói'} valor. Empurrar a espera para quem tem dinheiro a ${pct(S.forn,0)} custa mais do que economiza.`,
+      `C quase empata: o banco (${pct(S.banco,1)}) é só um pouco mais barato que a rede (${pct(S.rede,1)}).`,
+      `B é a única que elimina a espera em vez de repassá-la${b>0?`, e paga o investimento em ${fmt(S.bInv/b,1)} anos`:''}. A conta nem inclui menos ruptura e menos perda de perecíveis.`])));
+    return r;
+   }},
+  {t:'Pergunta 3 · Quando alongar o prazo deixa de ser ruim',
+   explain:'Fernanda tem razão sobre redes grandes com fornecedores grandes. Mova o custo de capital do fornecedor e veja onde a Opção A troca de sinal.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Laticínio São Bento','dinheiro de banco a 20% ao ano; 40 lojas; produto fresco e local'],['Fornecedor multinacional (hipótese)','custo de capital de 8%']]));
+    r.append(el('div',{class:'controls'},slider('Custo de capital do fornecedor',S,'forn',4,30,1,v=>pct(v,0),rerender)));
+    const g=90*S.rede/100, cA=90*S.forn/100, a=g-cA;
+    r.append(el('div',{class:'kpis'},kpi('Resultado de A por ano',(a>=0?'+':'')+fmt(a,1),a>=0?'good':'bad'),kpi('Ponto de troca de sinal',pct(S.rede,1))));
+    r.append(calcBox('A conta',[
+      ['Ganho da rede','90 × '+pct(S.rede,1),fmt(g,1)],
+      ['Custo repassado pelo fornecedor','90 × '+pct(S.forn,0),fmt(cA,1)],
+      ['Resultado de A','90 × ('+pct(S.rede,1)+' − '+pct(S.forn,0)+')',(a>=0?'+':'')+fmt(a,1)],
+      ['Troca de sinal','custo do fornecedor = custo da rede',pct(S.rede,1)]]));
+    r.append(diag(a>=0?'good':'bad',a>=0?'Com este fornecedor, A cria valor':'Com este fornecedor, A destrói valor',bl([
+      `A troca de sinal acontece quando o fornecedor tem o mesmo custo de capital da rede (${pct(S.rede,1)}). Abaixo disso, ele carrega a espera mais barato do que a rede.`,
+      'Um fornecedor multinacional a 8% carregaria a espera mais barato que a rede: alongar o prazo com ele cria valor.',
+      'O São Bento, a 20%, não: sobe o preço na próxima tabela ou vende para a cooperativa, e a rede perde o que a diferencia.',
+      'A mesma medida muda de sinal conforme quem a recebe. Regra única para todos os fornecedores é o erro.'])));
+    return r;
+   }}];
+
+// ===== EMBALAGENS =====
+const STEPS_embalagens=[
+  {t:'Pergunta 1 · A régua e o valor de cada projeto',
+   explain:'Monte a régua com o imposto e o custo de capital. Depois veja quanto cada projeto vale para o acionista.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(dados([['Projeto A · máquina','economiza R$ 6 mi por ano; investimento de R$ 20 mi; payback de 3,3 anos'],['Projeto B · S&OP','libera R$ 40 mi de estoque (de 70 para 30), uma vez; R$ 4 mi uma vez; R$ 2 mi por ano'],['Imposto · custo de capital','34% · 12%']]));
+    r.append(el('div',{class:'controls'},slider('Imposto sobre o lucro',S,'tax',0,40,1,v=>pct(v,0),rerender),slider('Custo de capital',S,'wacc',6,20,0.5,v=>pct(v,1),rerender)));
+    const reg=(1-S.tax/100)/(S.wacc/100);
+    r.append(el('div',{class:'ruler'},`R$ 1 de lucro por ano vale R$ ${fmt(reg,2)} · R$ 1 de capital liberado vale R$ 1,00`));
+    r.append(el('div',{class:'controls'},slider('A · economia anual',S,'aEcon',0,15,0.5,v=>money(v,1),rerender),slider('A · investimento',S,'aInv',0,40,1,v=>money(v,0),rerender),slider('B · estoque liberado',S,'bLib',0,70,1,v=>money(v,0),rerender),slider('B · gasto único',S,'bInv',0,15,0.5,v=>money(v,1),rerender),slider('B · custo anual',S,'bAnual',0,6,0.5,v=>money(v,1),rerender)));
+    const vA=S.aEcon*reg-S.aInv, vB=S.bLib-S.bInv-S.bAnual*reg;
+    r.append(el('div',{class:'kpis'},kpi('Vale A',fmt(vA,1),vA>=vB?'good':''),kpi('Vale B',fmt(vB,1),vB>vA?'good':''),kpi('Payback de A',S.aEcon>0?fmt(S.aInv/S.aEcon,1)+' anos':'—'),kpi('Payback de B','não existe')));
+    r.append(calcBox('A conta',[
+      ['Régua: o que sobra de R$ 1 depois do imposto','1 − '+pct(S.tax,0),fmt(1-S.tax/100,2)],
+      ['Régua: valor hoje de R$ 1 por ano',`${fmt(1-S.tax/100,2)} ÷ ${pct(S.wacc,1)}`,fmt(reg,2)],
+      ['A · economia anual × régua',`${fmt(S.aEcon,1)} × ${fmt(reg,2)}`,fmt(S.aEcon*reg,1)],
+      ['A · vale',`${fmt(S.aEcon*reg,1)} − ${fmt(S.aInv,0)} (investimento)`,fmt(vA,1)],
+      ['B · estoque liberado (vale 1 por 1)','entra uma vez',fmt(S.bLib,0)],
+      ['B · custo anual × régua',`${fmt(S.bAnual,1)} × ${fmt(reg,2)}`,fmt(S.bAnual*reg,1)],
+      ['B · vale',`${fmt(S.bLib,0)} − ${fmt(S.bInv,1)} − ${fmt(S.bAnual*reg,1)}`,fmt(vB,1)]]));
+    r.append(diag(vB>vA?'good':'warn',vB>vA?'B vale mais':'A vale mais',bl(vB>vA?[
+      `B vale ${fmt(vB,1)} e A vale ${fmt(vA,1)}: B vale ${fmt(vB/vA,1)} vezes A, com um quinto do investimento.`,
+      'Ricardo e Patrícia estavam certos ao mesmo tempo; faltava a unidade comum.',
+      'O ganho de B está no balanço (capital devolvido ao caixa), e o payback não tem onde registrá-lo.']:[
+      `Com estes números a máquina vence: A vale ${fmt(vA,1)} e B, ${fmt(vB,1)}.`,
+      'Note quanto o custo anual de B pesa: ele conta todos os anos, multiplicado pela régua.'])));
+    return r;
+   }},
+  {t:'Pergunta 2 · Por que o payback não vê o Projeto B',
+   explain:'O payback divide o investimento pela economia anual. Veja o que cada métrica enxerga.',
+   body(s,S,rerender){
+    const r=el('div');
+    r.append(el('div',{class:'tscroll'},(function(){const tb=el('table');tb.append(el('tr',{},el('th',{},'Efeito'),el('th',{},'Payback vê?'),el('th',{},'Régua vê?')));[['Economia anual de custo (A)','Sim','Sim, × 5,5'],['Investimento (A e B)','Sim','Sim, × 1'],['Capital liberado do estoque (B)','Não: não há onde registrar','Sim, × 1'],['Custo anual de B','Sim, como piora','Sim, × 5,5']].forEach(x=>tb.append(el('tr',{},...x.map((c,i)=>el('td',{class:i>0?(c.startsWith('Não')?'no':'ok'):''},c)))));return tb})()));
+    r.append(diag('','O que Ricardo deveria exigir',bl([
+      'B não economiza custo; acrescenta R$ 2 mi por ano. Para o payback, B só piora o resultado.',
+      'O ganho de B são R$ 40 mi que voltam ao caixa e deixam de custar 12% ao ano: R$ 4,8 mi por ano de custo de capital evitado. Isso está no balanço, não na demonstração de resultado.',
+      'Todo projeto de supply chain deveria chegar ao comitê com dois números: o efeito no custo anual e o efeito no capital preso, convertidos na mesma régua.',
+      'O payback mede bem o risco de prazo; não mede valor de capital liberado.'])));
+    return r;
+   }},
+  {t:'Pergunta 3 · Quanto o S&OP precisa liberar para empatar',
+   explain:'Patrícia promete R$ 40 mi. Mova a liberação real e encontre o ponto em que B deixa de valer mais que A.',
+   body(s,S,rerender){
+    const r=el('div');
+    const reg=(1-S.tax/100)/(S.wacc/100); const vA=S.aEcon*reg-S.aInv;
+    r.append(el('div',{class:'controls'},slider('Estoque que o S&OP de fato libera',S,'bLib',0,60,1,v=>money(v,0),rerender)));
+    const vB=S.bLib-S.bInv-S.bAnual*reg; const emp=vA+S.bInv+S.bAnual*reg;
+    r.append(el('div',{class:'kpis'},kpi('Vale B',fmt(vB,1),vB>=vA?'good':'bad'),kpi('Vale A',fmt(vA,1)),kpi('Empate',money(emp,0))));
+    r.append(calcBox('A conta',[
+      ['Vale A (não muda)',`${fmt(S.aEcon,1)} × ${fmt(reg,2)} − ${fmt(S.aInv,0)}`,fmt(vA,1)],
+      ['Vale B com esta liberação',`${fmt(S.bLib,0)} − ${fmt(S.bInv,1)} − ${fmt(S.bAnual,1)} × ${fmt(reg,2)}`,fmt(vB,1)],
+      ['Liberação de empate','vale A + gasto único + custo anual × régua = '+`${fmt(vA,1)} + ${fmt(S.bInv,1)} + ${fmt(S.bAnual*reg,1)}`,money(emp,0)]]));
+    r.append(diag(vB>=vA?'good':'bad',vB>=vA?'B ainda vence':'A passa a vencer',bl([
+      `B empata com A quando libera ${money(emp,0)}. Abaixo disso, a máquina vale mais.`,
+      'Quem pode garantir esse número é Patrícia, com os três clientes; é ela que assina.',
+      `Aprovação bem escrita: “liberar R$ 40 mi de estoque aceitando até R$ ${fmt(S.bAnual,1)} mi por ano de custo; se em doze meses não tiver liberado R$ ${fmt(emp,0)} mi, o comitê revê o projeto”.`])));
+    return r;
+   }}];
+
+// ===== VIDA =====
+const STEPS_vida=[
+  {t:'Pergunta 1 · O que cresceu mais',
+   explain:'Compare o crescimento da receita, do lucro e do capital, e veja onde os R$ 800 mi novos foram parar.',
+   body(s,S,rerender){
+    const r=el('div');
+    const gr=(a,b)=>(b/a-1)*100;
+    r.append(dados([['Receita','R$ 2.000 mi → R$ 3.000 mi'],['Lucro depois dos impostos','R$ 240 mi → R$ 300 mi'],['Capital preso','R$ 1.000 mi → R$ 1.800 mi'],['Onde foram os R$ 800 mi novos','lojas 480 · sortimento 245 · convênios 75']]));
+    r.append(el('div',{class:'kpis'},kpi('Receita','+'+pct(gr(S.rec0,S.rec1),0)),kpi('Lucro','+'+pct(gr(S.luc0,S.luc1),0)),kpi('Capital','+'+pct(gr(S.cap0,S.cap1),0),'bad')));
+    r.append(barChart([['Receita',gr(S.rec0,S.rec1)],['Lucro',gr(S.luc0,S.luc1)],['Capital',gr(S.cap0,S.cap1)]],'%'));
+    r.append(calcBox('A conta',[
+      ['Receita','3.000 ÷ 2.000 − 1','+50%'],['Lucro','300 ÷ 240 − 1','+25%'],['Capital','1.800 ÷ 1.000 − 1','+80%'],
+      ['Lojas novas','480 ÷ 800','60% do capital novo'],['Capital por loja nova','480 ÷ 120 lojas','≈ R$ 4 mi']]));
+    r.append(diag('warn','O que os números dizem',bl([
+      'O capital cresceu mais que a receita (+80% contra +50%), e a receita mais que o lucro (+25%).',
+      'As lojas novas prenderam 60% do capital novo: cada loja exige reforma, equipamentos e estoque inicial antes de vender.',
+      'O sortimento vem em segundo (R$ 245 mi): perfumaria gira devagar e está em todas as 320 lojas.',
+      'Os convênios prendem pouco (R$ 75 mi): 45 dias de prazo sobre R$ 600 mi por ano.'])));
+    return r;
+   }},
+  {t:'Pergunta 2 · O retorno médio',
+   explain:'Lucro dividido por capital, antes e depois. Ele continua acima de 12%. Isso basta para aprovar o plano?',
+   body(s,S,rerender){
+    const r=el('div');
+    const r0=S.luc0/S.cap0*100, r1=S.luc1/S.cap1*100;
+    r.append(el('div',{class:'kpis'},kpi('Há três anos',pct(r0)),kpi('Hoje',pct(r1),r1>=S.wacc?'good':'bad'),kpi('Custo de capital',pct(S.wacc,0))));
+    r.append(calcBox('A conta',[['Retorno médio há três anos','240 ÷ 1.000',pct(r0)],['Retorno médio hoje','300 ÷ 1.800',pct(r1)],['Custo de capital','',pct(S.wacc,0)]]));
+    r.append(diag('warn','A média prova menos do que parece',bl([
+      `Os ${pct(r1)} provam que a rede, no total, ainda cria valor (acima de ${pct(S.wacc,0)}).`,
+      'Não provam que o crescimento criou valor: a média mistura as lojas antigas, muito rentáveis, com o capital que acabou de entrar.',
+      'A queda de 24% para 16,7% é o primeiro sinal: o capital novo rende menos que o antigo.',
+      'Rogério pode usar a média para defender a rede; não para defender o plano.'])));
+    return r;
+   }},
+  {t:'Pergunta 3 · O retorno do capital novo',
+   explain:'Do dinheiro que entrou, quanto voltou em lucro novo? Compare com o custo. Depois mova o argumento de Tiago: quanto lucro as lojas novas vão gerar quando maduras?',
+   body(s,S,rerender){
+    const r=el('div');
+    const dC=S.cap1-S.cap0, dL=S.luc1-S.luc0;
+    r.append(el('div',{class:'controls'},slider('Lucro novo quando as lojas amadurecerem',S,'mature',dL,160,2,v=>money(v,0),rerender),slider('Custo de capital',S,'wacc',8,16,0.5,v=>pct(v,1),rerender)));
+    const ret=S.mature/dC*100, custo=S.wacc/100*dC, eva=S.mature-custo, emp=custo, retHoje=dL/dC*100;
+    const eva0=S.luc0-S.wacc/100*S.cap0, eva1=S.luc1-S.wacc/100*S.cap1;
+    r.append(el('div',{class:'kpis'},kpi('Retorno do capital novo',pct(ret),ret>=S.wacc?'good':'bad'),kpi('Por R$ 100 novos','R$ '+fmt(ret,2)+' contra R$ '+fmt(S.wacc,0)),kpi('Valor por ano no capital novo',(eva>=0?'+':'')+fmt(eva,0),eva>=0?'good':'bad'),kpi('Empate',money(emp,0))));
+    r.append(calcBox('A conta',[
+      ['Capital novo','1.800 − 1.000',money(dC,0)],['Lucro novo hoje','300 − 240',money(dL,0)],
+      ['Retorno do capital novo hoje','60 ÷ 800',pct(retHoje)],
+      ['Custo do capital novo por ano',`800 × ${pct(S.wacc,1)}`,money(custo,0)],
+      ['Valor por ano hoje',`60 − ${fmt(custo,0)}`,(dL-custo>=0?'+':'')+fmt(dL-custo,0)],
+      ['Com a maturação que você moveu',`${fmt(S.mature,0)} ÷ 800`,pct(ret)],
+      ['Valor por ano com a maturação',`${fmt(S.mature,0)} − ${fmt(custo,0)}`,(eva>=0?'+':'')+fmt(eva,0)],
+      ['Lucro novo de empate',`${pct(S.wacc,1)} × 800`,money(emp,0)],
+      ['Valor econômico da rede, há três anos',`240 − ${pct(S.wacc,1)} × 1.000`,fmt(eva0,0)],
+      ['Valor econômico da rede, hoje',`300 − ${pct(S.wacc,1)} × 1.800`,fmt(eva1,0)]]));
+    r.append(diag(eva>=0?'good':'bad',eva>=0?'Com esta maturação, o crescimento empata ou cria valor':'O crescimento destrói valor',bl([
+      `Hoje o capital novo rende ${pct(retHoje)} contra ${pct(S.wacc,1)} de custo: ${money(custo-dL,0)} por ano de valor perdido.`,
+      `A rede ficou ${fmt(eva0-eva1,0)} por ano mais pobre em valor econômico (de ${fmt(eva0,0)} para ${fmt(eva1,0)}) enquanto batia recorde de lucro.`,
+      `Para empatar, o lucro novo precisa chegar a ${money(emp,0)} (${pct(S.wacc,1)} de ${money(dC,0)}).`,
+      S.mature>=emp?'Se Tiago mostrar esse número, e em que ano, o plano pode seguir, com menos capital por loja.':'Enquanto o desenho for o mesmo, crescer amplia a perda. A resposta madura não é parar de crescer: é crescer com menos capital por loja.'])));
+    return r;
+   }}];
+
 CASES.push(home);
 CASES.push({id:'vitta',tab:'Vitta',empresa:'Vitta Cosméticos',tema:'Que cadeia, quanto capital',
  titulo:'Vitta Cosméticos: o benchmark que veio da distribuidora',
@@ -266,53 +641,7 @@ CASES.push({id:'vitta',tab:'Vitta',empresa:'Vitta Cosméticos',tema:'Que cadeia,
   ['A promessa ao cliente','Quem vence é 5 em um atributo, 4 em outro e 3 nos demais: preço, produto, acesso, serviço, experiência. Cada atributo prende capital de um jeito. Cortar capital onde ele sustenta a promessa custa margem.','Notas 1.4'],
  ],
  state:{mV:16,gV:1.1,mD:4,gD:4.0, f1:true,f2:true,f3:true, c1:4,c2:3,c3:2, q2a:null,q2b:null, rec:'',prem:''},
- steps:[
-  {t:'Pergunta 1 · O retorno de cada empresa',
-   explain:'A Vitta prende R$ 1.000 mi (670 em fábricas, 150 em estoque, 180 a receber) e vende R$ 1.100 mi: giro de 1,1 (1.100 ÷ 1.000). O lucro é de R$ 176 mi: margem de 16% (176 ÷ 1.100). A DistriMax não tem fábrica: margem de 4% e giro de 4,0, segundo o caso. Multiplique margem por giro e compare. Mude os controles para ver quando uma ultrapassa a outra.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'controls'},slider('Margem da Vitta',S,'mV',4,25,0.5,v=>pct(v,1),rerender),slider('Giro da Vitta',S,'gV',0.5,4,0.1,v=>fmt(v,1),rerender),slider('Margem da DistriMax',S,'mD',1,12,0.5,v=>pct(v,1),rerender),slider('Giro da DistriMax',S,'gD',1,6,0.1,v=>fmt(v,1),rerender)));
-    const rv=S.mV*S.gV, rd=S.mD*S.gD;
-    r.append(el('div',{class:'kpis'},kpi('Retorno Vitta',pct(rv)),kpi('Retorno DistriMax',pct(rd)),kpi('Diferença',(rv>=rd?'+':'')+fmt(rv-rd)+' p.p.',rv>=rd?'good':'bad')));
-    r.append(isoChart([{x:S.gV,y:S.mV,l:'Vitta'},{x:S.gD,y:S.mD,l:'DistriMax'}],[10,15,20]));
-    r.append(diag(rv>=rd?'good':'warn',rv>=rd?'A Vitta rende mais':'A DistriMax rende mais',
-      rv>=rd?`Girando a um quarto da velocidade (1,1 contra 4,0), a Vitta rende ${pct(rv)} contra ${pct(rd)}. As duas estão perto da mesma linha de retorno. O giro baixo vem sobretudo das fábricas (R$ 670 mi dos R$ 1.000 mi de capital, 67%), não do estoque. Marcos não tem razão: giro baixo não é ineficiência quando a margem paga por ele.`
-      :`Com estes números, a DistriMax rende mais. Note o que você mudou: a comparação só faz sentido com margem e giro juntos. Volte aos valores do minicaso (16% × 1,1 e 4% × 4,0) para continuar.`));
-    return r;
-   }},
-  {t:'Pergunta 2 · Promessa e cadeia',
-   explain:'Classifique cada empresa. A resposta muda o que é "estoque demais": para uma cadeia responsiva, o estoque é o custo da promessa; para uma eficiente, é desperdício.',
-   body(s,S,rerender){
-    const r=el('div',{class:'quiz'});
-    r.append(quiz('Em que atributo a Vitta é 5?',S,'q2a',['Preço','Produto','Acesso','Serviço'],'Produto',rerender,'Produto: 40 lançamentos por ano. O acesso (prateleira cheia) é o 4.','Releia a seção A empresa e a promessa: o que o cliente da Vitta paga para ter?'));
-    r.append(quiz('Que cadeia o produto da Vitta pede (Fisher)?',S,'q2b',['Eficiente','Responsiva'],'Responsiva',rerender,'Demanda imprevisível e ciclo curto pedem cadeia responsiva: estoque e capacidade de sobra para não perder a janela do lançamento.','Um lançamento tem demanda previsível? Se não, a cadeia precisa de folga.'));
-    if(S.q2a==='Produto'&&S.q2b==='Responsiva') r.append(diag('good','Diagnóstico','Os 110 dias de estoque são o custo da promessa (produto 5, acesso 4), não desperdício. E são R$ 150 mi, só 15% dos R$ 1.000 mi de capital. O problema, se houver, é o estoque sem função dentro deles, não o tamanho do estoque. A DistriMax é 5 em preço, produto funcional, cadeia eficiente.'));
-    return r;
-   }},
-  {t:'Pergunta 3 · O plano de Marcos, frente a frente',
-   explain:'Marcos propõe três frentes. Cada uma libera capital e custa margem, por um motivo de operação diferente. Ligue e desligue as frentes e ajuste o custo de margem que você acredita. <b>O retorno de cada combinação aparece abaixo.</b> Teste: qual frente cria valor sozinha? Qual é a estimativa que decide?',
-   body(s,S,rerender){
-    const fr=[{k:'f1',c:'c1',n:'Terceirizar metade da produção',cap:285,why:'o terceirizado cobra a própria margem e a Vitta perde velocidade de lançamento'},
-              {k:'f2',c:'c2',n:'Cortar catálogo (400→250) e estoque (110→55 dias)',cap:75,why:'menos lançamentos a preço cheio; faltas nas semanas de pico'},
-              {k:'f3',c:'c3',n:'Encurtar o prazo das farmácias (60→30 dias)',cap:90,why:'as farmácias só aceitam com desconto ou bonificação'}];
-    const r=el('div');
-    const base=16*1.1;
-    fr.forEach(f=>{
-      const row=el('div',{class:'controls',style:'align-items:end;border-bottom:1px solid var(--line);padding-bottom:10px'});
-      row.append(el('div',{class:'ctl'},el('label',{},f.n),el('button',{class:'chip','aria-pressed':String(S[f.k]),onclick:()=>{S[f.k]=!S[f.k];rerender()}},S[f.k]?'Ligada':'Desligada'),el('small',{class:'note'},'Libera '+money(f.cap)+'. Custa margem porque '+f.why+'.')));
-      row.append(slider('Custo de margem (pontos)',S,f.c,0,8,0.5,v=>fmt(v,1)+' p.p.',rerender));
-      const cap=1000-f.cap, g=1100/cap, m=16-S[f.c], ret=m*g;
-      row.append(el('div',{class:'ctl'},el('label',{},'Sozinha'),el('div',{class:'val'},`giro ${fmt(g,2)} · margem ${pct(m,0)} · retorno ${pct(ret)}`),el('div',{class:ret>base?'feedback show ok':'feedback show ko'},ret>base?'Cria valor':'Destrói valor')));
-      r.append(row);
-    });
-    const on=fr.filter(f=>S[f.k]); const cap=1000-on.reduce((a,f)=>a+f.cap,0); const g=1100/cap; const m=16-on.reduce((a,f)=>a+S[f.c],0); const ret=m*g;
-    const emp=on.length?base/g:null;
-    r.append(el('div',{class:'kpis'},kpi('Capital',money(cap)),kpi('Giro',fmt(g,2)),kpi('Margem',pct(m,1)),kpi('Retorno',pct(ret),ret>=base?'good':'bad')));
-    r.append(diag(on.length===0?'warn':ret>=base?'good':'bad',on.length===0?'Nenhuma frente ligada':ret>=base?'Esta combinação cria valor':'Esta combinação destrói valor',
-      on.length===0?'Ligue ao menos uma frente. O retorno de hoje é 17,6% (16% × 1,1).':`Retorno de ${pct(ret)} (${pct(m,1)} × ${fmt(g,2)}) contra 17,6% hoje (16% × 1,1). Com este giro (1.100 ÷ ${fmt(cap,0)} = ${fmt(g,2)}), a combinação empata se a margem cair até ${pct(emp)} (17,6% ÷ ${fmt(g,2)}): ou seja, se o custo total de margem for de até ${fmt(16-emp,1)} pontos (você estimou ${fmt(16-m,1)}). ${on.length===1&&on[0].k==='f1'?'A terceirização mexe em como a Vitta produz, algo que o cliente não compra; é a frente a estudar, e a estimativa de Lúcia (4 pontos) é a que decide.':''}${on.length===3?' O plano completo pede que a Vitta gire como distribuidora sem ter a margem de ninguém.':''} Cortes que mexem na promessa (catálogo, prateleira, prazo) são os que destroem valor.`));
-    return r;
-   }}
- ]});
+ steps:STEPS_vitta});
 
 // ---------- 2 · Autopar ----------
 CASES.push({id:'autopar',tab:'Autopar',empresa:'Autopar',tema:'Onde o dinheiro fica parado',
@@ -326,53 +655,7 @@ CASES.push({id:'autopar',tab:'Autopar',empresa:'Autopar',tema:'Onde o dinheiro f
   ['Caixa não é resultado','Vender o obsoleto libera caixa, mas por menos do que o balanço diz. A diferença aparece como perda no resultado. A perda já tinha acontecido; a venda só a reconhece.','Notas 2.2'],
  ],
  state:{owners:{Ciclo:null,'Trânsito':null,'Segurança':null,Obsoleto:null},cut:50,freq:2,sell:false,recov:50,reserveCut:0,rec:'',prem:''},
- steps:[
-  {t:'Pergunta 1 · De dias para reais, e de quem é cada espera',
-   explain:'Cada dia de estoque é R$ 2 milhões parados: o custo das peças vendidas é de R$ 730 mi por ano, e 730 ÷ 365 = 2. Converta as quatro formas e diga quem decide cada uma.',
-   body(s,S,rerender){
-    const forms=[['Ciclo',30,'Compras (Henrique)'],['Trânsito',20,'Compras e logística'],['Segurança',25,'Planejamento (Carla) e comercial'],['Obsoleto',15,'Comercial (Paula)']];
-    const opts=['Compras (Henrique)','Compras e logística','Planejamento (Carla) e comercial','Comercial (Paula)'];
-    const r=el('div');
-    const tb=el('table');tb.append(el('tr',{},el('th',{},'Forma'),el('th',{class:'num'},'Dias'),el('th',{class:'num'},'R$ mi'),el('th',{},'Quem decide')));
-    forms.forEach(([n,d,o])=>{const sel=el('select',{onchange:e=>{S.owners[n]=e.target.value;rerender()}},el('option',{value:''},'Escolha…'),...opts.map(x=>el('option',{value:x,selected:S.owners[n]===x?'':null},x)));if(S.owners[n])sel.value=S.owners[n];
-      tb.append(el('tr',{},el('td',{},n),el('td',{class:'num'},d),el('td',{class:'num'},fmt(d*2,0)),el('td',{class:S.owners[n]?(S.owners[n]===o?'ok':'no'):''},sel)));});
-    tb.append(el('tr',{class:'total'},el('td',{},'Total'),el('td',{class:'num'},'90'),el('td',{class:'num'},'180'),el('td',{},'Meta: 25% × 180 = R$ 45 mi')));
-    r.append(el('div',{class:'tscroll'},tb));
-    const all=forms.every(([n,,o])=>S.owners[n]===o);
-    const any=forms.some(([n])=>S.owners[n]);
-    if(any) r.append(diag(all?'good':'warn',all?'Quatro esperas, quatro donos':'Confira os donos',all?'Só a segurança está nas mãos de Carla. O ciclo é de Henrique, o obsoleto é de Paula. A meta foi dada "à supply chain", mas três das quatro alavancas estão em outras áreas.':'Pense em qual decisão cria cada espera: o lote (compras), a viagem (logística), a promessa de 98% (planejamento e comercial), o portfólio (comercial).'));
-    return r;
-   }},
-  {t:'Pergunta 2 · A proposta de Carla',
-   explain:'Carla quer cortar o parâmetro de reserva. Mova o corte e veja quanto libera e o que acontece com a disponibilidade prometida às oficinas. A reserva de hoje, 25 dias (R$ 50 mi), garante 98%.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'controls'},slider('Corte da reserva de segurança',S,'cut',0,100,5,v=>pct(v,0),rerender)));
-    const lib=25*2*S.cut/100; const z98=2.054; const z=z98*(1-S.cut/100); const disp=Phi(z)*100;
-    r.append(el('div',{class:'kpis'},kpi('Capital liberado',money(lib)),kpi('Meta',money(45)),kpi('Disponibilidade',pct(disp,0),disp>=97?'good':'bad'),kpi('Faltas',`1 em ${Math.max(1,Math.round(1/(1-disp/100)))}`)));
-    r.append(diag(lib>=45?'warn':'bad',lib>=45?'Cumpre a meta, e derruba a promessa':'Não cumpre a meta',`Cortar ${pct(S.cut,0)} da reserva libera ${money(lib)} (${pct(S.cut,0)} de 25 dias × R$ 2 mi) e ${lib>=45?'cumpre':'não cumpre'} os R$ 45 mi. Pela curva da reserva (a mesma da tabela do caso), a disponibilidade vai de 98% para cerca de ${pct(disp,0)}: falta peça em uma a cada ${Math.max(1,Math.round(1/(1-disp/100)))} reposições. Quem percebe primeiro é o mecânico com o carro no elevador; depois Paula, quando as oficinas pararem de ligar. O caixa melhora no trimestre e a receita cai no seguinte.`));
-    return r;
-   }},
-  {t:'Pergunta 3 · A alternativa que cumpre a meta sem tocar na reserva',
-   explain:'Ataque as esperas sem função. Henrique diz que os fornecedores aceitam entregar todo mês; Paula resiste a liquidar o obsoleto, que atacadistas compram por metade do valor. Monte a combinação e veja o caixa, a perda contábil e a disponibilidade.',
-   body(s,S,rerender){
-    const r=el('div');
-    const freqSel=el('select',{onchange:e=>{S.freq=+e.target.value;rerender()}},el('option',{value:2},'A cada 2 meses (hoje)'),el('option',{value:1},'Mensal (com o mesmo desconto)'));freqSel.value=String(S.freq);
-    r.append(el('div',{class:'controls'},el('div',{class:'ctl'},el('label',{},'Frequência de entrega dos fornecedores'),freqSel),
-      el('div',{class:'ctl'},el('label',{},'Obsoleto'),el('button',{class:'chip','aria-pressed':String(S.sell),onclick:()=>{S.sell=!S.sell;rerender()}},S.sell?'Vender aos atacadistas':'Manter no armazém')),
-      slider('Recuperação na venda do obsoleto',S,'recov',0,100,10,v=>pct(v,0),rerender),
-      slider('Corte adicional da reserva',S,'reserveCut',0,100,5,v=>pct(v,0),rerender)));
-    const ciclo=S.freq===1?15:30; const cicloLib=(30-ciclo)*2;
-    const obsBal=S.sell?30:0, obsCash=S.sell?30*S.recov/100:0, perda=obsBal-obsCash;
-    const resLib=50*S.reserveCut/100; const disp=Phi(2.054*(1-S.reserveCut/100))*100;
-    const cash=cicloLib+obsCash+resLib, bal=cicloLib+obsBal+resLib;
-    r.append(el('div',{class:'kpis'},kpi('Caixa liberado',money(cash),cash>=45?'good':'bad'),kpi('Estoque a menos no balanço',money(bal)),kpi('Perda no resultado',money(perda),perda>0?'bad':''),kpi('Disponibilidade',pct(disp,0),disp>=97?'good':'bad')));
-    const ok=cash>=45&&S.reserveCut===0;
-    r.append(diag(ok?'good':cash>=45?'warn':'bad',ok?'Meta cumprida sem tocar na reserva':cash>=45?'Meta cumprida, mas com a reserva':'Ainda falta',
-      `Entregas ${S.freq===1?'mensais cortam o lote de 60 para 30 dias e o ciclo médio de 30 para 15 dias (metade do lote): 15 dias × R$ 2 mi = R$ 30 mi':'a cada 2 meses mantêm 30 dias de ciclo'}. ${S.sell?`O obsoleto sai por ${pct(S.recov,0)} dos R$ 30 mi do balanço: R$ ${fmt(obsCash,0)} mi de caixa e R$ ${fmt(perda,0)} mi de perda no resultado (30 − ${fmt(obsCash,0)}), que já tinha acontecido.`:'O obsoleto continua parado: R$ 30 mi no balanço que já não valem isso.'} ${S.reserveCut>0?`Cortar ${pct(S.reserveCut,0)} da reserva derruba a disponibilidade para ${pct(disp,0)}.`:''} ${ok?'Luís precisa de Henrique (fornecedores), de Paula (liquidar) e do CFO (aceitar a perda contábil).':''}`));
-    return r;
-   }}
- ]});
+ steps:STEPS_autopar});
 
 // ---------- 3 · Bom Preço ----------
 CASES.push({id:'bompreco',tab:'Bom Preço',empresa:'Supermercados Bom Preço',tema:'Mudar o desenho ou mudar quem paga',
@@ -384,42 +667,7 @@ CASES.push({id:'bompreco',tab:'Bom Preço',empresa:'Supermercados Bom Preço',te
   ['Desenho ou financiamento','Três rotas reduzem o mesmo indicador de capital de giro; só uma reduz o tamanho do cofre. Dias de ciclo iguais podem esconder decisões de natureza oposta.','Notas 3.4'],
  ],
  state:{cls:{A:null,B:null,C:null},rede:12,forn:20,banco:11,bAnual:3,bInv:20,rec:'',prem:''},
- steps:[
-  {t:'Pergunta 1 · Desenho ou financiamento?',
-   explain:'Para cada proposta, responda: a mercadoria passa a esperar menos na loja, ou só muda quem financia a espera?',
-   body(s,S,rerender){
-    const r=el('div',{class:'quiz'});
-    const items=[['A','Alongar o prazo (Fernanda)','Financiamento','A mercadoria fica os mesmos 45 dias; quem espera 30 dias a mais é o fornecedor.'],['B','Reposição automática (João)','Desenho','Sem pedido semanal e sem depósito cheio, a mercadoria fica 15 dias em vez de 45.'],['C','Risco sacado (Cláudio)','Financiamento','A mercadoria fica o mesmo tempo; quem espera é o banco, que desconta juros do fornecedor.']];
-    items.forEach(([k,n,ans,why])=>r.append(quiz(k+' · '+n,S.cls,k,['Desenho','Financiamento'],ans,rerender,why,'Pergunte: o produto passou a ficar menos tempo na loja?')));
-    if(Object.values(S.cls).every(v=>v)&&items.every(([k,,a])=>S.cls[k]===a)) r.append(diag('good','Diagnóstico','Só B muda o desenho. A e C liberam o mesmo capital trocando quem paga a espera: o fornecedor em A, o banco em C.'));
-    return r;
-   }},
-  {t:'Pergunta 2 · Quanto cada opção rende por ano',
-   explain:'Os R$ 90 mi liberados deixam de custar o custo de capital da rede: 90 × 12% = R$ 10,8 mi por ano. Cada opção tem um custo anual. Mude as taxas e veja o resultado de cada uma e o payback de B.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'controls'},slider('Custo de capital da rede',S,'rede',6,20,0.5,v=>pct(v,1),rerender),slider('Custo de capital do fornecedor',S,'forn',6,30,1,v=>pct(v,0),rerender),slider('Taxa do banco (risco sacado)',S,'banco',6,20,0.5,v=>pct(v,1),rerender),slider('Custo anual da reposição automática',S,'bAnual',0,10,0.5,v=>money(v,1),rerender),slider('Investimento da reposição automática',S,'bInv',0,40,1,v=>money(v,0),rerender)));
-    const g=90*S.rede/100; const a=g-90*S.forn/100, b=g-S.bAnual, c=g-90*S.banco/100;
-    const tb=el('table');tb.append(el('tr',{},el('th',{},'Opção'),el('th',{class:'num'},'Ganho'),el('th',{class:'num'},'Custo por ano'),el('th',{class:'num'},'Resultado por ano')));
-    [['A · Alongar o prazo',90*S.forn/100,a],['B · Reposição automática',S.bAnual,b],['C · Risco sacado',90*S.banco/100,c]].forEach(([n,cu,res])=>tb.append(el('tr',{},el('td',{},n),el('td',{class:'num'},fmt(g,1)),el('td',{class:'num'},fmt(cu,1)),el('td',{class:'num '+(res>=0?'ok':'no')},(res>=0?'+':'')+fmt(res,1)))));
-    r.append(el('div',{class:'tscroll'},tb));
-    r.append(barChart([['A',a],['B',b],['C',c]]));
-    r.append(el('div',{class:'kpis'},kpi('Payback de B',b>0?fmt(S.bInv/b,1)+' anos':'não se paga',b>0?'good':'bad')));
-    const best=[['A',a],['B',b],['C',c]].sort((x,y)=>y[1]-x[1])[0][0];
-    r.append(diag(best==='B'?'good':'warn',`A melhor opção com estas taxas é ${best}`,`A ganha ${fmt(g,1)} (90 × ${pct(S.rede,1)}) e paga ${fmt(90*S.forn/100,1)} no preço (90 × ${pct(S.forn,0)}, o custo de capital do fornecedor): ${a>=0?'cria':'destrói'} valor. C quase empata com a rede (${pct(S.banco,1)} contra ${pct(S.rede,1)}). B é a única que elimina a espera em vez de repassá-la${b>0?`, e paga o investimento em ${fmt(S.bInv/b,1)} anos`:''}; a conta nem inclui menos ruptura e menos perda de perecíveis.`));
-    return r;
-   }},
-  {t:'Pergunta 3 · Quando alongar o prazo deixa de ser ruim',
-   explain:'Fernanda tem razão sobre redes grandes com fornecedores grandes. Mova o custo de capital do fornecedor e veja onde a Opção A troca de sinal. Depois pense no dono do Laticínio São Bento, que trabalha a 20%.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'controls'},slider('Custo de capital do fornecedor',S,'forn',4,30,1,v=>pct(v,0),rerender)));
-    const g=90*S.rede/100, a=g-90*S.forn/100;
-    r.append(el('div',{class:'kpis'},kpi('Resultado de A por ano',(a>=0?'+':'')+fmt(a,1),a>=0?'good':'bad'),kpi('Ponto de troca de sinal',pct(S.rede,1))));
-    r.append(diag(a>=0?'good':'bad',a>=0?'Com este fornecedor, A cria valor':'Com este fornecedor, A destrói valor',`A troca de sinal acontece quando o fornecedor tem o mesmo custo de capital da rede (${pct(S.rede,1)}). Um fornecedor multinacional a 8% carregaria a espera mais barato que a rede. O São Bento, a 20%, não: ele sobe o preço na próxima tabela ou vende para a cooperativa, e a rede perde o que a diferencia. A mesma medida muda de sinal conforme quem a recebe.`));
-    return r;
-   }}
- ]});
+ steps:STEPS_bompreco});
 
 // ---------- 4 · Embalagens Sul ----------
 CASES.push({id:'embalagens',tab:'Embalagens Sul',empresa:'Embalagens Sul',tema:'Quanto vale uma decisão',
@@ -431,40 +679,7 @@ CASES.push({id:'embalagens',tab:'Embalagens Sul',empresa:'Embalagens Sul',tema:'
   ['O payback não enxerga capital','Payback é o tempo que a economia anual leva para devolver o investimento. Ele vê bem um corte de custo e não tem onde registrar capital liberado. Para ele, um projeto que devolve R$ 40 mi ao caixa e não corta custo não vale nada.','Notas 4.7'],
  ],
  state:{tax:34,wacc:12,aEcon:6,aInv:20,bLib:40,bInv:4,bAnual:2,rec:'',prem:''},
- steps:[
-  {t:'Pergunta 1 · A régua e o valor de cada projeto',
-   explain:'Monte a régua com o imposto e o custo de capital. Depois veja quanto cada projeto vale para o acionista. Mude os números do projeto para sentir o peso de um custo que se repete.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'controls'},slider('Imposto sobre o lucro',S,'tax',0,40,1,v=>pct(v,0),rerender),slider('Custo de capital',S,'wacc',6,20,0.5,v=>pct(v,1),rerender)));
-    const reg=(1-S.tax/100)/(S.wacc/100);
-    r.append(el('div',{class:'ruler'},`R$ 1 de lucro por ano vale R$ ${fmt(reg,2)} · R$ 1 de capital liberado vale R$ 1,00`));
-    r.append(el('div',{class:'controls'},slider('A · economia anual',S,'aEcon',0,15,0.5,v=>money(v,1),rerender),slider('A · investimento',S,'aInv',0,40,1,v=>money(v,0),rerender),slider('B · estoque liberado',S,'bLib',0,70,1,v=>money(v,0),rerender),slider('B · gasto único',S,'bInv',0,15,0.5,v=>money(v,1),rerender),slider('B · custo anual',S,'bAnual',0,6,0.5,v=>money(v,1),rerender)));
-    const vA=S.aEcon*reg-S.aInv, vB=S.bLib-S.bInv-S.bAnual*reg;
-    r.append(el('div',{class:'kpis'},kpi('Vale A',fmt(vA,1),vA>=vB?'good':''),kpi('Vale B',fmt(vB,1),vB>vA?'good':''),kpi('Payback de A',S.aEcon>0?fmt(S.aInv/S.aEcon,1)+' anos':'—'),kpi('Payback de B','não existe')));
-    r.append(diag(vB>vA?'good':'warn',vB>vA?'B vale mais':'A vale mais',`A: ${fmt(S.aEcon,1)} por ano × ${fmt(reg,2)} − ${fmt(S.aInv,0)} = ${fmt(vA,1)}. B: ${fmt(S.bLib,0)} − ${fmt(S.bInv,1)} − ${fmt(S.bAnual,1)} × ${fmt(reg,2)} = ${fmt(vB,1)}. ${vB>vA?'Ricardo e Patrícia estavam certos ao mesmo tempo; faltava a unidade comum. O ganho de B está no balanço, e o payback não tem onde registrá-lo.':'Com estes números a máquina vence; note quanto o custo anual de B pesa, porque conta muitas vezes.'}`));
-    return r;
-   }},
-  {t:'Pergunta 2 · Por que o payback não vê o Projeto B',
-   explain:'O payback só conta economias de custo. Marque o que cada métrica enxerga.',
-   body(s,S,rerender){
-    const r=el('div');
-    r.append(el('div',{class:'tscroll'},(function(){const tb=el('table');tb.append(el('tr',{},el('th',{},'Efeito'),el('th',{},'Payback vê?'),el('th',{},'Régua vê?')));[['Economia anual de custo (A)','Sim','Sim, × 5,5'],['Investimento (A e B)','Sim','Sim, × 1'],['Capital liberado do estoque (B)','Não: não há onde registrar','Sim, × 1'],['Custo anual de B','Sim, como piora','Sim, × 5,5']].forEach(x=>tb.append(el('tr',{},...x.map((c,i)=>el('td',{class:i>0?(c.startsWith('Não')?'no':'ok'):''},c)))));return tb})()));
-    r.append(diag('','O que Ricardo deveria exigir','Que todo projeto de supply chain chegue ao comitê com dois números: o efeito sobre o custo anual e o efeito sobre o capital preso, convertidos na mesma unidade. O payback mede bem o risco de prazo; não mede valor de capital liberado.'));
-    return r;
-   }},
-  {t:'Pergunta 3 · Quanto o S&OP precisa liberar para empatar',
-   explain:'Patrícia promete R$ 40 mi. Mova a liberação real e encontre o ponto em que B deixa de valer mais que A. É a premissa decisiva, e quem a garante é Patrícia com os três clientes.',
-   body(s,S,rerender){
-    const r=el('div');
-    const reg=(1-S.tax/100)/(S.wacc/100); const vA=S.aEcon*reg-S.aInv;
-    r.append(el('div',{class:'controls'},slider('Estoque que o S&OP de fato libera',S,'bLib',0,60,1,v=>money(v,0),rerender)));
-    const vB=S.bLib-S.bInv-S.bAnual*reg; const emp=vA+S.bInv+S.bAnual*reg;
-    r.append(el('div',{class:'kpis'},kpi('Vale B',fmt(vB,1),vB>=vA?'good':'bad'),kpi('Vale A',fmt(vA,1)),kpi('Empate',money(emp,0))));
-    r.append(diag(vB>=vA?'good':'bad',vB>=vA?'B ainda vence':'A passa a vencer',`B empata com A quando libera ${money(emp,0)}: o valor de A (${fmt(vA,1)}) mais o gasto único (${fmt(S.bInv,1)}) mais o custo anual × régua (${fmt(S.bAnual,1)} × ${fmt(reg,2)}). Uma aprovação bem escrita: "liberar R$ 40 mi de estoque aceitando até R$ ${fmt(S.bAnual,1)} mi por ano de custo; se em doze meses não tiver liberado R$ ${fmt(emp,0)} mi, o comitê revê o projeto".`));
-    return r;
-   }}
- ]});
+ steps:STEPS_embalagens});
 
 // ---------- 5 · Vida ----------
 CASES.push({id:'vida',tab:'Vida',empresa:'Farmácias Vida',tema:'Crescer para a frente ou para trás',
@@ -476,39 +691,7 @@ CASES.push({id:'vida',tab:'Vida',empresa:'Farmácias Vida',tema:'Crescer para a 
   ['Valor econômico (EVA)','Lucro depois dos impostos menos custo de capital × capital preso. É o que sobra depois de remunerar todos os donos do dinheiro.','Notas 5.1'],
  ],
  state:{rec0:2000,rec1:3000,luc0:240,luc1:300,cap0:1000,cap1:1800,wacc:12,mature:60,rec:'',prem:''},
- steps:[
-  {t:'Pergunta 1 · O que cresceu mais',
-   explain:'Compare o crescimento da receita, do lucro e do capital. O minicaso diz onde os R$ 800 mi novos foram parar: lojas 480, sortimento 245, convênios 75.',
-   body(s,S,rerender){
-    const r=el('div');
-    const gr=(a,b)=>(b/a-1)*100;
-    r.append(el('div',{class:'kpis'},kpi('Receita','+'+pct(gr(S.rec0,S.rec1),0)),kpi('Lucro','+'+pct(gr(S.luc0,S.luc1),0)),kpi('Capital','+'+pct(gr(S.cap0,S.cap1),0),'bad')));
-    r.append(barChart([['Receita',gr(S.rec0,S.rec1)],['Lucro',gr(S.luc0,S.luc1)],['Capital',gr(S.cap0,S.cap1)]],'%'));
-    r.append(diag('warn','Diagnóstico','O capital cresceu mais que a receita (+80% contra +50%), e a receita mais que o lucro (+25%). As lojas novas prenderam mais capital: R$ 480 mi dos R$ 800 mi novos (60%), cerca de R$ 4 mi por loja, cada loja exige reforma, equipamentos e estoque inicial antes de vender. O sortimento vem em segundo: perfumaria gira devagar e está em todas as 320 lojas.'));
-    return r;
-   }},
-  {t:'Pergunta 2 · O retorno médio',
-   explain:'Lucro dividido por capital, antes e depois. Ele continua acima de 12%. Isso basta para aprovar o plano?',
-   body(s,S,rerender){
-    const r=el('div');
-    const r0=S.luc0/S.cap0*100, r1=S.luc1/S.cap1*100;
-    r.append(el('div',{class:'kpis'},kpi('Há três anos',pct(r0)),kpi('Hoje',pct(r1),r1>=S.wacc?'good':'bad'),kpi('Custo de capital',pct(S.wacc,0))));
-    r.append(diag('warn','A média prova menos do que parece',`Os ${pct(r1)} provam que a rede, no total, ainda cria valor. Não provam que o crescimento criou, porque a média mistura as lojas antigas, muito rentáveis, com o capital que acabou de entrar. Rogério pode usar a média para defender a rede; não para defender o plano.`));
-    return r;
-   }},
-  {t:'Pergunta 3 · O retorno do capital novo',
-   explain:'Do dinheiro que entrou, quanto voltou em lucro novo? Compare com o custo. Depois mova o argumento de Tiago: quanto lucro as lojas novas vão gerar quando maduras?',
-   body(s,S,rerender){
-    const r=el('div');
-    const dC=S.cap1-S.cap0, dL=S.luc1-S.luc0;
-    r.append(el('div',{class:'controls'},slider('Lucro novo quando as lojas amadurecerem',S,'mature',dL,160,2,v=>money(v,0),rerender),slider('Custo de capital',S,'wacc',8,16,0.5,v=>pct(v,1),rerender)));
-    const ret=S.mature/dC*100, eva=S.mature-S.wacc/100*dC, emp=S.wacc/100*dC;
-    const eva0=S.luc0-S.wacc/100*S.cap0, eva1=S.luc1-S.wacc/100*S.cap1;
-    r.append(el('div',{class:'kpis'},kpi('Retorno do capital novo',pct(ret),ret>=S.wacc?'good':'bad'),kpi('Por R$ 100 novos','R$ '+fmt(ret,2)+' contra R$ '+fmt(S.wacc,0)),kpi('Valor por ano no capital novo',(eva>=0?'+':'')+fmt(eva,0),eva>=0?'good':'bad'),kpi('Empate',money(emp,0))));
-    r.append(diag(eva>=0?'good':'bad',eva>=0?'Com esta maturação, o crescimento empata ou cria valor':'O crescimento destrói valor',`Hoje o capital novo rende ${pct(dL/dC*100)} (60 ÷ 800): ${money(S.wacc/100*dC-dL,0)} por ano de valor perdido (800 × ${pct(S.wacc,1)} = ${fmt(S.wacc/100*dC,0)} de custo, menos 60 de lucro novo). Valor econômico da rede (lucro − ${pct(S.wacc,1)} × capital): ${fmt(eva0,0)} há três anos (240 − ${fmt(S.wacc/100*S.cap0,0)}), ${fmt(eva1,0)} hoje (300 − ${fmt(S.wacc/100*S.cap1,0)}). Para empatar, o lucro novo precisa chegar a ${money(emp,0)} (${pct(S.wacc,0)} de ${money(dC,0)}). ${S.mature>=emp?'Se Tiago mostrar esse número, e em que ano, o plano pode seguir, com menos capital por loja.':'Enquanto o desenho for o mesmo, crescer amplia a perda. A resposta madura não é parar de crescer: é crescer com menos capital por loja.'}`));
-    return r;
-   }}
- ]});
+ steps:STEPS_vida});
 
 // ============ componentes ============
 function slider(label,S,key,min,max,step,f,rerender){
@@ -589,7 +772,7 @@ const META={
 };
 const EXTRA=[{"desafios":[["E se a terceirização custar os 4 pontos de margem que Lúcia estima e, além disso, atrasar um em cada quatro lançamentos, tirando 5% da receita?","Capital de 715 (1.000 − 285), receita de 1.045 (1.100 menos 5%): giro de 1,46 (1.045 ÷ 715). Margem de 12% (16 − 4). Retorno de 17,5% (12% × 1,46), contra 17,6% hoje. A frente que criava valor passa a empatar, ligeiramente abaixo. A lição: a perda de margem e a perda de receita somam-se, e a velocidade de lançamento (o 5 da promessa) é a premissa escondida atrás da estimativa de Lúcia."],["O minicaso mantém a receita constante quando se cortam 150 itens. E se o catálogo menor tirar 10% da receita?","Só a frente do catálogo: capital de 925 (1.000 − 75), receita de 990 (1.100 menos 10%), giro de 1,07 (990 ÷ 925); margem de 13% (16 − 3); retorno de 13,9% (13% × 1,07), contra 15,5% com a receita constante (13% × 1,19) e 17,6% hoje. A simplificação do minicaso favorece o plano de Marcos; corrigida, o plano fica pior, não melhor."]],"atrito":["Marcos chegou há três semanas e precisa mostrar resultado. Renata vai discordar do novo CFO na primeira reunião de diretoria. Como ela faz isso sem transformar a reunião numa disputa?","Começar pelo que concorda (há capital demais em alguns lugares); trocar a meta de giro por uma meta de retorno, que Marcos também pode defender; oferecer a ele a frente que funciona, a terceirização, como piloto. Quem vence a discussão sem dar uma vitória ao outro perde a implementação."],"ponte":["Ponte para o minicaso 2","A Vitta mostrou que o capital de uma fabricante está nas fábricas. Numa distribuidora, ele está quase todo no estoque. Se o CFO mandar cortar um quarto dele, onde vocês cortariam?","A pergunta leva a turma a responder “no estoque de segurança”, que é exatamente a armadilha da Autopar."]},{"desafios":[["E se os atacadistas pagarem só 30% do valor do obsoleto, e não metade?","O obsoleto rende R$ 9 mi de caixa (30% de R$ 30 mi) e R$ 21 mi de perda contábil (30 − 9). Com os 30 do ciclo, chega-se a 39: faltam 6 para os 45. Ou se cortam R$ 6 mi dos R$ 50 mi da reserva (12%), e a disponibilidade cai de 98% para cerca de 96,5%, ou se renegocia a meta. A discussão que importa: vale mais cumprir a meta do CFO ou a promessa às oficinas? Quem decide, e com que número?"],["A reserva supõe prazo de reposição constante. E se o navio atrasar com frequência?","A reserva calculada fica pequena demais: a variação do prazo também precisa de cobertura. A disponibilidade real já seria menor que 98%, e cortar a reserva seria ainda mais caro do que a tabela mostra. É o argumento mais forte contra a proposta de Carla."]],"atrito":["Henrique é cobrado por preço, Paula por receita, Carla pela meta de estoque. Como Luís faz Henrique aceitar entregas mensais sem sentir que perde o bônus?","Mostrar a Henrique o custo total, não só o preço: os 15 dias de ciclo a mais, que as entregas a cada dois meses criam, são R$ 30 mi parados (15 × R$ 2 mi) e custam R$ 3,6 mi por ano de capital (30 × 12%), um custo que hoje ninguém cobra dele. A saída é dividir a meta por dono da espera e medir compras pelo custo total. E o CFO precisa aceitar a perda contábil fora da meta de Paula."],"ponte":["Ponte para o minicaso 3","A Autopar liberou caixa fazendo a peça esperar menos. Há outro jeito de mover o mesmo indicador sem tocar na espera: mudar quem paga por ela. É a mesma coisa?","A turma tende a dizer que sim, porque o indicador melhora igual. O Bom Preço mostra que não é."]},{"desafios":[["Supusemos que o Laticínio São Bento repassa os 20% inteiros no preço. E se, com medo de perder a rede, ele repassar só metade?","Com metade do repasse, a rede paga R$ 9 mi por ano (metade de 90 × 20%), não 18: a Opção A vai de −7,2 para +1,8 (10,8 − 9). A decisão não se inverte (B rende +7,8), mas A deixa de destruir valor para a rede. Os outros R$ 9 mi por ano não somem: o fornecedor os absorve a 20%, e é aí que mora o risco de perdê-lo. A rede “ganha” transferindo prejuízo a quem é mais frágil na cadeia."],["E se o fornecedor fosse uma multinacional com custo de capital de 8%?","O fornecedor carrega R$ 90 mi a 8% e repassa 7,2 por ano (90 × 8%). A Opção A rende 10,8 − 7,2 = +3,6 por ano: cria valor, mas ainda menos que B (+7,8). Alongar prazo com quem tem dinheiro mais barato é legítimo; o erro é aplicar a mesma regra a todos os fornecedores."]],"atrito":["Fernanda é cobrada pelo capital de giro, e o prazo maior bate a meta dela no mês seguinte. A reposição automática leva um ano e tira dos gerentes de loja o poder de pedir. Quem perde com a Opção B, e como se lida com isso?","Os gerentes perdem autonomia e passam a ser cobrados por algo que não controlam mais; a métrica deles precisa mudar junto (ruptura medida pelo sistema, não pela intuição). Fernanda pode usar o risco sacado como ponte de curto prazo enquanto B é implantada. Sem mudar as métricas, B fracassa por resistência, não por conta."],"ponte":["Ponte para o minicaso 4","No Bom Preço, a reposição automática custa R$ 20 mi uma vez e R$ 3 mi por ano, e libera R$ 90 mi. Como comparar um custo anual com um capital liberado sem misturar as unidades?","É exatamente o problema do comitê da Embalagens Sul, e a régua é a resposta."]},{"desafios":[["E se o custo de capital da empresa fosse 8%, e não 12%?","A régua sobe para 0,66 ÷ 0,08 = 8,25. A passa a valer 6 × 8,25 − 20 = 29,5; B, 40 − 4 − 2 × 8,25 = 19,5. A decisão se inverte: com dinheiro barato, lucro recorrente vale mais e capital liberado vale menos. O empate acontece quando a régua vale 7 (6 × 7 − 20 = 40 − 4 − 2 × 7), ou seja, custo de capital de 0,66 ÷ 7 = 9,4%. A escolha entre os projetos depende do custo de capital, um número que operações raramente pergunta."],["O minicaso supõe que a liberação é permanente. E se a empresa crescer 20% ao ano?","Pela lei de Little, o estoque acompanha as vendas: o que o S&OP reduz são os dias de espera, não um valor fixo em reais. Com vendas 20% maiores, a diferença entre ter e não ter o S&OP passa de 40 para cerca de 48. O crescimento não apaga o ganho; aumenta. O que apaga é o processo deixar de funcionar."]],"atrito":["Ricardo foi treinado a vida inteira para olhar o payback. Como Patrícia leva o S&OP a ele sem parecer que está dizendo que a métrica dele está errada?","Falar a língua dele: os R$ 40 mi liberados deixam de custar 12% ao ano, ou seja, R$ 4,8 mi por ano de custo de capital evitado (40 × 12%), comparável aos R$ 6 mi de economia da máquina. Ou, pelo valor econômico anual: B dá 4,8 − 1,32 (custo anual de 2 depois do imposto) − 0,48 (12% dos 4 investidos) = 3,0; A dá 3,96 (6 depois do imposto) − 2,4 (12% dos 20 investidos) = 1,56. E oferecer a ele o que mais valoriza: uma meta verificável e uma cláusula de revisão."],"ponte":["Ponte para o minicaso 5","A régua acabou de aprovar um projeto que devolve capital ao caixa. E quando o capital entra, em vez de sair? Uma empresa que cresce 50% e bate recorde de lucro está criando valor?","A turma, com a régua fresca, já desconfia da resposta; a Vida mostra onde o capital novo foi parar."]},{"desafios":[["Se a Vida cortasse pela metade os dias de estoque do sortimento ampliado, sem perder lucro, o crescimento empataria?","Pela lei de Little, metade dos dias libera cerca de metade dos R$ 245 mi, uns R$ 122 mi. O capital novo cai para cerca de 678 (800 − 122), e o retorno sobe para 60 ÷ 678 = 8,9%, ainda abaixo de 12%. Para empatar com o lucro de hoje, o capital novo teria de ser no máximo R$ 500 mi (60 ÷ 12%): o grosso do ajuste está nas lojas (480), não no sortimento."],["Tiago diz que o lucro novo chegará a R$ 96 mi. Em que ano isso precisa acontecer para o argumento valer?","Enquanto não chega, cada ano custa a diferença entre 96 e o lucro novo daquele ano: R$ 36 mi hoje (96 − 60), menos nos anos seguintes. Uma promessa de empate sem data é uma promessa sem custo para quem a faz. A pergunta transforma o argumento de Tiago num compromisso com prazo, exatamente o que Beatriz pediu."]],"atrito":["Rogério é o CEO, o lucro é recorde e a marca é a mais lembrada da região. Como Beatriz faz a pergunta sobre o capital sem parecer que é contra crescer?","Enquadrar como crescer melhor, não como frear: aprovar em fases, pedir o retorno por safra de lojas e condicionar a fase seguinte ao número. Vale perguntar também o que mede hoje o sucesso de Tiago, lojas abertas ou retorno da safra, porque é isso que ele vai entregar."],"ponte":["Ponte para o fechamento","Cinco empresas, cinco setores. Em todas, a conta foi curta. O que decidiu cada uma?","A turma deve chegar sozinha à resposta: uma premissa de operação, convertida em valor por finanças. É a frase que fecha a sessão."]}];
 ['vitta','autopar','bompreco','embalagens','vida'].forEach((k,i)=>{const x=EXTRA[i];META[k].desafios=x.desafios;META[k].atrito=x.atrito;META[k].transicao=x.ponte});
-const NOTA=[['decisao','Decisão'],['num','O número'],['prem','A premissa crítica'],['gatilho','Gatilho de revisão'],['porque','Por quê, nas palavras do grupo']];
+const NOTA=[['decisao','Decisão'],['num','O número'],['prem','A premissa crítica'],['gatilho','Gatilho de revisão']];
 const words=t=>(t||'').trim().split(/\s+/).filter(Boolean).length;
 const hasNum=t=>/\d/.test(t||'');
 
@@ -692,73 +875,123 @@ function caseReader(c,open){const k=caso(c);const d=el('details',{class:'reader'
  if(k.numeros){d.append(el('h4',{class:'subh'},'Os números'),tbl(k.numeros));if(k.numerosNota)d.append(el('small',{class:'note',html:md(k.numerosNota)}))}
  return d}
 function tutorCard(txt){return el('div',{class:'tutor'},el('div',{class:'tav','aria-hidden':'true'},'P'),el('div',{},el('div',{class:'pl'},'O professor'),el('p',{},txt)))}
-function problemaStep(c){return {t:'O problema',fase:0,
- explain:'Antes de qualquer conta, entendam a decisão: quem decide, o que está em jogo e quem pensa o quê. Leiam o caso completo aqui ou no papel.',
+const FASES=['O problema','A análise','A decisão','A apresentação'];
+// ===== múltipla escolha: interpretação de cada pergunta e resposta ao contra-argumento =====
+const MC={
+vitta:{q:[
+ {p:'Marcos tem razão quando diz que a Vitta é ineficiente?',o:[
+  ['Sim: girar 1,1 contra 4,0 é ineficiência',0,'Compara metade da conta. Retorno = margem × giro: a Vitta rende 17,6% (16% × 1,1) e a DistriMax, 16,0% (4% × 4,0).'],
+  ['Não: a Vitta rende mais (17,6% contra 16%), e o giro baixo vem das fábricas, que a DistriMax não tem',1,'A margem alta paga pelo giro baixo. As fábricas são 67% do capital; o estoque, 15%. Comparar uma fabricante com uma distribuidora pelo giro é comparar modelos de negócio.'],
+  ['Não dá para saber sem comparar o estoque das duas',0,'O estoque é só 15% do capital da Vitta (R$ 150 mi). A diferença de giro está nas fábricas (R$ 670 mi).']]},
+ {p:'Os 110 dias de estoque da Vitta são…',o:[
+  ['Desperdício: a DistriMax trabalha com 25 dias',0,'A DistriMax vende sabonete, com demanda previsível: produto funcional, cadeia eficiente. A Vitta vende lançamentos imprevisíveis: cadeia responsiva, que precisa de folga.'],
+  ['O custo da promessa (produto 5, acesso 4): produto inovador pede cadeia responsiva; e são só 15% do capital',1,'Se faltar na farmácia na semana do lançamento, a janela se perde. Pode haver estoque sem função dentro dos 110 dias, e a resposta é procurá-lo, não cortar o total pela metade.'],
+  ['Irrelevantes: o que importa é o giro do capital',0,'O giro depende do estoque e, muito mais, das fábricas. E o retorno depende do giro e da margem, que o estoque sustenta.']]},
+ {p:'O que Renata deve recomendar, e qual estimativa precisa testar antes?',o:[
+  ['Recusar o plano inteiro: toda frente custa margem',0,'Uma frente cria valor: terceirizar metade dá 18,5% (12% × 1,54) contra 17,6% hoje. Recusar tudo deixa isso na mesa.'],
+  ['Estudar só a terceirização, em piloto; a estimativa que decide é o custo de margem de Lúcia (4 pontos, contra 4,6 de empate)',1,'Capital de 715 (1.000 − 285), giro de 1,54. A margem pode cair até 11,4% (17,6% ÷ 1,54): 4,6 pontos. Se Lúcia estiver errada para cima, a frente deixa de valer. Catálogo (15,5%) e prazo (16,9%) destroem valor.'],
+  ['Aprovar o plano completo: libera R$ 450 mi',0,'Giro de 2,0 (1.100 ÷ 550) com margem de 7% dá 14,0%, abaixo de 17,6%. O capital liberado vale menos do que os 9 pontos de margem (R$ 99 mi por ano).']]}],
+ contra:{p:'Marcos: “se terceirizar metade cria valor, terceirizar tudo cria o dobro; e giro 2,0 é o que os analistas cobram.” A melhor resposta:',o:[
+  ['Concordar: se metade cria valor, tudo cria mais',0,'O custo de margem não cresce em linha reta. A primeira metade são itens maduros; a segunda são lançamentos, onde atraso custa o 5 da promessa.'],
+  ['O custo não é linear: a segunda metade são lançamentos, o 5 da promessa. E o acionista recebe retorno, não giro: com o plano completo, 14% contra 17,6%',1,'Concorda com o que é verdade (a primeira metade cria valor), traz o mecanismo e termina num número.'],
+  ['Recusar: terceirizar é sempre perder controle',0,'É um adjetivo, não um número. Marcos responde com outro adjetivo e a reunião vira disputa.']]}},
+autopar:{q:[
+ {p:'A meta de 25% está nas mãos de quem?',o:[
+  ['Da supply chain, como disse o CFO',0,'“Supply chain” não decide o lote (compras), a viagem (logística) nem o portfólio (comercial). Três das quatro esperas estão em outras áreas.'],
+  ['De Carla: ela controla o estoque de segurança',0,'Carla controla 25 dos 90 dias. É por isso que a proposta dela cai no único parâmetro que alguém controla sozinho.'],
+  ['De quatro áreas: compras (ciclo, 60), logística (trânsito, 40), planejamento e comercial (segurança, 50), comercial (obsoleto, 30)',1,'R$ 180 mi em quatro esperas com quatro donos. A meta de R$ 45 mi (25% × 180) só sai de uma área se for cortando a reserva.']]},
+ {p:'A proposta de Carla (cortar a reserva pela metade)…',o:[
+  ['Cumpre a meta e é a mais rápida',0,'Metade de 25 dias são 12,5 dias × R$ 2 mi = R$ 25 mi. A meta é 45.'],
+  ['Não cumpre a meta (R$ 25 mi) e derruba a disponibilidade de 98% para cerca de 85%',1,'Pela tabela da reserva, 50 de reserva sustenta cerca de 85%: falta peça em uma de cada sete reposições. Quem percebe primeiro é o mecânico com o carro no elevador.'],
+  ['Cumpre a meta, mas custa um pouco de serviço',0,'Nem cumpre (25 < 45), nem é pouco: os últimos pontos de disponibilidade são os mais caros em reserva, e cortar metade tira 13 pontos.']]},
+ {p:'A alternativa com entregas mensais e venda do obsoleto…',o:[
+  ['Libera R$ 60 mi de caixa (30 do ciclo + 30 do obsoleto)',0,'O obsoleto vale R$ 30 mi no balanço, mas o atacadista paga metade: R$ 15 mi de caixa e R$ 15 mi de perda contábil.'],
+  ['Libera R$ 45 mi de caixa (30 + 15), com R$ 15 mi de perda contábil, e exige Henrique, Paula e o CFO',1,'Entrega mensal corta o ciclo médio de 30 para 15 dias (15 × 2 = 30). A perda do obsoleto já tinha acontecido; a venda só a reconhece. Luís precisa de três áreas que não são dele.'],
+  ['Libera R$ 30 mi; o obsoleto não deve ser vendido porque gera perda',0,'A perda já existe: as peças não valem o que o balanço diz. Vender transforma R$ 15 mi em caixa; manter deixa R$ 30 mi parados que não valem isso.']]}],
+ contra:{p:'O CFO: “vender o obsoleto põe R$ 15 mi de perda no trimestre, e o mercado vai ver; cortar a reserva não aparece em lugar nenhum.” A melhor resposta:',o:[
+  ['Adiar a venda do obsoleto para não mostrar a perda',0,'A perda já aconteceu quando as peças deixaram de vender. Adiar só mantém R$ 30 mi parados no balanço valendo 15.'],
+  ['A perda já aconteceu; vender só a reconhece e traz R$ 15 mi de caixa. Cortar a reserva também custa, mas na receita: falta peça em uma de cada sete reposições',1,'Separa caixa de resultado e mostra onde aparece cada custo: o do obsoleto no balanço, o da reserva na receita do trimestre seguinte.'],
+  ['Cortar a reserva, como o CFO prefere, e deixar o obsoleto',0,'Libera 25, não 45, e derruba a disponibilidade para 85%. O custo existe; só não aparece no balanço.']]}},
+bompreco:{q:[
+ {p:'Em qual proposta a mercadoria passa a esperar menos na loja?',o:[
+  ['Nas três: todas liberam R$ 90 mi',0,'Liberam o mesmo capital, mas por caminhos opostos. Em A e C a mercadoria fica os mesmos 45 dias; só muda quem financia a espera.'],
+  ['Só na reposição automática (B): de 45 para 15 dias. A e C mudam quem paga a espera: o fornecedor e o banco',1,'O indicador de capital de giro melhora igual nas três. Só B reduz o tamanho da fila; as outras a transferem.'],
+  ['Em A e C: são as mais rápidas de implantar',0,'Rapidez não é espera. Em A o fornecedor espera 30 dias a mais; em C, o banco. A mercadoria continua 45 dias na loja.']]},
+ {p:'Quanto cada opção rende por ano (R$ mi)?',o:[
+  ['A é a melhor: não tem custo nenhum',0,'O fornecedor carrega R$ 90 mi a 20% e repassa R$ 18 mi por ano no preço. Ganho de 10,8 (90 × 12%) menos 18 = −7,2.'],
+  ['B: +7,8 (10,8 − 3), payback de 2,6 anos (20 ÷ 7,8). A: −7,2. C: +0,9 (10,8 − 9,9)',1,'As três ganham 10,8 (90 × 12%). O que as separa é quanto custa quem carrega a espera: 20% do fornecedor, 11% do banco, ou R$ 3 mi por ano de manutenção.'],
+  ['C é a melhor: o banco é mais barato que o fornecedor',0,'Mais barato que o fornecedor (11% contra 20%), mas quase igual à rede (12%): sobra 0,9 por ano. E a fila continua do mesmo tamanho.']]},
+ {p:'Quando alongar o prazo com o fornecedor cria valor?',o:[
+  ['Nunca: é sempre empurrar o problema para o outro',0,'Depende de quem é o outro. Uma multinacional a 8% carrega a espera mais barato do que a rede a 12%: a cadeia inteira paga menos.'],
+  ['Quando o fornecedor tem custo de capital menor que o da rede (12%). O São Bento, a 20%, não: sobe o preço ou vai para a cooperativa',1,'Resultado de A = 90 × (12% − custo do fornecedor). Positivo abaixo de 12%, negativo acima. A mesma medida muda de sinal conforme quem a recebe.'],
+  ['Sempre que o fornecedor aceitar',0,'O São Bento aceita e repassa na próxima tabela, ou vende para a cooperativa. Aceitar não é absorver.']]}],
+ contra:{p:'Fernanda: “os fornecedores aceitaram os 60 dias. Se ninguém reclamou, de onde vem esse custo de 20%?” A melhor resposta:',o:[
+  ['Eles não reclamam: repassam. R$ 90 mi a 20% são R$ 18 mi por ano na próxima tabela de preço, ou o fornecedor vai vender para quem paga em 30',1,'Troca R$ 10,8 mi de ganho por R$ 18 mi de custo e arrisca o sortimento local que diferencia a rede.'],
+  ['Se ninguém reclamou, o custo é zero',0,'Fornecedor pequeno não reclama com o maior cliente; embute no preço. O custo aparece com um ano de atraso, na tabela.'],
+  ['Pedir desconto em troca do prazo maior',0,'Desconto é o repasse ao contrário: o fornecedor a 20% só dá desconto se tirar de outro lugar. O custo da espera continua existindo.']]}},
+embalagens:{q:[
+ {p:'Na régua, quanto vale cada projeto para o acionista?',o:[
+  ['A vale 13 (6 × 5,5 − 20) e B vale 25 (40 − 4 − 2 × 5,5)',1,'R$ 1 de economia anual vale 5,5 (0,66 ÷ 0,12); R$ 1 de estoque liberado vale 1. B vale quase o dobro de A com um quinto do investimento.'],
+  ['A vale 33 e B vale 40',0,'Esqueceu o investimento de A (−20), o gasto único de B (−4) e o custo anual de B (−2 × 5,5 = −11).'],
+  ['A vale 13 e B vale 36',0,'Esqueceu que o custo anual de B se repete: R$ 2 mi × 5,5 = 11, não 2. B vale 40 − 4 − 11 = 25.']]},
+ {p:'Por que o payback não enxerga o Projeto B?',o:[
+  ['Porque B é mais arriscado que a máquina',0,'O payback não mede risco de resultado; mede tempo de recuperação. O problema é outro: B não tem o que o payback conta.'],
+  ['Porque B não reduz custo; o ganho é capital devolvido ao caixa, que fica no balanço, e o payback só conta economias de custo',1,'B até acrescenta R$ 2 mi por ano de custo. Os R$ 40 mi liberados deixam de custar 12% ao ano (R$ 4,8 mi), mas isso não aparece na demonstração de resultado.'],
+  ['Porque o payback de B é muito longo',0,'Não é longo: não existe. Sem economia anual, não há o que dividir.']]},
+ {p:'Quanto o S&OP precisa liberar para empatar com a máquina, e quem garante?',o:[
+  ['R$ 28 mi; Patrícia, com os três clientes',1,'Liberação − 4 − 11 = 13 (o valor de A) dá 28. Abaixo disso a máquina vale mais. A aprovação deve trazer o número: “se em doze meses não liberar R$ 28 mi, o comitê revê”.'],
+  ['R$ 40 mi; o comitê de investimentos',0,'40 é a promessa, não o empate. O comitê não garante liberação de estoque; quem tem os dados é a área de planejamento.'],
+  ['R$ 13 mi; Ricardo',0,'13 é o valor da máquina, não a liberação de empate. E Ricardo não controla o estoque.']]}],
+ contra:{p:'Ricardo: “capital liberado é dinheiro de papel; no ano seguinte o estoque volta. A máquina eu toco, vejo e meço.” A melhor resposta:',o:[
+  ['Aprovar com meta verificável: R$ 28 mi em doze meses, medidos todo mês; abaixo disso, o comitê revê. A máquina também tem premissa: os R$ 6 mi por ano',1,'Aceita o risco que Ricardo levanta, dá a ele o que ele valoriza (um número para cobrar) e lembra que A não é certeza.'],
+  ['O estoque nunca volta depois do S&OP',0,'Volta, se a previsão semanal virar mutirão de fim de ano. A liberação só é permanente se o processo mudar; por isso precisa de meta e revisão.'],
+  ['Ignorar: a régua já provou que B vale mais',0,'A régua prova o valor se os R$ 40 mi aparecerem. A objeção de Ricardo é justamente sobre isso, e merece uma resposta com número.']]}},
+vida:{q:[
+ {p:'O que cresceu mais, e onde foi parar?',o:[
+  ['A receita: +50%',0,'A receita cresceu 50%, mas o capital cresceu 80% (de 1.000 para 1.800). Cada real de venda nova exigiu mais capital do que antes.'],
+  ['O capital: +80%, sobretudo nas lojas novas (R$ 480 mi, 60% do capital novo)',1,'Cada loja prende cerca de R$ 4 mi (reforma, equipamentos, estoque inicial) antes de vender. O sortimento vem depois (R$ 245 mi): perfumaria gira devagar em todas as 320 lojas.'],
+  ['O lucro: +25%',0,'O lucro foi o que menos cresceu (240 para 300). Cresceu menos que a receita e muito menos que o capital.']]},
+ {p:'O retorno médio caiu de 24% para 16,7%, ainda acima de 12%. Isso prova que…',o:[
+  ['O plano deve ser aprovado: a rede rende acima do custo de capital',0,'Prova que a rede, no total, cria valor. Não diz nada sobre o capital que acabou de entrar, porque a média o mistura com as lojas antigas.'],
+  ['A rede cria valor, não que o crescimento criou: a média mistura o capital antigo com o novo',1,'Rogério pode usar a média para defender a rede; não para defender o plano. A queda de 24% para 16,7% é o primeiro sinal de que o capital novo rende menos.'],
+  ['A rede destrói valor, porque o retorno caiu',0,'16,7% ainda é maior que 12%: a rede como um todo cria valor. O problema está escondido dentro da média.']]},
+ {p:'O capital novo…',o:[
+  ['Rende 7,5% (60 ÷ 800) contra 12% de custo: R$ 36 mi por ano de valor perdido; empata se o lucro novo chegar a R$ 96 mi',1,'De cada R$ 100 que entraram, voltaram R$ 7,50, contra R$ 12 de custo. O valor econômico da rede caiu de 120 para 84 enquanto o lucro batia recorde.'],
+  ['Rende 16,7%, acima do custo',0,'16,7% é a média de tudo (300 ÷ 1.800). O capital novo rende 60 ÷ 800 = 7,5%.'],
+  ['Rende 30% (300 ÷ 1.000)',0,'Mistura o lucro total com o capital antigo. A pergunta é: do dinheiro que entrou (800), quanto voltou em lucro novo (60)?']]}],
+ contra:{p:'Tiago: “loja nova leva três anos para amadurecer; julgar o capital novo hoje é julgar um aluno pela nota do primeiro dia.” A melhor resposta:',o:[
+  ['Concordar e aprovar: as lojas vão amadurecer',0,'O argumento é verdadeiro e não tem número. Sem número e data, é uma promessa sem custo para quem a faz.'],
+  ['Concordar e pedir o número com data: R$ 96 mi de lucro novo, por safra de lojas; até lá, crescer em fases, com menos capital por loja',1,'Transforma o argumento de Tiago num compromisso verificável, exatamente o que Beatriz pediu, sem parar o crescimento.'],
+  ['Discordar: loja nova deveria render desde o primeiro ano',0,'Não é verdade em varejo, e Tiago sabe disso. Discordar do que é verdade perde a sala.']]}}};
+
+function mcBlock(title,q,sel,onPick,ok,extra){const r=el('div',{class:'mcb'});r.append(el('h4',{class:'subh'},title),el('p',{class:'mcq'},q.p));
+ const list=el('div',{class:'mc'});q.o.forEach(([t,isOk,fb],i)=>list.append(el('button',{class:'mco'+(sel===i?(isOk?' good':' bad'):''),'aria-pressed':String(sel===i),onclick:()=>onPick(i)},el('span',{class:'mcl'},'ABC'[i]),el('span',{},t))));r.append(list);
+ if(sel!=null){const [t,isOk,fb]=q.o[sel];r.append(diag(isOk?'good':'warn',isOk?'É a interpretação mais forte':'Vale rever',fb));if(extra)extra.forEach(x=>r.append(x))}
+ return r}
+function problemaStep(c){return {t:'O problema e a aposta',fase:0,
+ explain:'Antes de qualquer conta: a decisão, o que está em jogo, quem pensa o quê, e a aposta do grupo. Leiam o caso completo aqui ou no papel.',
  body(s,S,rerender){const P=CONTEUDO[c.id].problema;const r=el('div');
   r.append(tutorCard(P.tutor));
   r.append(el('div',{class:'decq'},el('div',{class:'pl'},'A decisão'),el('p',{},P.decisao)),el('div',{class:'decq jogo'},el('div',{class:'pl'},'O que está em jogo'),el('p',{},P.jogo)));
   r.append(el('h4',{class:'subh'},'Quem pensa o quê'),tbl({h:['Quem','Papel','Posição'],r:CONTEUDO[c.id].pers}));
   r.append(caseReader(c,false));
+  const m=META[c.id];r.append(el('h4',{class:'subh'},GRUPO[c.id]?'A aposta do grupo, antes das contas':'A aposta da turma, antes das contas'),el('p',{class:'mcq'},m.aposta.q));
+  r.append(el('div',{class:'chips'},...m.aposta.opts.map(o=>el('button',{class:'chip','aria-pressed':String(S.aposta===o),onclick:()=>{S.aposta=o;rerender()}},o))));
+  if(S.aposta)r.append(diag('','Aposta registrada',`“${S.aposta}”. Agora as contas. Se elas contrariarem a aposta, é a discussão que a sala quer ouvir.`));
   return r}}}
 function analise(c,st,k){return {t:st.t,fase:1,explain:st.explain,
- body(s,S,rerender){const T=CONTEUDO[c.id].tutor[k];S.tut=S.tut||{};S.concl=S.concl||{};S.raz=S.raz||{};const lv=S.tut[k]||0;const r=el('div');
+ body(s,S,rerender){S.mc=S.mc||{};const r=el('div');
+  r.append(fio(FIO[c.id][k]));
   r.append(el('div',{class:'qbox'},el('div',{class:'pl'},'Pergunta '+(k+1)+' do caso'),el('p',{},caso(c).perguntas[k])));
-  r.append(st.body(s,S,rerender));
-  const tp=el('div',{class:'tutor'},el('div',{class:'tav','aria-hidden':'true'},'P'));const tb=el('div');tp.append(tb);
-  tb.append(el('div',{class:'pl'},'Tutoria'),el('p',{class:'hint'},lv===0?'Travou? Peça uma dica de cada vez. Tente a conta entre uma dica e outra.':''));
-  if(lv>=1)tb.append(el('p',{},el('b',{},'Dica 1. '),T.d1));
-  if(lv>=2)tb.append(el('p',{},el('b',{},'Dica 2. '),T.d2));
-  if(lv<2)tb.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{S.tut[k]=lv+1;rerender(true)}},lv===0?'Pedir a dica 1':'Pedir a dica 2')));
-  r.append(tp);
-  r.append(el('label',{class:'flabel',for:'cc'+k+'-'+s},'A conclusão do grupo · '+T.e),el('textarea',{id:'cc'+k+'-'+s,placeholder:'Em duas ou três frases, com o número que sustenta a conclusão.',oninput:e=>{S.concl[k]=e.target.value;store.set('state:'+s,S)}},S.concl[k]||''));
-  r.append(reveal(S.raz[k]?'Esconder o raciocínio do professor':'Comparar com o raciocínio do professor',()=>S.raz[k]||words(S.concl[k])>=1,()=>{S.raz[k]=!S.raz[k];rerender(true)},'O campo da conclusão está vazio. Escrevam a conclusão do grupo no campo acima e cliquem de novo: comparar depois de tentar é o que fixa o aprendizado.'));
-  if(S.raz[k])r.append(diag('good','O raciocínio do professor',T.r));
+  const node=st.body(s,S,rerender);const diags=[...node.querySelectorAll('.diag')];diags.forEach(d=>d.remove());r.append(node);
+  r.append(mcBlock('A interpretação do grupo',MC[c.id].q[k],S.mc[k],i=>{S.mc[k]=i;rerender()},null,[el('h4',{class:'subh'},'O que os números na tela dizem'),...diags]));
   return r}}}
-function opcoesStep(c){return {t:'O mapa das opções',fase:2,
- explain:'Uma decisão madura compara as opções pelos mesmos critérios: o que muda na operação, quanto vale, o que pode dar errado e quem ganha ou perde. Classifiquem cada opção e escrevam o critério que decidiu.',
- body(s,S,rerender){const O=CONTEUDO[c.id].opcoes;S.op=S.op||{};const r=el('div');
-  O.forEach((o,i)=>{const card=el('div',{class:'opt'+(S.op[i]==='Recomendar'?' rec':S.op[i]==='Descartar'?' desc':'')},el('h4',{},o[0]),
-    el('dl',{},el('dt',{},'Na operação'),el('dd',{},o[1]),el('dt',{},'Em finanças'),el('dd',{},o[2]),el('dt',{},'O que pode dar errado'),el('dd',{},o[3]),el('dt',{},'Quem ganha e quem perde'),el('dd',{},o[4])),
-    el('div',{class:'chips'},...['Recomendar','Com condição','Descartar'].map(x=>el('button',{class:'chip','aria-pressed':String(S.op[i]===x),onclick:()=>{S.op[i]=x;rerender(true)}},x))));r.append(card)});
-  r.append(el('label',{class:'flabel',for:'opc-'+s},'O critério que decidiu'),el('textarea',{id:'opc-'+s,placeholder:'Qual comparação, com que número, fez o grupo preferir uma opção?',oninput:e=>{S.opCrit=e.target.value;store.set('state:'+s,S)}},S.opCrit||''));
-  const n=Object.values(S.op).filter(x=>x==='Recomendar').length;
-  if(Object.keys(S.op).length===O.length)r.append(diag(n===1?'good':'warn',n===1?'Uma opção recomendada':n===0?'Nenhuma opção recomendada':'Mais de uma opção recomendada',n===1?'Agora testem a escolha contra a objeção mais forte, no passo seguinte.':n===0?'Um Conselho espera uma recomendação. Se todas dependem de condição, digam qual condição decide.':'Se forem complementares, digam a ordem e o que vem primeiro; se não, escolham.'));
-  return r}}}
-const FASES=['O problema','A análise','As possibilidades','A decisão'];
-
-function apostaStep(c){return {fase:0,t:GRUPO[c.id]?'A aposta do grupo':'A aposta da turma',
- explain:'Antes de qualquer conta, registrem a intuição. Executivos decidem com intuição o tempo todo; o que os diferencia é saber quando os números a contrariam. No fim do minicaso, vocês comparam a aposta com a decisão.',
- body(s,S,rerender){
-  const m=META[c.id]; const r=el('div',{class:'quiz'});
-  r.append(el('div',{class:'q'},el('span',{class:'lbl'},m.aposta.q)));
-  r.append(el('div',{class:'chips'},...m.aposta.opts.map(o=>el('button',{class:'chip','aria-pressed':String(S.aposta===o),onclick:()=>{S.aposta=o;rerender(true)}},o))));
-  r.append(el('div',{class:'q'},el('span',{class:'lbl'},'Com que convicção?')));
-  r.append(el('div',{class:'chips'},...['Pouca','Média','Muita'].map(o=>el('button',{class:'chip','aria-pressed':String(S.conv===o),onclick:()=>{S.conv=o;rerender(true)}},o))));
-  r.append(el('label',{class:'flabel',for:'ap-'+s},'Por quê, em uma frase'),el('textarea',{id:'ap-'+s,placeholder:'O argumento que convenceu o grupo, antes das contas.',oninput:e=>{S.apostaPor=e.target.value;store.set('state:'+s,S)}},S.apostaPor||''));
-  if(S.aposta) r.append(diag('','Aposta registrada',`“${S.aposta}”${S.conv?', com '+S.conv.toLowerCase()+' convicção':''}. Agora façam as contas. Se elas contrariarem a aposta, ótimo: é a discussão que a sala quer ouvir.`));
-  return r;
- }};}
-
-function contraStep(c){return {fase:2,t:'O contra-argumento e quem perde',
- explain:'Uma boa recomendação sobrevive à objeção mais forte de quem discorda. Leiam a fala, respondam por escrito em até três frases e só depois comparem com a resposta de referência. Uma resposta de executivo concorda com o que é verdade, traz o mecanismo e termina num número.',
- body(s,S,rerender){
-  const m=META[c.id].contra; const r=el('div');
+function contraStep(c){return {fase:2,t:'O contra-argumento',
+ explain:'Uma boa recomendação sobrevive à objeção mais forte de quem discorda. Escolham a resposta que o grupo daria. Uma resposta de executivo concorda com o que é verdade, traz o mecanismo e termina num número.',
+ body(s,S,rerender){const m=META[c.id].contra;const r=el('div');r.append(fio(FIO2.contra));
   r.append(el('blockquote',{class:'objection'},el('p',{},'“'+m.fala+'”'),el('cite',{},m.quem)));
-  r.append(el('p',{class:'hint'},el('b',{},'Pista. '),m.dica));
-  r.append(el('label',{class:'flabel',for:'ct-'+s},'Resposta do grupo'),el('textarea',{id:'ct-'+s,placeholder:'Concordem com o que é verdade, mostrem o mecanismo, terminem num número.',oninput:e=>{S.contra=e.target.value;store.set('state:'+s,S)}},S.contra||''));
-  const out=el('div');
-  const btn={};
-  r.append(reveal(S.contraVer?'Esconder a resposta de referência':'Ver uma resposta de referência',()=>S.contraVer||words(S.contra)>=1,()=>{S.contraVer=!S.contraVer;rerender(true)},'Escrevam antes a resposta do grupo (uma frase completa) e cliquem de novo.'));
-  if(S.contraVer) r.append(diag('good','Uma resposta possível',m.modelo));
-  const at=META[c.id].atrito;
-  r.append(el('h4',{class:'subh'},'Quem perde com a decisão?'),el('p',{class:'hint'},'A conta fecha; agora a empresa. Toda decisão tira algo de alguém: uma meta, um bônus, um poder. Se ninguém cuidar disso, a decisão certa trava na implementação.'),
-   el('blockquote',{class:'objection'},el('p',{},'“'+at[0]+'”')),
-   el('label',{class:'flabel',for:'at-'+s},'Como o grupo lida com isso'),el('textarea',{id:'at-'+s,placeholder:'Quem perde, o que muda na métrica dessa pessoa, e o que se oferece em troca.',oninput:e=>{S.atrito=e.target.value;store.set('state:'+s,S)}},S.atrito||''));
-  r.append(reveal(S.atritoVer?'Esconder':'Ver o que um executivo responderia',()=>S.atritoVer||words(S.atrito)>=1,()=>{S.atritoVer=!S.atritoVer;rerender(true)},'Escrevam antes como o grupo lida com isso (uma frase completa) e cliquem de novo.'));
-  if(S.atritoVer) r.append(diag('good','O que se espera ouvir',at[1]));
-  r.append(out); return r;
- }};}
-
+  r.append(mcBlock('A resposta do grupo',MC[c.id].contra,S.contraSel,i=>{S.contraSel=i;rerender()}));
+  return r}}}
 // alternativas da decisão: [texto, é a melhor?, retorno]
 const ESCOLHAS={
 vitta:{
@@ -827,29 +1060,19 @@ vida:{
   ["Rever se o lucro total cair",0,"O lucro total pode subir enquanto o capital novo destrói valor."],
   ["Rever daqui a três anos",0,"Três anos e 120 lojas depois, a perda já aconteceu."]]}};
 const ESC_ITENS=[['decisao','1 · A decisão'],['num','2 · O número que sustenta a decisão'],['prem','3 · A premissa que pode inverter a decisão'],['gatilho','4 · O gatilho de revisão']];
-function notaStep(c){return {fase:3,t:'A decisão do grupo',
- explain:'Quatro escolhas. Discutam e marquem a alternativa que o grupo defende; o comentário do professor aparece logo abaixo. Podem trocar de escolha. No fim, uma frase com as palavras do grupo.',
- body(s,S,rerender){const N=S.nota=S.nota||{};N.sel=N.sel||{};const E=ESCOLHAS[c.id];const r=el('div',{class:'lamina'});
+function notaStep(c){return {fase:2,t:'A decisão do grupo',
+ explain:'Quatro escolhas. Discutam e marquem a alternativa que o grupo defende; o comentário do professor aparece logo abaixo. Podem trocar de escolha.',
+ body(s,S,rerender){const N=S.nota=S.nota||{};N.sel=N.sel||{};const E=ESCOLHAS[c.id];const r=el('div',{class:'lamina'});r.append(fio(FIO2.nota));
   if(S.aposta)r.append(el('p',{class:'apostaecho'},`Lembrete: antes das contas, o grupo apostou “${S.aposta}”.`));
   ESC_ITENS.forEach(([k,l])=>{const sel=N.sel[k];r.append(el('h4',{},l));
    const list=el('div',{class:'mc'});const n=E[k].length;const rot=E[k].some(o=>/^[ABC] · /.test(o[0]))?0:(IDX[c.id]*2+ESC_ITENS.findIndex(x=>x[0]===k))%n;[...Array(n).keys()].map(j=>(j+rot)%n).forEach((i,pos)=>{const [t,ok]=E[k][i];list.append(el('button',{class:'mco'+(sel===i?(ok?' good':' bad'):''),'aria-pressed':String(sel===i),onclick:()=>{N.sel[k]=i;N[k]=t;rerender()}},el('span',{class:'mcl'},String.fromCharCode(65+pos)),el('span',{},t)))});
    r.append(list);
    if(sel!=null){const [t,ok,fb]=E[k][sel];r.append(diag(ok?'good':'warn',ok?'É a escolha mais forte':'Vale discutir',fb))}});
-  r.append(el('h4',{},'5 · Por quê, nas palavras do grupo'),el('textarea',{id:'nt-porque-'+s,placeholder:'Uma frase: o mecanismo de operação que sustenta a decisão.',oninput:e=>{N.porque=e.target.value;store.set('state:'+s,S)}},N.porque||''));
   r.append(el('h4',{},'Integrantes do grupo'),el('input',{type:'text',id:'nt-int-'+s,placeholder:'Nomes de quem fez este minicaso',value:S.integrantes||'',oninput:e=>{S.integrantes=e.target.value;store.set('state:'+s,S)}}));
   {const msg=el('span',{class:'tmsg',role:'status'});const bar=el('div',{class:'toolbar'});bar.append(exportBtn(c,msg,bar),el('button',{class:'btn secondary',onclick:()=>copiar(notaTexto(c),msg,bar)},'Copiar a nota'),msg);r.append(bar)}
   return r}}}
 
 
-function desafioStep(c){return {fase:3,t:'Desafio extra · opcional',
- explain:'Para o grupo que terminou antes. Todo modelo simplifica; aqui as simplificações viram perguntas. Mudem uma premissa e vejam se a decisão do grupo sobrevive. Respondam com a conta antes de abrir a resposta.',
- body(s,S,rerender){const r=el('div');S.desafio=S.desafio||{};S.desafioVer=S.desafioVer||{};
-  META[c.id].desafios.forEach(([q,a],i)=>{
-   const b=reveal('Ver o que a turma deve encontrar',()=>words(S.desafio[i])>=1,()=>{S.desafioVer[i]=true;rerender(true)},'Escrevam antes a conta e a conclusão do grupo.');
-   r.append(el('div',{class:'desafio'},el('p',{class:'dq'},el('b',{},'Desafio '+(i+1)+'. '),q),
-    el('textarea',{id:'df'+i+'-'+s,placeholder:'A conta e a conclusão: o que muda na decisão do grupo?',oninput:e=>{S.desafio[i]=e.target.value;store.set('state:'+s,S)}},S.desafio[i]||''),
-    b,S.desafioVer[i]?diag('good','Resposta',a):null))});
-  return r;}};}
 function ponteCard(c){const p=META[c.id].transicao;const i=CASES.indexOf(c);const nx=i+1<CASES.length?i+1:null;
  return el('div',{class:'pontecard'},el('div',{class:'pl'},p[0]),el('p',{class:'pq'},'“'+p[1]+'”'),el('p',{class:'hint'},p[2]),nx?el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{go(nx);window.scrollTo(0,0)}},'Ir para o minicaso '+nx+' · '+CASES[nx].empresa)):null)}
 // ---------- apresentação: a ponte entre operação e finanças ----------
@@ -860,9 +1083,9 @@ const APRES=[['caso','O caso em duas frases','A situação e a decisão que a em
  ['perg','A pergunta para a turma','Uma provocação que leve a turma para a empresa dela.']];
 function apresStep(c){return {fase:3,t:'A apresentação: a ponte entre operação e finanças',
  explain:'A ferramenta já levou o grupo às contas; a apresentação é a parte que ela não faz. O grupo conta o caso e a decisão como uma <b>ponte em quatro elos</b>: o que muda na operação, o que isso faz com o capital e a margem, que indicador se move e quanto vale. Cada elo precisa de um mecanismo e de um número. A faixa “Da operação ao valor”, no topo, mostra a situação de hoje; a ponte do grupo mostra o efeito da decisão.',
- body(s,S,rerender){const A=S.apres=S.apres||{};const N=S.nota||{};const r=el('div',{class:'lamina'});
+ body(s,S,rerender){const A=S.apres=S.apres||{};const N=S.nota||{};const r=el('div',{class:'lamina'});r.append(fio(FIO2.apres));
   r.append(tutorCard('Uma boa ponte pode ser lida nos dois sentidos. Um diretor de operações deve reconhecer a operação no primeiro elo; um diretor financeiro deve reconhecer a conta no quarto. Se um dos dois não se reconhecer, falta um elo. Teste útil para o segundo elo: na planilha do fluxo de caixa livre que vocês montaram em Análise de Desempenho, em que linha a decisão aparece? Custos e despesas pesam todo ano; capital de giro e Capex, uma vez.'));
-  r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const P=CONTEUDO[c.id].problema;A.caso=A.caso||P.decisao;A.decisao=A.decisao||N.decisao||'';A.prem=A.prem||[N.prem,N.gatilho].filter(Boolean).join(' Gatilho: ');A.perde=A.perde||S.atrito||'';rerender()}},'Trazer o que o grupo já escreveu'),el('small',{class:'note',style:'margin:0'},'Copia a decisão, a premissa, o gatilho e quem perde da nota e do contra-argumento. Os quatro elos o grupo escreve.')));
+  r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const P=CONTEUDO[c.id].problema;A.caso=A.caso||P.decisao;A.decisao=A.decisao||N.decisao||'';A.prem=A.prem||[N.prem,N.gatilho].filter(Boolean).join(' Gatilho: ');const cs=MC[c.id].contra;A.perde=A.perde||(S.contraSel!=null?cs.o[S.contraSel][0]:'');rerender()}},'Trazer o que o grupo já escolheu'),el('small',{class:'note',style:'margin:0'},'Copia a decisão, a premissa, o gatilho e a resposta ao contra-argumento. Os quatro elos o grupo escreve com as próprias palavras.')));
   APRES.forEach(([k,l,ph],i)=>{if(i===2)r.append(el('h4',{class:'subh'},'A ponte'));r.append(el('h4',{},l),el('textarea',{id:'ap-'+k+'-'+s,placeholder:ph,oninput:e=>{A[k]=e.target.value;store.set('state:'+s,S);paint()}},A[k]||''))});
   const checks=el('ul',{class:'checks'});
   const paint=()=>{checks.innerHTML='';[[hasNum(A.cap),'O elo de capital e margem tem um valor em R$'],[hasNum(A.ind),'O elo do indicador diz quanto ele muda'],[hasNum(A.val),'O elo de valor compara com o custo de capital ou usa a régua'],[words(A.op)>=6,'O elo de operação diz o que muda na cadeia, não um adjetivo'],[words(A.perde)>=6,'A apresentação diz quem perde e como a decisão sobrevive']].forEach(([ok,t])=>checks.append(el('li',{class:ok?'ok':''},(ok?'✓ ':'○ ')+t)))};
@@ -885,15 +1108,16 @@ function slides(c){const S=c.state,A=S.apres||{},N=S.nota||{};const g=GRUPO[c.id
 // ---------- exportar e apresentar ----------
 let DL=null; // namespace de downloads, se disponível
 const esc=t=>String(t||'').replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
-function notaTexto(c){const S=c.state,N=S.nota||{};let t=`MINICASO ${CASES.indexOf(c)} · ${gl(c).toUpperCase()} · ${c.empresa.toUpperCase()}\n${c.titulo}\nINTEGRANTES: ${S.integrantes||'—'}\n\n`;
- NOTA.forEach(([k,l])=>t+=`${l.toUpperCase()}: ${N[k]||'—'}\n`);
- (caso(c).perguntas).forEach((q,k)=>{t+=`\nANÁLISE ${k+1}: ${(S.concl&&S.concl[k])||'—'}`});t+='\n';CONTEUDO[c.id].opcoes.forEach((o,i)=>{t+=`\nOPÇÃO · ${o[0]}: ${(S.op&&S.op[i])||'—'}`});t+=`\nCRITÉRIO: ${S.opCrit||'—'}\n`;
- APRES.forEach(([k,l])=>{t+=`\nAPRESENTAÇÃO · ${l.toUpperCase()}: ${(S.apres||{})[k]||'—'}`});t+='\n';
- t+=`\nQUEM PERDE COM A DECISÃO: ${S.atrito||'—'}\n`;(META[c.id].desafios||[]).forEach(([q],i)=>{if(S.desafio&&S.desafio[i])t+=`DESAFIO ${i+1}: ${S.desafio[i]}\n`});
- t+=`\nAPOSTA INICIAL: ${S.aposta||'—'}${S.conv?' ('+S.conv.toLowerCase()+' convicção)':''}\nPOR QUÊ: ${S.apostaPor||'—'}\nO QUE MUDOU: ${S.mudou||'—'}\n\nRESPOSTA AO CONTRA-ARGUMENTO (${META[c.id].contra.quem}): ${S.contra||'—'}\n`;return t}
+function respostas(c){const S=c.state;const q=MC[c.id].q.map((x,k)=>[caso(c).perguntas[k],S.mc&&S.mc[k]!=null?x.o[S.mc[k]][0]:'—',S.mc&&S.mc[k]!=null?(x.o[S.mc[k]][1]?'escolha mais forte':'vale rever'):'']);const ct=MC[c.id].contra;q.push([ct.p,S.contraSel!=null?ct.o[S.contraSel][0]:'—',S.contraSel!=null?(ct.o[S.contraSel][1]?'escolha mais forte':'vale rever'):'']);return q}
+function notaTexto(c){const S=c.state,N=S.nota||{};let t=`MINICASO ${CASES.indexOf(c)} · ${gl(c).toUpperCase()} · ${c.empresa.toUpperCase()}\n${c.titulo}\nINTEGRANTES: ${S.integrantes||'—'}\n\nAPOSTA INICIAL: ${S.aposta||'—'}\n\nA ANÁLISE E O CONTRA-ARGUMENTO\n`;
+ respostas(c).forEach(([q,a,v],k)=>{t+=`${k+1}. ${q}\n   → ${a}${v?' ('+v+')':''}\n`});
+ t+='\nA DECISÃO\n';NOTA.forEach(([k,l])=>t+=`${l.toUpperCase()}: ${N[k]||'—'}\n`);
+ t+='\nA APRESENTAÇÃO\n';APRES.forEach(([k,l])=>{t+=`${l.toUpperCase()}: ${(S.apres||{})[k]||'—'}\n`});return t}
 function notaHTML(c){const S=c.state,N=S.nota||{},i=CASES.indexOf(c);
- return `<section><p class="k">Minicaso ${i} · ${gl(c)} · ${esc(c.tema)}</p><h2>${esc(c.titulo)}</h2><p><b>Integrantes:</b> ${esc(S.integrantes)||'—'}</p><table>${NOTA.map(([k,l])=>`<tr><th>${l}</th><td>${esc(N[k])||'—'}</td></tr>`).join('')}</table>
- <h3>A análise</h3><table>${caso(c).perguntas.map((q,k)=>`<tr><th>Pergunta ${k+1}</th><td><i>${esc(q)}</i><br>${esc(S.concl&&S.concl[k])||'—'}</td></tr>`).join('')}</table><h3>As opções</h3><table>${CONTEUDO[c.id].opcoes.map((o,i)=>`<tr><th>${esc(o[0])}</th><td>${esc(S.op&&S.op[i])||'—'}</td></tr>`).join('')}<tr><th>Critério</th><td>${esc(S.opCrit)||'—'}</td></tr></table><h3>A apresentação: a ponte entre operação e finanças</h3><table>${APRES.map(([k,l])=>`<tr><th>${l}</th><td>${esc((S.apres||{})[k])||'—'}</td></tr>`).join('')}</table><h3>O percurso do grupo</h3><table><tr><th>Aposta inicial</th><td>${esc(S.aposta)||'—'}${S.conv?' ('+S.conv.toLowerCase()+' convicção)':''}<br>${esc(S.apostaPor)}</td></tr><tr><th>O que mudou</th><td>${esc(S.mudou)||'—'}</td></tr><tr><th>Resposta a ${esc(META[c.id].contra.quem)}</th><td><i>“${esc(META[c.id].contra.fala)}”</i><br>${esc(S.contra)||'—'}</td></tr><tr><th>Quem perde com a decisão</th><td>${esc(S.atrito)||'—'}</td></tr>${(META[c.id].desafios||[]).map(([q],j)=>S.desafio&&S.desafio[j]?`<tr><th>Desafio ${j+1}</th><td><i>${esc(q)}</i><br>${esc(S.desafio[j])}</td></tr>`:'').join('')}</table></section>`}
+ return `<section><p class="k">Minicaso ${i} · ${gl(c)} · ${esc(c.tema)}</p><h2>${esc(c.titulo)}</h2><p><b>Integrantes:</b> ${esc(S.integrantes)||'—'}<br><b>Aposta inicial:</b> ${esc(S.aposta)||'—'}</p>
+ <h3>A análise e o contra-argumento</h3><table>${respostas(c).map(([q,a,v],k)=>`<tr><th>${k+1}. ${esc(q)}</th><td>${esc(a)}${v?' <i>('+v+')</i>':''}</td></tr>`).join('')}</table>
+ <h3>A decisão</h3><table>${NOTA.map(([k,l])=>`<tr><th>${l}</th><td>${esc(N[k])||'—'}</td></tr>`).join('')}</table>
+ <h3>A apresentação: a ponte entre operação e finanças</h3><table>${APRES.map(([k,l])=>`<tr><th>${l}</th><td>${esc((S.apres||{})[k])||'—'}</td></tr>`).join('')}</table></section>`}
 function docHTML(list){const tt=list.length===1?`${gl(list[0])} · ${list[0].empresa} · Nota ao Conselho`:'Sessão 1 · Notas ao Conselho';return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${tt}</title><style>body{font:15px/1.5 Georgia,serif;color:#111;max-width:760px;margin:32px auto;padding:0 16px}h1{font-size:22px;color:#0b2545}h2{font-size:20px;color:#0b2545;margin:4px 0 12px}h3{font-size:15px;color:#b5462b;text-transform:uppercase;letter-spacing:.05em}.k{font:700 12px Arial,sans-serif;color:#b5462b;letter-spacing:.08em;text-transform:uppercase;margin:0}table{border-collapse:collapse;width:100%;margin-bottom:14px}th{width:30%;text-align:left;vertical-align:top;background:#0b2545;color:#fff;padding:8px;font:600 13px Arial,sans-serif}td{border-bottom:1px solid #ccc;padding:8px;vertical-align:top}section{page-break-after:always;margin-bottom:28px}</style></head><body><h1>Operações, Risco e Capital · Sessão 1 · Nota ao Conselho</h1>${list.map(notaHTML).join('')}</body></html>`}
 async function getDL(){if(DL)return DL;try{for(let i=0;i<20&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,150));if(window.claude&&window.claude.use)DL=await window.claude.use('downloads')}catch(e){}return DL}
 function baixarLocal(list,nome,msg,host){try{const url=URL.createObjectURL(new Blob([docHTML(list)],{type:'text/html'}));const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Se o arquivo não baixou, use “Copiar a nota”.'}catch(e){msg.textContent='O download não está disponível aqui. Use “Copiar a nota”.'}}
@@ -909,7 +1133,7 @@ function toolbar(c){const msg=el('span',{class:'tmsg',role:'status'});const bar=
  bar.append(exportBtn(c,msg,bar));
  bar.append(el('button',{class:'btn secondary',onclick:()=>copiar(notaTexto(c),msg,bar)},'Copiar a nota'),el('button',{class:'btn secondary',onclick:()=>slides(c)},'Apresentar em tela cheia'),msg);return bar}
 function ponte(c){const p=META[c.id].ponte;return el('div',{class:'ponte','aria-label':'Da operação ao valor'},...p.flatMap(([l,t],i)=>[el('div',{class:'pnode'},el('div',{class:'pl'},l),el('div',{},t)),i<p.length-1?el('div',{class:'parrow','aria-hidden':'true'},'→'):null]))}
-CASES.forEach(c=>{if(c.steps){c.steps=[problemaStep(c),apostaStep(c),...c.steps.map((st,k)=>analise(c,st,k)),opcoesStep(c),contraStep(c),notaStep(c),apresStep(c),desafioStep(c)];c.state.nota=c.state.nota||{}}});
+CASES.forEach(c=>{if(c.steps){c.steps=[problemaStep(c),...c.steps.map((st,k)=>analise(c,st,k)),contraStep(c),notaStep(c),apresStep(c)];c.state.nota=c.state.nota||{}}});
 
 // ============ motor ============
 let current=store.get('tab',0);
@@ -942,7 +1166,7 @@ function render(soft){
   aside.append(el('div',{class:'atabs',role:'tablist'},...[['perg','Perguntas do caso'],['conc','Conceitos']].map(([k,l])=>el('button',{class:'atab',role:'tab','aria-selected':String(tab===k),onclick:()=>{store.set('aside',k);render(true)}},l))));
   if(tab==='perg'){const P=CONTEUDO[c.id].problema;
    aside.append(el('div',{class:'concept'},el('div',{class:'pl'},'A decisão'),el('p',{},P.decisao)));
-   caso(c).perguntas.forEach((q,k)=>{const j=2+k;const done=unlocked>j;const cur=unlocked===j;
+   caso(c).perguntas.forEach((q,k)=>{const j=1+k;const done=unlocked>j;const cur=unlocked===j;
     aside.append(el('button',{class:'pq-item'+(done?' done':'')+(cur?' cur':''),onclick:()=>goStep(j)},el('span',{class:'pqn'},done?'✓':String(k+1)),el('span',{},q)))});
    aside.append(el('small',{class:'note'},'Clique numa pergunta para ir ao passo que a responde.'));
   } else {
