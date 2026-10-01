@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Simulador dos Minicasos</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
@@ -21,9 +25,9 @@
 
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--ui);font-size:16px;line-height:1.5}
-.wrap{max-width:1120px;margin:0 auto;padding-block:0 48px;padding-inline:16px}
+.wrap{max-width:1680px;margin:0 auto;padding-block:0 48px;padding-inline:16px}
 header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-.top .in{max-width:1120px;margin:0 auto;padding:10px 16px 0;display:flex;flex-direction:column;gap:6px}
+.top .in{max-width:1680px;margin:0 auto;padding:10px 16px 0;display:flex;flex-direction:column;gap:6px}
 .kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);font-weight:700}
 h1{font-family:var(--display);font-weight:600;font-size:clamp(22px,3vw,30px);margin:0;color:var(--navy);text-wrap:balance}
 nav.tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:0;scrollbar-width:none}
@@ -39,9 +43,10 @@ section.case.active{display:block}
 .casehead{padding:28px 0 18px}
 .casehead h2{font-family:var(--display);font-size:clamp(24px,3.4vw,34px);font-weight:600;margin:0 0 6px;color:var(--navy);text-wrap:balance}
 .casehead .sub{color:var(--muted);font-style:italic;font-family:var(--display);font-size:17px;margin:0}
-.lead{font-family:var(--display);font-size:18px;line-height:1.55;max-width:68ch;margin:10px 0 0}
+.lead{font-family:var(--display);font-size:18px;line-height:1.55;max-width:90ch;margin:10px 0 0}
 
-.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:28px;align-items:start}
+@media (min-width:1500px){body{font-size:17px}.grid{grid-template-columns:minmax(0,1fr) 420px;gap:36px}.wrap,.top .in{padding-inline:32px}}
 @media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
 aside.concepts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px);display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 156px);overflow:auto;padding-bottom:8px}
 @media (max-width:860px){aside.concepts{position:static;max-height:none;overflow:visible}}
@@ -61,7 +66,7 @@ aside.concepts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px);di
 .step-h{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
 .step-h .idx{font:700 12px var(--ui);letter-spacing:.08em;color:var(--terra);text-transform:uppercase}
 .step-h h3{font-family:var(--display);font-size:20px;font-weight:600;margin:0;color:var(--fg)}
-.explain{font-size:15px;max-width:70ch;margin:0 0 12px;color:var(--fg)}
+.explain{font-size:15px;max-width:none;margin:0 0 12px;color:var(--fg)}
 .explain b{color:var(--navy)}
 .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 18px;margin:8px 0 12px}
 .ctl{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -203,6 +208,8 @@ details.reader summary{cursor:pointer;font-weight:700;color:var(--navy)}
 .mco.good{border-color:var(--good);box-shadow:inset 4px 0 0 var(--good)} .mco.good .mcl{background:var(--good);color:#fff}
 .mco.bad{border-color:var(--warn);box-shadow:inset 4px 0 0 var(--warn)} .mco.bad .mcl{background:var(--warn);color:#fff}
 </style>
+</head>
+<body>
 
 <header class="top"><div class="in">
   <div class="kicker">Operações, Risco e Capital · Sessão 1 · Desenho da cadeia e capital</div>
@@ -955,4 +962,5 @@ render();
 getDL();
 </script>
 
-</body></html>
+</body>
+</html>
