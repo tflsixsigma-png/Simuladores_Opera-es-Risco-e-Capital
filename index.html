@@ -218,6 +218,8 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .diag{font-size:15px}
 .mcq{font-family:var(--display);font-size:17px;margin:0 0 8px}
 .mcb{margin-top:14px}
+.eloq{margin:0;font-family:var(--display);font-size:16px;line-height:1.45;color:var(--fg)}
+label.flabel{display:block;margin-top:2px}
 </style>
 </head>
 <body>
@@ -259,7 +261,7 @@ const FIO={
  vida:["Até aqui: lucro recorde e um plano de mais 120 lojas. Agora: o que cresceu mais, e onde o capital novo foi parar.",
         "Até aqui: o capital cresceu 80%, mais que receita e lucro. Agora: o retorno médio, que é o número que Rogério vai usar.",
         "Até aqui: a média (16,7%) ainda está acima de 12%, mas caiu. Agora: o retorno do capital novo, que é a pergunta de Beatriz."]};
-const FIO2={contra:'Até aqui: as três perguntas interpretadas. Agora: a interpretação precisa sobreviver a quem discorda.',nota:'Até aqui: a objeção respondida. Agora: fechar a decisão em quatro escolhas.',apres:'Até aqui: a decisão fechada. Agora: a parte que a ferramenta não faz: contar a decisão como uma ponte entre operação e finanças.'};
+const FIO2={contra:'Até aqui: as três perguntas interpretadas. Agora: a interpretação precisa sobreviver a quem discorda.',nota:'Até aqui: a objeção respondida. Agora: fechar a decisão em quatro escolhas.',apres:'Até aqui: a decisão fechada. Agora: contar a decisão como uma ponte entre operação e finanças, elo por elo.'};
 function fio(t){return el('div',{class:'fio'},el('span',{class:'fl'},'Fio'),el('span',{},t))}
 function dados(rows){return el('div',{class:'dados'},el('div',{class:'pl'},'Dados do caso usados aqui'),el('dl',{},...rows.flatMap(([k,v])=>[el('dt',{},k),el('dd',{},v)])))}
 function bl(items){return el('ul',{class:'bl'},...items.map(t=>el('li',{},t)))}
@@ -281,9 +283,9 @@ const home={id:'home',tab:'Início',render(root){
         el('li',{},'Abram o minicaso do grupo. Os passos seguem as perguntas do enunciado. Cada passo libera o seguinte.'),
         el('li',{},'Mexam nos controles. O diagnóstico muda na hora, e é assim que vocês testam a premissa: o que precisa ser verdade para a recomendação se inverter?'),
         el('li',{},'O painel Conceitos, ao lado, traz a teoria do ponto de aprendizagem. Use quando travar.'),
-        el('li',{},'Cada minicaso tem quatro fases: o problema (o que está em jogo, quem pensa o quê e a aposta do grupo), a análise (as três perguntas do caso: mexam nos números, vejam a conta e escolham a interpretação), a decisão (o contra-argumento e quatro escolhas) e a apresentação (a ponte entre operação e finanças, com as palavras do grupo).'),
+        el('li',{},'Cada minicaso tem quatro fases: o problema (o que está em jogo, quem pensa o quê e a aposta do grupo), a análise (as três perguntas do caso: mexam nos números, vejam a conta e escolham a interpretação), a decisão (o contra-argumento e quatro escolhas) e a apresentação (a ponte entre operação e finanças, montada elo por elo).'),
         el('li',{},'Toda pergunta é de múltipla escolha, e o comentário do professor aparece ao marcar. O valor do trabalho está na interpretação e na apresentação: é nelas que a sala vai julgar o grupo.'),
-        el('li',{},'Na apresentação, o grupo conta o caso e a decisão como uma ponte entre operação e finanças, em quatro elos: operação, capital e margem, indicador, valor. O passo “A apresentação” monta as telas, e o botão “Apresentar em tela cheia” as projeta.'),
+        el('li',{},'Na apresentação, o grupo conta o caso e a decisão como uma ponte entre operação e finanças, em quatro elos: operação, capital e margem, indicador, valor. Para cada elo a ferramenta oferece três alternativas; o grupo marca a que defende e pode ajustar o texto. O passo “A apresentação” monta as telas, e o botão “Apresentar em tela cheia” as projeta.'),
         el('li',{},'Para entregar, use o botão de exportar no topo do minicaso do grupo.')),
       el('small',{class:'note'},'Os números são os do caderno de minicasos. O que o grupo escreve fica guardado só neste navegador; para entregar, use o botão de exportar no topo do minicaso do grupo.'))));
 }};
@@ -735,7 +737,7 @@ function barChart(items,unit=''){
 // ============ camada executiva: aposta, ponte, contra-argumento, nota ============
 const META={
  vitta:{
-  ponte:[['Operação','Fábricas próprias, 40 lançamentos por ano, prazo de 60 dias às farmácias'],['Capital e margem','R$ 1.000 mi presos, R$ 670 mi deles nas fábricas (67%); lucro de R$ 176 mi sobre receita de R$ 1.100 mi: margem de 16%'],['Indicador','Giro de 1,1 (1.100 ÷ 1.000) × margem de 16% = retorno de 17,6%'],['Valor','Acima do custo de capital de 12%: a empresa já cria valor']],
+  ponte:[['Operação','Fábricas próprias, 40 lançamentos por ano, prazo de 60 dias às farmácias'],['Capital e margem','R$ 1.000 mi presos, R$ 670 mi deles nas fábricas (67%); lucro de R$ 176 mi sobre receita de R$ 1.100 mi: margem de 16%'],['Indicador','Giro de 1,1 (1.100 ÷ 1.000) × margem de 16% = retorno de 17,6%'],['Valor','Antes de impostos, rende mais que a DistriMax (16% = 4% × 4,0), o benchmark de Marcos: a margem paga pelo giro baixo']],
   aposta:{q:'Marcos quer levar o giro de 1,1 para 2,0. Antes de qualquer conta, de que lado o grupo está?',opts:['Marcos: o giro precisa subir','Sérgio e Lúcia: o plano destrói margem','Em parte: alguma frente pode valer']},
   contra:{quem:'Marcos Teixeira, diretor financeiro',fala:'Se terceirizar metade da produção cria valor, terceirizar tudo cria o dobro. E giro 2,0 é o que os analistas cobram de uma empresa eficiente.',
    dica:'Respondam com o mecanismo. O custo de margem cresce à medida que se terceiriza mais? O que acontece com a velocidade de lançamento, que é o 5 da promessa? E o que o acionista recebe: giro ou retorno?',
@@ -1081,14 +1083,89 @@ const APRES=[['caso','O caso em duas frases','A situação e a decisão que a em
  ['ind','Elo 3 · Indicador','Que medida muda e quanto: retorno, giro, dias, resultado anual.'],['val','Elo 4 · Valor','Quanto vale para o acionista, comparado ao custo de capital ou à régua.'],
  ['prem','A premissa e o gatilho','O que precisa ser verdade, e que número faz o grupo rever a decisão.'],['perde','Quem perde e como a decisão sobrevive','A área, a meta ou o bônus afetado, e o que se oferece em troca.'],
  ['perg','A pergunta para a turma','Uma provocação que leve a turma para a empresa dela.']];
+// alternativas de cada elo da ponte: [texto, é o elo mais forte?, comentário do professor]
+const PONTE_OPC={
+vitta:{
+ op:[["Metade da produção, os itens maduros, passa a ser feita por um terceiro, começando por um piloto numa linha; uma das duas fábricas é vendida. Catálogo, estoque de 110 dias e prazo de 60 dias às farmácias ficam como estão.",1,"Diz o que muda (quem produz os itens maduros) e o que fica (tudo o que o cliente compra). Um diretor de operações reconhece a decisão."],
+  ["Catálogo de 400 para 250 itens e estoque de 110 para 55 dias.",0,"É a frente que mexe na promessa (produto 5, acesso 4). Sozinha, rende 15,5% (13% × 1,19), abaixo dos 17,6% de hoje."],
+  ["A Vitta fica mais enxuta e passa a girar o capital mais depressa.",0,"É adjetivo e indicador. O primeiro elo diz o que muda na cadeia: quem produz o quê, e em que fábrica."]],
+ cap:[["Capital de R$ 1.000 mi para R$ 715 mi: R$ 285 mi liberados, uma vez, com a venda da fábrica. Margem de 16% para 12%: 4 pontos a menos, cerca de R$ 44 mi por ano, que é a margem do terceirizado.",1,"Os dois lados, cada um em reais. Na planilha do fluxo de caixa livre, os 285 entram uma vez, como venda de ativo fixo (um Capex ao contrário); os 44 pesam todo ano, na linha de custos."],
+  ["R$ 285 mi de capital liberado com a venda da fábrica.",0,"Conta metade. O terceirizado cobra a própria margem: 4 pontos, cerca de R$ 44 mi por ano (4% × R$ 1.100 mi). É a metade que o plano de Marcos deixou de fora."],
+  ["R$ 450 mi de capital liberado e 9 pontos de margem a menos (R$ 99 mi por ano).",0,"É a conta do plano completo. A decisão de estudar só a terceirização mexe em R$ 285 mi e em 4 pontos."]],
+ ind:[["Giro de 1,1 para 1,54 (1.100 ÷ 715) e margem de 16% para 12%: o retorno sobre o capital vai de 17,6% para 18,5% (12% × 1,54).",1,"Mostra as duas metades da conta e a medida que as junta. O giro sobe mais do que a margem cai."],
+  ["Giro de 1,1 para 1,54: o capital gira 40% mais depressa.",0,"É metade da conta, a mesma que Marcos olhou. Com a margem em 12%, o retorno fica em 18,5%; é esse o número que decide."],
+  ["Giro de 1,1 para 2,0, o que os analistas cobram.",0,"É o indicador do plano completo. Com giro 2,0 a margem cai para 7% e o retorno, para 14,0%."]],
+ val:[["O retorno sobe de 17,6% para 18,5%: cria valor, com folga curta. Empata se a terceirização custar 4,6 pontos de margem (margem de 11,4%); Lúcia estima 4.",1,"Compara com o que a empresa já rende e mostra o tamanho da folga. É o que leva à premissa e ao piloto."],
+  ["R$ 285 mi devolvidos ao acionista.",0,"É o capital liberado, sem o que ele custa: R$ 44 mi por ano de margem. O valor é o saldo dos dois, e aparece no retorno: 18,5% contra 17,6%."],
+  ["A Vitta chega mais perto do giro de uma empresa eficiente.",0,"O acionista recebe retorno, não giro. A DistriMax gira 4,0 e rende 16%, menos que a Vitta hoje."]]},
+autopar:{
+ op:[["Os fornecedores passam a entregar todo mês, e não a cada dois: o lote cai de 60 para 30 dias e o ciclo médio, de 30 para 15. As peças fora de linha são vendidas a atacadistas. A reserva de 25 dias fica como está.",1,"Duas esperas sem função encurtadas, cada uma com o seu dono (compras e comercial), e a única que sustenta os 98% preservada."],
+  ["O parâmetro de estoque de segurança cai pela metade no sistema: a reserva vai de 25 para 12,5 dias.",0,"É a proposta de Carla. Mexe na única espera que tem função, libera R$ 25 mi e derruba a disponibilidade para cerca de 85%."],
+  ["O estoque cai 25%, de 90 para 67,5 dias.",0,"É a meta do CFO, e ela não diz qual espera encurta. O primeiro elo precisa dizer: o lote, a viagem, a reserva ou o obsoleto?"]],
+ cap:[["R$ 45 mi de caixa, uma vez: 30 do ciclo (15 dias × R$ 2 mi) e 15 do obsoleto, vendido por metade dos R$ 30 mi do balanço. A outra metade, R$ 15 mi, vira perda contábil no trimestre.",1,"Separa caixa de resultado. Na planilha do fluxo de caixa livre, o estoque cai R$ 60 mi (capital de giro, uma vez) e o resultado leva R$ 15 mi de perda (uma vez): R$ 45 mi de caixa. Nada disso se repete todo ano."],
+  ["R$ 60 mi de caixa: 30 do ciclo e 30 do obsoleto.",0,"Saem R$ 60 mi do balanço, mas o atacadista paga metade do obsoleto: entram R$ 45 mi no caixa. Os outros 15 são a perda."],
+  ["R$ 15 mi de custo novo, com a venda do obsoleto.",0,"A perda é de uma vez e já tinha acontecido quando as peças deixaram de vender; a venda só a reconhece. E falta o caixa: R$ 45 mi."]],
+ ind:[["Estoque de 90 para 60 dias (R$ 180 mi para R$ 120 mi no balanço), R$ 45 mi de caixa, a meta do CFO, e disponibilidade mantida em 98%.",1,"Põe lado a lado o indicador do CFO (dias e caixa) e o do cliente (disponibilidade). A proposta de Carla não aguenta essa comparação: R$ 25 mi e cerca de 85%."],
+  ["Estoque de 90 para 77,5 dias, com R$ 25 mi liberados.",0,"É o indicador da proposta de Carla (12,5 dias × R$ 2 mi). Não chega aos 45 e esconde o outro número: disponibilidade de 98% para cerca de 85%."],
+  ["Estoque 25% menor em doze meses.",0,"Repete a meta. O indicador do grupo pede dois números: quanto caixa (R$ 45 mi) e o que acontece com a disponibilidade (98% mantidos)."]],
+ val:[["Capital liberado vale 1 por 1: R$ 45 mi para a expansão ao Sul, sem dívida. E a receita fica protegida, porque os 98% que fazem a oficina voltar não mudam.",1,"Usa a régua (capital liberado vale 1 por 1) e mostra que o caixa não foi comprado com receita futura. É a diferença para a proposta de Carla."],
+  ["R$ 60 mi: o estoque que sai do balanço.",0,"Metade do obsoleto não vira caixa. O acionista recebe R$ 45 mi; os outros 15 já estavam perdidos."],
+  ["A meta do CFO é cumprida no prazo.",0,"Cumprir a meta é o indicador. O valor está no que o caixa permite (a expansão sem dívida) e no que a decisão preserva (a receita das oficinas)."]]},
+bompreco:{
+ op:[["O gerente deixa de fazer o pedido semanal. O sistema lê o que saiu no caixa de cada loja e repõe só isso, todo dia, a partir do centro de distribuição. A mercadoria fica 15 dias na loja, em vez de 45.",1,"Muda o desenho: a espera encurta. Um diretor de operações reconhece o processo novo e quem deixa de decidir o pedido."],
+  ["A rede passa a pagar os fornecedores em 60 dias, em vez de 30.",0,"Nada muda na cadeia: a mercadoria fica os mesmos 45 dias na loja, e quem espera 30 dias a mais é o fornecedor. É financiamento."],
+  ["A rede ganha agilidade e trabalha com menos estoque.",0,"É adjetivo. O primeiro elo diz o que muda no processo: quem pede, com que frequência, e quantos dias a mercadoria espera."]],
+ cap:[["R$ 90 mi a menos de estoque nas lojas (30 dias × R$ 3 mi), uma vez. Em troca, R$ 20 mi de sistema e implantação, uma vez, e R$ 3 mi por ano de manutenção.",1,"Cada número na sua linha da planilha do fluxo de caixa livre: os 90 em capital de giro e os 20 em Capex, uma vez; os 3 em custos, todo ano."],
+  ["R$ 90 mi liberados do capital de giro.",0,"É verdade e não decide: as três propostas liberam os mesmos 90. O que separa B é o que ela custa: R$ 20 mi uma vez e R$ 3 mi por ano."],
+  ["R$ 23 mi de custo: 20 do sistema e 3 de manutenção.",0,"Soma dinheiro de uma vez com dinheiro de todo ano. Os 20 são investimento; os 3 voltam todo ano. E falta o outro lado: os R$ 90 mi liberados."]],
+ ind:[["Estoque de loja de 45 para 15 dias. Resultado de +R$ 7,8 mi por ano (10,8 de custo de capital evitado − 3 de manutenção) e payback de 2,6 anos (20 ÷ 7,8).",1,"Um indicador de operação (dias) e um de finanças (resultado por ano), ligados pela mesma conta. Na mesma medida, o prazo dá −7,2 e o risco sacado, +0,9."],
+  ["Capital de giro R$ 90 mi menor e ciclo de caixa 30 dias mais curto.",0,"São iguais nas três propostas. O indicador que as separa é o resultado por ano: −7,2 (A), +7,8 (B), +0,9 (C)."],
+  ["Resultado de +R$ 10,8 mi por ano (90 × 12%).",0,"É o ganho antes do custo, igual nas três. Em B falta descontar a manutenção: 10,8 − 3 = 7,8."]],
+ val:[["Os R$ 90 mi deixam de custar 12% ao ano à rede, e ninguém passa a cobrar pela espera, porque ela acabou: +R$ 7,8 mi por ano, contra −7,2 com o prazo e +0,9 com o risco sacado.",1,"Compara com o custo de capital da rede e com as alternativas, e diz por que o valor fica: a espera acabou, em vez de mudar de dono."],
+  ["R$ 90 mi para abrir as seis lojas.",0,"É o que o Conselho pediu, e as três propostas entregam. O valor é o que sobra por ano depois de pagar quem carrega a espera."],
+  ["O capital de giro melhora sem custo, porque os fornecedores aceitaram o prazo.",0,"É o argumento de Fernanda para a proposta A. O fornecedor a 20% repassa R$ 18 mi por ano no preço: −7,2 por ano para a rede."]]},
+embalagens:{
+ op:[["A fábrica deixa de adivinhar: toda semana faz a previsão junto com os três grandes clientes, olhando os planos de produção deles. Com previsão melhor, a reserva de cada modelo de caixa pode ser menor.",1,"Diz o que muda no processo e por que o estoque cai. É também a condição para a liberação ser permanente: previsão toda semana."],
+  ["O estoque de produto acabado cai de R$ 70 mi para R$ 30 mi.",0,"É o efeito no capital, o segundo elo. O primeiro responde o que faz o estoque cair: a previsão semanal com os clientes."],
+  ["Uma cortadeira nova reduz o refugo e a mão de obra.",0,"É o projeto A, a máquina. Na régua ele vale 13, contra 25 do S&OP."]],
+ cap:[["R$ 40 mi a menos de produto acabado (de 70 para 30), uma vez. Em troca, R$ 4 mi de sistema e consultoria, uma vez, e R$ 2 mi por ano de equipe.",1,"Na planilha do fluxo de caixa livre: os 40 em capital de giro e os 4 em investimento, uma vez; os 2 em custos, todo ano. O ganho está no balanço; a margem até piora um pouco."],
+  ["R$ 2 mi por ano a mais de despesa: o resultado piora.",0,"É a parte que o payback de Ricardo enxerga. Falta a que ele não vê: R$ 40 mi que voltam ao caixa, no balanço."],
+  ["Economia de R$ 6 mi por ano no custo de produção.",0,"É o ganho da máquina, o projeto A. O S&OP não corta custo; devolve capital."]],
+ ind:[["Estoque de produto acabado de R$ 70 mi para R$ 30 mi. Os R$ 40 mi deixam de custar 12% ao ano: R$ 4,8 mi por ano de custo de capital evitado, contra R$ 2 mi por ano de equipe.",1,"Traduz um ganho de balanço para reais por ano, a língua de Ricardo, sem depender do payback, que não tem onde registrá-lo."],
+  ["Payback de 3,3 anos.",0,"É o payback da máquina (20 ÷ 6). O S&OP não tem payback: sem economia anual de custo, não há o que dividir."],
+  ["Despesa R$ 2 mi por ano maior.",0,"É só o que aparece na demonstração de resultado. O indicador que muda está no balanço: estoque de 70 para 30."]],
+ val:[["Na régua, o S&OP vale R$ 25 mi (40 − 4 − 2 × 5,5) e a máquina, R$ 13 mi (6 × 5,5 − 20). O S&OP vale mais enquanto liberar pelo menos R$ 28 mi.",1,"Põe os dois projetos na mesma unidade e já traz o número de empate, que vira a premissa e o gatilho."],
+  ["R$ 40 mi: o estoque liberado.",0,"Esquece o que o projeto custa: 4 uma vez e 2 por ano, que na régua são 11 (2 × 5,5). 40 − 4 − 11 = 25."],
+  ["R$ 220 mi: os R$ 40 mi liberados × 5,5.",0,"A régua de 5,5 vale para dinheiro que se repete todo ano. Capital liberado volta uma vez e vale 1 por 1."]]},
+vida:{
+ op:[["As 120 lojas vêm em fases, e cada fase só começa quando a safra anterior mostra que está amadurecendo. Cada loja nova abre com menos capital: sortimento e estoque inicial definidos pelo perfil da cidade.",1,"Diz o que muda no ritmo de abertura e no modelo da loja. O diretor de expansão reconhece o que terá de fazer diferente."],
+  ["Mais 120 lojas no mesmo modelo, com o mesmo sortimento e os mesmos prazos aos convênios.",0,"É o plano de Rogério. Repete o desenho em que o capital novo rende 7,5% contra 12% de custo."],
+  ["A rede passa a crescer com mais disciplina.",0,"É adjetivo. O primeiro elo diz o que muda na operação: quantas lojas por fase, com quanto estoque inicial e que sortimento."]],
+ cap:[["Em três anos entraram R$ 800 mi de capital: 480 nas lojas (cerca de R$ 4 mi cada), 245 no sortimento e 75 nos convênios, para R$ 60 mi de lucro novo por ano. Em fases, entra menos capital por loja, e só depois de a safra anterior mostrar o lucro.",1,"Segue o dinheiro que entrou e diz onde ele está. Na planilha do fluxo de caixa livre, loja nova é Capex e estoque inicial é capital de giro: saem do caixa antes da primeira venda."],
+  ["Lucro recorde de R$ 300 mi, 25% acima de três anos atrás.",0,"É verdade e não diz quanto capital foi preciso. O lucro cresceu 25%; o capital, 80%."],
+  ["Receita de R$ 2,0 bi para R$ 3,0 bi.",0,"Receita não é capital nem margem. O segundo elo pergunta quanto dinheiro ficou preso para essa receita existir: R$ 800 mi."]],
+ ind:[["Retorno do capital novo de 7,5% (60 ÷ 800), contra 12% de custo; o retorno médio caiu de 24% para 16,7%. Para empatar, o lucro novo precisa chegar a R$ 96 mi por ano (12% × 800).",1,"Usa a medida que isola o crescimento e já traz o número de empate, que é o argumento de Tiago convertido em meta."],
+  ["Retorno médio de 16,7% (300 ÷ 1.800), acima dos 12% de custo.",0,"A média mistura as lojas antigas, muito rentáveis, com o capital que acabou de entrar. Serve para defender a rede, e não o plano."],
+  ["Receita 50% maior e lucro 25% maior.",0,"Nenhuma das duas mede o capital, que cresceu 80%. O indicador é o que o dinheiro novo rendeu: 60 ÷ 800 = 7,5%."]],
+ val:[["O capital novo custa R$ 96 mi por ano (800 × 12%) e traz R$ 60 mi: R$ 36 mi por ano de valor perdido. O valor econômico da rede caiu de R$ 120 mi para R$ 84 mi por ano, com lucro recorde. Em fases, a perda para de crescer enquanto a maturação não aparece.",1,"Compara o lucro novo com o custo do capital novo e mostra o efeito na rede inteira: mais lucro e menos valor."],
+  ["A rede rende 16,7%, acima de 12%: o crescimento cria valor.",0,"A rede cria valor; o crescimento, ainda não. No capital novo a conta é 7,5% contra 12%."],
+  ["R$ 60 mi de lucro novo por ano.",0,"Falta descontar o custo do dinheiro que entrou: 800 × 12% = 96. O saldo é −R$ 36 mi por ano."]]}};
+const ELOS=['op','cap','ind','val'];
 function apresStep(c){return {fase:3,t:'A apresentação: a ponte entre operação e finanças',
- explain:'A ferramenta já levou o grupo às contas; a apresentação é a parte que ela não faz. O grupo conta o caso e a decisão como uma <b>ponte em quatro elos</b>: o que muda na operação, o que isso faz com o capital e a margem, que indicador se move e quanto vale. Cada elo precisa de um mecanismo e de um número. A faixa “Da operação ao valor”, no topo, mostra a situação de hoje; a ponte do grupo mostra o efeito da decisão.',
- body(s,S,rerender){const A=S.apres=S.apres||{};const N=S.nota||{};const r=el('div',{class:'lamina'});r.append(fio(FIO2.apres));
+ explain:'A ferramenta já levou o grupo às contas e à decisão. Agora o grupo conta o caso como uma <b>ponte em quatro elos</b>: o que muda na operação, o que isso faz com o capital e a margem, que indicador se move e quanto vale. Cada elo precisa de um mecanismo e de um número. Para cada elo há três alternativas: marquem a que melhor conta a decisão do grupo, e o comentário do professor aparece logo abaixo. O texto escolhido vai para a tela e pode ser ajustado. A faixa “Da operação ao valor”, no topo, mostra a situação de hoje; a ponte do grupo mostra o efeito da decisão.',
+ body(s,S,rerender){const A=S.apres=S.apres||{};A.sel=A.sel||{};const N=S.nota||{};const OP=PONTE_OPC[c.id]||{};const r=el('div',{class:'lamina'});r.append(fio(FIO2.apres));
   r.append(tutorCard('Uma boa ponte pode ser lida nos dois sentidos. Um diretor de operações deve reconhecer a operação no primeiro elo; um diretor financeiro deve reconhecer a conta no quarto. Se um dos dois não se reconhecer, falta um elo. Teste útil para o segundo elo: na planilha do fluxo de caixa livre que vocês montaram em Análise de Desempenho, em que linha a decisão aparece? Custos e despesas pesam todo ano; capital de giro e Capex, uma vez.'));
-  r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const P=CONTEUDO[c.id].problema;A.caso=A.caso||P.decisao;A.decisao=A.decisao||N.decisao||'';A.prem=A.prem||[N.prem,N.gatilho].filter(Boolean).join(' Gatilho: ');const cs=MC[c.id].contra;A.perde=A.perde||(S.contraSel!=null?cs.o[S.contraSel][0]:'');rerender()}},'Trazer o que o grupo já escolheu'),el('small',{class:'note',style:'margin:0'},'Copia a decisão, a premissa, o gatilho e a resposta ao contra-argumento. Os quatro elos o grupo escreve com as próprias palavras.')));
-  APRES.forEach(([k,l,ph],i)=>{if(i===2)r.append(el('h4',{class:'subh'},'A ponte'));r.append(el('h4',{},l),el('textarea',{id:'ap-'+k+'-'+s,placeholder:ph,oninput:e=>{A[k]=e.target.value;store.set('state:'+s,S);paint()}},A[k]||''))});
+  r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const P=CONTEUDO[c.id].problema;A.caso=A.caso||P.decisao;A.decisao=A.decisao||N.decisao||'';A.prem=A.prem||[N.prem,N.gatilho].filter(Boolean).join(' Gatilho: ');const cs=MC[c.id].contra;A.perde=A.perde||(S.contraSel!=null?cs.o[S.contraSel][0]:'');rerender()}},'Trazer o que o grupo já escolheu'),el('small',{class:'note',style:'margin:0'},'Copia a decisão, a premissa, o gatilho e a resposta ao contra-argumento. Os quatro elos o grupo escolhe abaixo.')));
+  APRES.forEach(([k,l,ph],i)=>{if(i===2)r.append(el('h4',{class:'subh'},'A ponte'));r.append(el('h4',{},l));const O=OP[k];
+   if(O){const sel=A.sel[k];r.append(el('p',{class:'eloq'},ph));
+    const list=el('div',{class:'mc'});const n=O.length;const rot=(IDX[c.id]+ELOS.indexOf(k)+1)%n;[...Array(n).keys()].map(j=>(j+rot)%n).forEach((oi,pos)=>{const [t,ok]=O[oi];list.append(el('button',{class:'mco'+(sel===oi?(ok?' good':' bad'):''),'aria-pressed':String(sel===oi),onclick:()=>{A.sel[k]=oi;A[k]=t;rerender()}},el('span',{class:'mcl'},String.fromCharCode(65+pos)),el('span',{},t)))});
+    r.append(list);
+    if(sel!=null&&O[sel])r.append(diag(O[sel][1]?'good':'warn',O[sel][1]?'É o elo mais forte':'Vale discutir',O[sel][2]));
+    r.append(el('label',{class:'flabel',for:'ap-'+k+'-'+s},'O que vai para a tela (o grupo pode ajustar o texto)'))}
+   r.append(el('textarea',{id:'ap-'+k+'-'+s,placeholder:O?'Marquem uma alternativa acima. Depois, se quiserem, ajustem com as palavras do grupo.':ph,oninput:e=>{A[k]=e.target.value;store.set('state:'+s,S);paint()}},A[k]||''))});
   const checks=el('ul',{class:'checks'});
-  const paint=()=>{checks.innerHTML='';[[hasNum(A.cap),'O elo de capital e margem tem um valor em R$'],[hasNum(A.ind),'O elo do indicador diz quanto ele muda'],[hasNum(A.val),'O elo de valor compara com o custo de capital ou usa a régua'],[words(A.op)>=6,'O elo de operação diz o que muda na cadeia, não um adjetivo'],[words(A.perde)>=6,'A apresentação diz quem perde e como a decisão sobrevive']].forEach(([ok,t])=>checks.append(el('li',{class:ok?'ok':''},(ok?'✓ ':'○ ')+t)))};
+  const fraco=k=>{const O=OP[k],i=A.sel[k];return !!(O&&i!=null&&O[i]&&!O[i][1]&&A[k]===O[i][0])};
+  const paint=()=>{checks.innerHTML='';[[words(A.op)>=6&&!fraco('op'),'O elo de operação diz o que muda na cadeia, não um adjetivo'],[hasNum(A.cap)&&!fraco('cap'),'O elo de capital e margem tem os dois lados da conta, em R$'],[hasNum(A.ind)&&!fraco('ind'),'O elo do indicador diz quanto ele muda'],[hasNum(A.val)&&!fraco('val'),'O elo de valor compara com o custo de capital, com o retorno de hoje ou com a régua'],[words(A.perde)>=6,'A apresentação diz quem perde e como a decisão sobrevive']].forEach(([ok,t])=>checks.append(el('li',{class:ok?'ok':''},(ok?'✓ ':'○ ')+t)))};
   paint();
   r.append(el('h4',{},'Teste da ponte'),checks,el('div',{class:'row'},el('button',{class:'btn',onclick:()=>slides(c)},'Apresentar em tela cheia'),el('small',{class:'note',style:'margin:0'},'Setas ← → mudam de tela; Esc fecha.')));
   return r}}}
