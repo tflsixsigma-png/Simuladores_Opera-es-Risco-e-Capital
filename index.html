@@ -1,9 +1,5 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Simulador dos Minicasos</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Simulador Sessão 1</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: cabeçalho fixo com abas por minicaso; cada minicaso é uma trilha de passos (explicação → controle → diagnóstico), com um painel de conceitos ao lado. */
@@ -219,8 +215,6 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .mcq{font-family:var(--display);font-size:17px;margin:0 0 8px}
 .mcb{margin-top:14px}
 </style>
-</head>
-<body>
 
 <header class="top"><div class="in">
   <div class="kicker">Operações, Risco e Capital · Sessão 1 · Desenho da cadeia e capital</div>
@@ -1081,13 +1075,15 @@ function ponteCard(c){const p=META[c.id].transicao;const i=CASES.indexOf(c);cons
 const APRES=[['caso','O caso em duas frases','A situação e a decisão que a empresa precisa tomar.'],['decisao','A decisão do grupo','A alternativa que o grupo escolheu no passo da decisão.'],
  ['op','Elo 1 · Operação','O que muda na cadeia: lote, prazo, fábrica, previsão, loja.'],['cap','Elo 2 · Capital e margem','O que isso faz com o dinheiro preso e com a margem, em R$. Na planilha do fluxo de caixa livre, é custo (todo ano) ou investimento em capital de giro e Capex (uma vez)?'],
  ['ind','Elo 3 · Indicador','Que medida muda e quanto: retorno, giro, dias, resultado anual.'],['val','Elo 4 · Valor','Quanto vale para o acionista, comparado ao custo de capital ou à régua.'],
- ['prem','A premissa e o gatilho','O que precisa ser verdade, e que número faz o grupo rever a decisão.'],['perde','Quem perde e como a decisão sobrevive','A área, a meta ou o bônus afetado, e o que se oferece em troca.'],
+ ['prem','A premissa e o gatilho','Preenchido com as escolhas 3 e 4 do passo “A decisão do grupo”. Marquem lá para aparecer aqui; depois podem ajustar o texto.'],['perde','Quem perde e como a decisão sobrevive','Preenchido com quem fez a objeção e a resposta escolhida no passo “O contra-argumento”. Marquem lá para aparecer aqui; depois podem ajustar o texto.'],
  ['perg','A pergunta para a turma','Uma provocação que leve a turma para a empresa dela.']];
 function apresStep(c){return {fase:3,t:'A apresentação: a ponte entre operação e finanças',
  explain:'A ferramenta já levou o grupo às contas; a apresentação é a parte que ela não faz. O grupo conta o caso e a decisão como uma <b>ponte em quatro elos</b>: o que muda na operação, o que isso faz com o capital e a margem, que indicador se move e quanto vale. Cada elo precisa de um mecanismo e de um número. A faixa “Da operação ao valor”, no topo, mostra a situação de hoje; a ponte do grupo mostra o efeito da decisão.',
  body(s,S,rerender){const A=S.apres=S.apres||{};const N=S.nota||{};const r=el('div',{class:'lamina'});r.append(fio(FIO2.apres));
   r.append(tutorCard('Uma boa ponte pode ser lida nos dois sentidos. Um diretor de operações deve reconhecer a operação no primeiro elo; um diretor financeiro deve reconhecer a conta no quarto. Se um dos dois não se reconhecer, falta um elo. Teste útil para o segundo elo: na planilha do fluxo de caixa livre que vocês montaram em Análise de Desempenho, em que linha a decisão aparece? Custos e despesas pesam todo ano; capital de giro e Capex, uma vez.'));
-  r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const P=CONTEUDO[c.id].problema;A.caso=A.caso||P.decisao;A.decisao=A.decisao||N.decisao||'';A.prem=A.prem||[N.prem,N.gatilho].filter(Boolean).join(' Gatilho: ');const cs=MC[c.id].contra;A.perde=A.perde||(S.contraSel!=null?cs.o[S.contraSel][0]:'');rerender()}},'Trazer o que o grupo já escolheu'),el('small',{class:'note',style:'margin:0'},'Copia a decisão, a premissa, o gatilho e a resposta ao contra-argumento. Os quatro elos o grupo escreve com as próprias palavras.')));
+  const derivado=()=>{const P=CONTEUDO[c.id].problema;const cs=MC[c.id].contra;const m=META[c.id].contra;const quem=m&&m.quem?m.quem:'';return {caso:P.decisao||'',decisao:N.decisao||'',prem:N.prem?('Premissa: '+N.prem+(N.gatilho?' Gatilho: '+N.gatilho:'')):'',perde:(S.contraSel!=null&&cs&&cs.o&&cs.o[S.contraSel])?('Quem perde: '+(quem||'quem fez a objeção')+'. Como a decisão sobrevive: '+cs.o[S.contraSel][0]):''}};
+   const D=derivado();A._d=A._d||{};['caso','decisao','prem','perde'].forEach(k=>{if(A[k]===undefined||A[k]===''||A[k]===A._d[k]){A[k]=D[k];A._d[k]=D[k]}});store.set('state:'+s,S);
+   r.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{const D=derivado();['caso','decisao','prem','perde'].forEach(k=>{A[k]=D[k];A._d[k]=D[k]});store.set('state:'+s,S);rerender()}},'Refazer com as escolhas do grupo'),el('small',{class:'note',style:'margin:0'},'O caso, a decisão, a premissa com o gatilho e a resposta ao contra-argumento vêm preenchidos com o que o grupo marcou nos passos anteriores e se atualizam se o grupo trocar de escolha; podem ser editados. Os quatro elos o grupo escreve com as próprias palavras.')));
   APRES.forEach(([k,l,ph],i)=>{if(i===2)r.append(el('h4',{class:'subh'},'A ponte'));r.append(el('h4',{},l),el('textarea',{id:'ap-'+k+'-'+s,placeholder:ph,oninput:e=>{A[k]=e.target.value;store.set('state:'+s,S);paint()}},A[k]||''))});
   const checks=el('ul',{class:'checks'});
   const paint=()=>{checks.innerHTML='';[[hasNum(A.cap),'O elo de capital e margem tem um valor em R$'],[hasNum(A.ind),'O elo do indicador diz quanto ele muda'],[hasNum(A.val),'O elo de valor compara com o custo de capital ou usa a régua'],[words(A.op)>=6,'O elo de operação diz o que muda na cadeia, não um adjetivo'],[words(A.perde)>=6,'A apresentação diz quem perde e como a decisão sobrevive']].forEach(([ok,t])=>checks.append(el('li',{class:ok?'ok':''},(ok?'✓ ':'○ ')+t)))};
@@ -1120,7 +1116,7 @@ function notaHTML(c){const S=c.state,N=S.nota||{},i=CASES.indexOf(c);
  <h3>A análise e o contra-argumento</h3><table>${respostas(c).map(([q,a,v],k)=>`<tr><th>${k+1}. ${esc(q)}</th><td>${esc(a)}${v?' <i>('+v+')</i>':''}</td></tr>`).join('')}</table>
  <h3>A decisão</h3><table>${NOTA.map(([k,l])=>`<tr><th>${l}</th><td>${esc(N[k])||'—'}</td></tr>`).join('')}</table>
  <h3>A apresentação: a ponte entre operação e finanças</h3><table>${APRES.map(([k,l])=>`<tr><th>${l}</th><td>${esc((S.apres||{})[k])||'—'}</td></tr>`).join('')}</table></section>`}
-function docHTML(list){const tt=list.length===1?`${gl(list[0])} · ${list[0].empresa} · Nota ao Conselho`:SESS.titulo+' · Notas ao Conselho';return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${tt}</title><style>body{font:15px/1.5 Georgia,serif;color:#111;max-width:760px;margin:32px auto;padding:0 16px}h1{font-size:22px;color:#0b2545}h2{font-size:20px;color:#0b2545;margin:4px 0 12px}h3{font-size:15px;color:#b5462b;text-transform:uppercase;letter-spacing:.05em}.k{font:700 12px Arial,sans-serif;color:#b5462b;letter-spacing:.08em;text-transform:uppercase;margin:0}table{border-collapse:collapse;width:100%;margin-bottom:14px}th{width:30%;text-align:left;vertical-align:top;background:#0b2545;color:#fff;padding:8px;font:600 13px Arial,sans-serif}td{border-bottom:1px solid #ccc;padding:8px;vertical-align:top}section{page-break-after:always;margin-bottom:28px}</style></head><body><h1>Operações, Risco e Capital · '+SESS.titulo+' · Nota ao Conselho</h1>${list.map(notaHTML).join('')}</body></html>`}
+function docHTML(list){const tt=list.length===1?`${gl(list[0])} · ${list[0].empresa} · Nota ao Conselho`:SESS.titulo+' · Notas ao Conselho';return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulador Sessão 1</title><style>body{font:15px/1.5 Georgia,serif;color:#111;max-width:760px;margin:32px auto;padding:0 16px}h1{font-size:22px;color:#0b2545}h2{font-size:20px;color:#0b2545;margin:4px 0 12px}h3{font-size:15px;color:#b5462b;text-transform:uppercase;letter-spacing:.05em}.k{font:700 12px Arial,sans-serif;color:#b5462b;letter-spacing:.08em;text-transform:uppercase;margin:0}table{border-collapse:collapse;width:100%;margin-bottom:14px}th{width:30%;text-align:left;vertical-align:top;background:#0b2545;color:#fff;padding:8px;font:600 13px Arial,sans-serif}td{border-bottom:1px solid #ccc;padding:8px;vertical-align:top}section{page-break-after:always;margin-bottom:28px}</style></head><body><h1>Operações, Risco e Capital · '+SESS.titulo+' · Nota ao Conselho</h1>${list.map(notaHTML).join('')}</body></html>`}
 async function getDL(){if(DL)return DL;try{for(let i=0;i<20&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,150));if(window.claude&&window.claude.use)DL=await window.claude.use('downloads')}catch(e){}return DL}
 function baixarLocal(list,nome,msg,host){try{const url=URL.createObjectURL(new Blob([docHTML(list)],{type:'text/html'}));const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Se o arquivo não baixou, use “Copiar a nota”.'}catch(e){msg.textContent='O download não está disponível aqui. Use “Copiar a nota”.'}}
 async function baixar(list,nome,msg,host){msg.textContent='Preparando o arquivo…';const dl=await getDL();if(!dl){baixarLocal(list,nome,msg,host);return}try{await dl.save({filename:nome,data:docHTML(list)});msg.textContent='Arquivo salvo.'}catch(e){const code=e&&e.code;if(code==='declined'){msg.textContent='Download cancelado.'}else if(code==='rate_limited'){msg.textContent='Já há uma confirmação aberta; responda a ela.'}else{DL=null;baixarLocal(list,nome,msg,host)}}}
@@ -1189,5 +1185,4 @@ render();
 getDL();
 </script>
 
-</body>
-</html>
+</body></html>
