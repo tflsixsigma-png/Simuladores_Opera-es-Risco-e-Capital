@@ -455,68 +455,30 @@ const STEPS_vitta=[
     return r;
    }},
   {t:'Pergunta 3 · O plano de Marcos, frente a frente',
-   explain:'Cada frente faz duas coisas ao mesmo tempo: devolve capital (o cofre diminui) e tira lucro (a margem cai). O retorno, que é lucro ÷ capital, mostra qual das duas ganha. Primeiro a conta com as estimativas do caso; depois, testem as estimativas e montem o plano.',
+   explain:'Cada frente faz duas coisas ao mesmo tempo: devolve capital (o cofre diminui) e tira lucro (a margem cai). O retorno, que é lucro ÷ capital, mostra qual das duas ganha.',
    body(s,S,rerender){
-    const fr=[{k:'f1',c:'c1',n:'Terceirizar metade da produção',cap:285,est:4,why:'o terceirizado cobra a própria margem, e a Vitta perde velocidade de lançamento'},
-              {k:'f2',c:'c2',n:'Cortar catálogo (400 → 250) e estoque (110 → 55 dias)',cap:75,est:3,why:'menos lançamentos a preço cheio; faltas nas semanas de pico'},
-              {k:'f3',c:'c3',n:'Encurtar o prazo das farmácias (60 → 30 dias)',cap:90,est:2,why:'as farmácias só aceitam com desconto ou bonificação'}];
-    const L0=176, C0=1000, R0=17.6, base=R0;
+    const L0=176, C0=1000, base=17.6;
     const r=el('div');
     r.append(dados([
       ['Hoje','receita de R$ 1.100 mi · lucro de R$ 176 mi (margem de 16%) · capital de R$ 1.000 mi · retorno = 176 ÷ 1.000 = 17,6%'],
       ['De onde vem a queda da margem','da tabela “O que cada frente faz com a margem”, no caso: estimativas de Sérgio e Lúcia, de −4, −3 e −2 pontos'],
       ['O que é um ponto de margem','1% da receita: R$ 11 mi de lucro por ano. Cair 4 pontos é a margem ir de 16% para 12%, e o lucro de 176 para 132']]));
-
-    // ---------- 1 · a conta com as estimativas do caso ----------
-    r.append(el('h4',{class:'subh'},'1 · A conta, com as estimativas do caso'));
+    r.append(el('h4',{class:'subh'},'A conta, com as estimativas do caso'));
     const row=(n,cap,pts)=>{const L=L0-pts*11, C=C0-cap, R=L/C*100; return [n,`1.000 − ${fmt(cap,0)} = **${fmt(C,0)}**`,`176 − ${fmt(pts,0)} × 11 = 176 − ${fmt(pts*11,0)} = **${fmt(L,0)}** (margem de ${pct(16-pts,0)})`,`${fmt(L,0)} ÷ ${fmt(C,0)} = **${pct(R)}**`,R>base?'Sobe: **cria valor**':'Cai: **destrói valor**']};
     r.append(tbl({h:['Frente','Capital que sobra (R$ mi)','Lucro por ano (R$ mi): 176 − pontos × 11','Retorno = lucro ÷ capital','Contra os 17,6% de hoje'],r:[
       ['Hoje','1.000','176 (margem de 16%)','176 ÷ 1.000 = **17,6%**','—'],
       row('Terceirizar metade',285,4),row('Cortar catálogo e estoque',75,3),row('Encurtar o prazo',90,2),
       row('Plano completo',450,9)]}));
     r.append(el('p',{class:'note'},'Lucro ÷ capital é o mesmo que margem × giro: 12% × 1,54 = 18,5%. As duas contas dão o mesmo número; a primeira é mais fácil de ver.'));
-
-    // ---------- 2 · testar as estimativas ----------
-    r.append(el('h4',{class:'subh'},'2 · Testem as estimativas'));
-    r.append(el('p',{class:'note'},'As quedas de margem são estimativas de duas áreas que preferem manter tudo como está. Movam cada uma. Para manter os 17,6% de hoje, cada real que sai do cofre pode levar junto, no máximo, R$ 0,176 de lucro por ano: é a linha de empate. À esquerda dela (verde), a frente cria valor; à direita (vermelho), destrói.'));
-    fr.forEach(f=>{
-      const C=C0-f.cap, beL=R0/100*f.cap, bePts=beL/11, v=S[f.c], L=L0-v*11, R=L/C*100, ok=R>base;
-      const card=el('div',{style:'border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0;background:var(--surface)'});
-      card.append(el('div',{style:'display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline'},
-        el('strong',{style:'font-size:16px;color:var(--navy)'},f.n),
-        el('button',{class:'chip','aria-pressed':String(S[f.k]),onclick:()=>{S[f.k]=!S[f.k];rerender()}},S[f.k]?'No plano':'Fora do plano')));
-      card.append(el('p',{class:'note',style:'margin:4px 0 8px'},`Devolve ${money(f.cap)}. A margem cai porque ${f.why}. Estimativa do caso: ${fmt(f.est,0)} pontos.`));
-      card.append(slider('Quanto a margem cai',S,f.c,0,8,0.5,x=>fmt(x,1)+' pontos = R$ '+fmt(x*11,0)+' mi de lucro a menos por ano',rerender));
-      // régua visual 0–8 pontos
-      const W=8, g=Math.min(bePts/W*100,100);
-      const bar=el('div',{style:'position:relative;height:18px;border-radius:4px;overflow:visible;margin:10px 0 4px;background:linear-gradient(to right,var(--good) 0,var(--good) '+g+'%,var(--bad) '+g+'%,var(--bad) 100%)','aria-hidden':'true'});
-      bar.append(el('div',{style:'position:absolute;top:-5px;bottom:-5px;width:3px;background:var(--fg);left:calc('+g+'% - 1px)'}));
-      bar.append(el('div',{style:'position:absolute;top:-4px;width:14px;height:26px;border-radius:3px;background:#fff;border:3px solid var(--fg);left:calc('+(Math.min(v,W)/W*100)+'% - 7px)'}));
-      card.append(bar);
-      card.append(el('div',{style:'position:relative;height:18px;font-size:13px;color:var(--muted)'},el('span',{style:'position:absolute;left:0'},'0'),el('span',{style:'position:absolute;right:0'},'8 pontos'),el('span',{style:'position:absolute;font-weight:700;color:var(--fg);white-space:nowrap;left:'+Math.min(Math.max(g,8),78)+'%;transform:translateX(-50%)'},'empate: '+fmt(bePts,1))));
-      card.append(el('p',{style:'margin:8px 0 4px'},el('b',{},'Empate: '),`a margem pode cair até ${fmt(bePts,1)} pontos (R$ ${fmt(beL,0)} mi de lucro), que é 17,6% dos ${money(f.cap)} devolvidos.`));
-      card.append(el('p',{style:'margin:0'},el('b',{},'Com '+fmt(v,1)+' pontos: '),`capital ${fmt(C,0)} · lucro ${fmt(L,0)} · retorno ${fmt(L,0)} ÷ ${fmt(C,0)} = ${pct(R)} `,el('span',{class:ok?'feedback show ok':'feedback show ko',style:'display:inline-block;margin-left:6px'},ok?'cria valor':'destrói valor')));
-      r.append(card);
-    });
-
-    // ---------- 3 · o plano do grupo ----------
-    const on=fr.filter(f=>S[f.k]); const lib=on.reduce((a,f)=>a+f.cap,0); const C=C0-lib; const pts=on.reduce((a,f)=>a+S[f.c],0); const L=L0-pts*11; const R=L/C*100;
-    r.append(el('h4',{class:'subh'},'3 · O plano que vocês montaram'));
-    r.append(el('p',{class:'note'},on.length?'Frentes no plano: '+on.map(f=>f.n.split(' (')[0]).join(' + ')+'. Use os botões “No plano / Fora do plano” acima.':'Nenhuma frente no plano. Use os botões “No plano / Fora do plano” acima.'));
-    r.append(el('div',{class:'kpis'},kpi('Capital',money(C)),kpi('Lucro por ano',money(L)),kpi('Margem',pct(L/11,1)),kpi('Retorno',pct(R),R>=base?'good':'bad')));
-    if(on.length){const beL=R0/100*lib; r.append(calcBox('A conta do plano',[
-      ['Capital devolvido',on.map(f=>fmt(f.cap,0)).join(' + '),money(lib)],
-      ['Capital que sobra','1.000 − '+fmt(lib,0),money(C)],
-      ['Lucro que some',on.map(f=>fmt(S[f.c],1)).join(' + ')+' pontos × R$ 11 mi',money(pts*11)],
-      ['Lucro que fica','176 − '+fmt(pts*11,0),money(L)],
-      ['Retorno','lucro ÷ capital = '+fmt(L,0)+' ÷ '+fmt(C,0),pct(R)],
-      ['Retorno de hoje','176 ÷ 1.000','17,6%'],
-      ['Lucro máximo que pode sumir para empatar','17,6% × '+fmt(lib,0)+' devolvidos',money(beL)]]));}
-    r.append(diag(on.length===0?'warn':R>=base?'good':'bad',on.length===0?'Nenhuma frente no plano':R>=base?'Este plano cria valor':'Este plano destrói valor',bl(on.length===0?['Ponham ao menos uma frente no plano. O retorno de hoje é 17,6% (176 ÷ 1.000).']:[
-      `Retorno de ${pct(R)} contra 17,6% hoje: ${R>=base?'cria':'destrói'} valor.`,
-      `O plano devolve ${money(lib)} e tira ${money(pts*11)} de lucro por ano. Para empatar, poderia tirar até ${money(R0/100*lib)} (17,6% do capital devolvido).`,
-      ...(on.length===1&&on[0].k==='f1'?['A terceirização mexe em como a Vitta produz, algo que o cliente não compra. É a frente a estudar; a estimativa de 4 pontos é a que decide, contra 4,6 de empate.']:[]),
-      ...(on.length===3?['O plano completo pede que a Vitta gire como distribuidora (2,0) sem ter a margem de ninguém (7%).']:[]),
+    r.append(el('h4',{class:'subh'},'Até onde cada frente aguenta'));
+    r.append(el('p',{class:'note'},'Para manter os 17,6% de hoje, cada real que sai do cofre pode levar junto, no máximo, R$ 0,176 de lucro por ano. Por isso o empate é 17,6% do capital devolvido.'));
+    r.append(tbl({h:['Frente','Capital devolvido','Lucro que pode sumir sem perder retorno','Em pontos de margem','Estimativa do caso'],r:[
+      ['Terceirizar metade','285','17,6% × 285 = **50**','**4,6**','4: **cabe**, com pouca folga'],
+      ['Cortar catálogo e estoque','75','17,6% × 75 = **13**','**1,2**','3: **não cabe**'],
+      ['Encurtar o prazo','90','17,6% × 90 = **16**','**1,4**','2: **não cabe**']]}));
+    r.append(diag('good','O que a conta mostra',bl([
+      'Só a terceirização faz o retorno subir (18,5% contra 17,6%). Catálogo e prazo o derrubam, e o plano completo leva a 14,0%.',
+      'A terceirização aguenta perder até 4,6 pontos de margem; o caso estima 4. A folga é de pouco mais de meio ponto: é essa estimativa que Renata precisa testar, em piloto.',
       'As frentes que mexem na promessa (catálogo, prateleira, prazo) são as que destroem valor: só valeriam se custassem menos de 1,2 e 1,4 ponto, e o caso estima 3 e 2.'])));
     return r;
    }}];
