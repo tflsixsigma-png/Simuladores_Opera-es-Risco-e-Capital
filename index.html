@@ -42,7 +42,9 @@ section.case.active{display:block}
 @media (min-width:1500px){body{font-size:17px}.grid{grid-template-columns:minmax(0,1fr) 420px;gap:36px}.wrap,.top .in{padding-inline:32px}}
 @media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
 aside.concepts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px);display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 156px);overflow:auto;padding-bottom:8px}
-@media (max-width:860px){aside.concepts{position:static;max-height:none;overflow:visible}}
+@media (max-width:860px){aside.concepts{position:static;max-height:none;overflow:visible;order:-1;padding:12px 14px 6px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}}
+.decidem summary{cursor:pointer;font:700 12px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--terra)}
+.decidem ol{margin:8px 0 0}
 .concept{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--navy);padding:12px 14px;border-radius:4px}
 .concept summary{cursor:pointer;font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--navy);list-style:none}
 .concept summary::-webkit-details-marker{display:none}
@@ -1481,7 +1483,7 @@ function renderInner(soft){
    caso(c).perguntas.forEach((q,k)=>{const j=1+k;const done=unlocked>j;const cur=unlocked===j;
     aside.append(el('button',{class:'pq-item'+(done?' done':'')+(cur?' cur':''),onclick:()=>goStep(j)},el('span',{class:'pqn'},done?'✓':String(k+1)),el('span',{},q)))});
    aside.append(el('small',{class:'note'},'Clique numa pergunta para ir ao passo que a responde.'));
-   if(typeof DECIDEM!=='undefined'&&DECIDEM[c.id])aside.append(el('div',{class:'concept decidem'},el('div',{class:'pl'},'Os números que decidem'),el('ol',{},...DECIDEM[c.id].map(t=>el('li',{},t)))));
+   if(typeof DECIDEM!=='undefined'&&DECIDEM[c.id])aside.append(el('details',{class:'concept decidem'},el('summary',{},'Os números que decidem · abrir depois da análise'),el('p',{class:'note',style:'margin:6px 0 0'},'Os três números que fecham o caso. Vale mais conferir depois de ter feito a conta.'),el('ol',{},...DECIDEM[c.id].map(t=>el('li',{},t)))));
   } else {
    const X=CONTEUDO[c.id].conc;
    c.concepts.forEach(([t,p,ref],i)=>{const x=X[i]||[];aside.append(el('details',{class:'concept',open:i===0?'':null},el('summary',{},t),el('p',{},p),...x.map(l=>{const m=l.match(/^([^:]+):\s*(.*)$/);return el('p',{class:'cx'},el('b',{},m?m[1]+'. ':''),m?m[2]:l)}),el('p',{class:'ref'},ref)))});
