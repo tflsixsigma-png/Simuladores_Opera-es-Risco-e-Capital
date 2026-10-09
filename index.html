@@ -54,10 +54,10 @@ aside.concepts{position:sticky;top:calc(env(safe-area-inset-top,0px) + 140px);di
 
 .steps{display:flex;flex-direction:column;gap:18px}
 .step{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
-.step.locked{opacity:.55}
+.step.locked{opacity:1;border-style:dashed}.step.locked h3{color:var(--muted)}
 .step.locked .body{display:none}
 .step-h{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
-.step-h .idx{font:700 12px var(--ui);letter-spacing:.08em;color:var(--terra);text-transform:uppercase}
+.step-h .idx{font:700 13px var(--ui);letter-spacing:.06em;color:var(--terra);text-transform:uppercase}.idx b{font-size:15px;color:var(--navy)}
 .step-h h3{font-family:var(--display);font-size:20px;font-weight:600;margin:0;color:var(--fg)}
 .explain{font-size:15px;max-width:none;margin:0 0 12px;color:var(--fg)}
 .explain b{color:var(--navy)}
@@ -69,9 +69,9 @@ input[type=range]{width:100%;accent-color:var(--terra)}
 input[type=number],select,input[type=text],textarea{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:6px 8px;width:100%}
 textarea{min-height:64px;resize:vertical}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:6px 12px;font:600 14px var(--ui);cursor:pointer}
+.chip{border:1px solid #9a948a;background:var(--bg);color:var(--fg);border-radius:999px;padding:9px 14px;font:600 14px var(--ui);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
-.btn{border:0;background:var(--terra);color:#fff;font:700 14px var(--ui);padding:10px 16px;border-radius:4px;cursor:pointer}
+.btn{border:0;background:var(--terra);color:#fff;font:700 14px var(--ui);padding:12px 18px;border-radius:4px;cursor:pointer}.btn[disabled]{opacity:.45;cursor:default}
 .btn.secondary{background:transparent;color:var(--navy);border:1px solid var(--navy)}
 .btn:disabled{opacity:.5;cursor:default}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
@@ -195,7 +195,7 @@ details.reader summary{cursor:pointer;font-weight:700;color:var(--navy)}
 .pbtn{background:#fff;color:#000;border:0;font:700 15px var(--ui);padding:8px 14px;border-radius:4px;cursor:pointer}
 .pcount{color:#fff;font:700 15px var(--ui)}
 .mc{display:flex;flex-direction:column;gap:6px}
-.mco{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font:15px/1.45 var(--ui);color:var(--fg);cursor:pointer}
+.mco{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1px solid #9a948a;border-radius:6px;padding:10px 12px;font:15px/1.45 var(--ui);color:var(--fg);cursor:pointer}
 .mco:hover{border-color:var(--navy)}
 .mco .mcl{flex:0 0 24px;height:24px;border-radius:50%;background:var(--navy-tint);color:var(--navy);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
 .mco.good{border-color:var(--good);box-shadow:inset 4px 0 0 var(--good)} .mco.good .mcl{background:var(--good);color:#fff}
@@ -235,7 +235,7 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .pbridge2{display:grid;gap:18px;margin-bottom:18px}
 .prow{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:stretch}
 .prl{font:700 clamp(12px,1.1vw,15px) var(--ui);letter-spacing:.08em;text-transform:uppercase;color:#ffcf5a;align-self:center}
-.prow .pnode2 .pv{font-size:clamp(14px,1.35vw,20px)}
+.prow .pnode2 .pv{font-size:clamp(17px,1.9vw,27px)}
 .plines{margin:8px 0 4px;padding-left:20px;font-size:clamp(14px,1.3vw,19px);line-height:1.4}
 .plist{font-size:clamp(18px,2vw,30px);line-height:1.4;padding-left:1.4em;max-width:60ch}
 .plist li{margin-bottom:14px}
@@ -243,6 +243,11 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .present .psmall{font-size:clamp(15px,1.5vw,22px)}
 .present .psmallblk .pv{font-size:clamp(15px,1.5vw,22px)}
 .present .pref{display:block;opacity:.75;margin-top:4px}
+.ressalvas{margin:14px 0 0;border:1px dashed #9a948a;border-radius:6px;padding:8px 12px;background:var(--surface)}
+.ressalvas summary{cursor:pointer;font:700 13px var(--ui);letter-spacing:.04em;text-transform:uppercase;color:var(--navy)}
+.ressalvas ul{margin:8px 0 2px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--fg)}
+.ressalvas li{margin-bottom:6px}
+@media (max-width:600px){nav.tabs{mask-image:linear-gradient(90deg,#000 85%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent)}.step-h{flex-direction:column;gap:2px}}
 </style>
 </head>
 <body>
@@ -420,19 +425,19 @@ const STEPS_vitta=[
    body(s,S,rerender){
     const r=el('div');
     r.append(dados([['Receita da Vitta','R$ 1.100 mi'],['Lucro operacional da Vitta','R$ 176 mi'],['Capital preso da Vitta','R$ 1.000 mi (670 fábricas · 150 estoque · 180 a receber)'],['DistriMax','margem de 4%, giro de 4,0 (sem fábrica)']]));
-    r.append(el('div',{class:'controls'},slider('Margem da Vitta',S,'mV',4,25,0.5,v=>pct(v,1),rerender),slider('Giro da Vitta',S,'gV',0.5,4,0.1,v=>fmt(v,1),rerender),slider('Margem da DistriMax',S,'mD',1,12,0.5,v=>pct(v,1),rerender),slider('Giro da DistriMax',S,'gD',1,6,0.1,v=>fmt(v,1),rerender)));
+    r.append(el('div',{class:'controls'},slider('Margem da Vitta',S,'mV',4,22,0.5,v=>pct(v,1),rerender),slider('Giro da Vitta',S,'gV',0.5,4,0.1,v=>fmt(v,1),rerender),slider('Margem da DistriMax',S,'mD',1,12,0.5,v=>pct(v,1),rerender),slider('Giro da DistriMax',S,'gD',1,4.5,0.1,v=>fmt(v,1),rerender)));
     const rv=S.mV*S.gV, rd=S.mD*S.gD;
     r.append(el('div',{class:'kpis'},kpi('Retorno Vitta',pct(rv)),kpi('Retorno DistriMax',pct(rd)),kpi('Diferença',(rv>=rd?'+':'')+fmt(rv-rd)+' p.p.',rv>=rd?'good':'bad')));
     r.append(isoChart([{x:S.gV,y:S.mV,l:'Vitta'},{x:S.gD,y:S.mD,l:'DistriMax'}],[10,15,20]));
     r.append(calcBox('A conta',[
-      ['Margem da Vitta','lucro ÷ receita = 176 ÷ 1.100','16%'],
-      ['Giro da Vitta','receita ÷ capital = 1.100 ÷ 1.000','1,1'],
+      ['Margem da Vitta',S.mV===16?'lucro ÷ receita = 176 ÷ 1.100':'ajustada no controle (no caso: 176 ÷ 1.100 = 16%)',pct(S.mV,1)],
+      ['Giro da Vitta',S.gV===1.1?'receita ÷ capital = 1.100 ÷ 1.000':'ajustado no controle (no caso: 1.100 ÷ 1.000 = 1,1)',fmt(S.gV,1)],
       ['Retorno da Vitta',`margem × giro = ${pct(S.mV,1)} × ${fmt(S.gV,1)}`,pct(rv)],
       ['Retorno da DistriMax',`margem × giro = ${pct(S.mD,1)} × ${fmt(S.gD,1)}`,pct(rd)],
       ['Peso das fábricas no capital','670 ÷ 1.000','67%'],
       ['Peso do estoque no capital','150 ÷ 1.000','15%']]));
     r.append(diag(rv>=rd?'good':'warn',rv>=rd?'O que os números dizem':'Atenção ao que você mudou',bl(rv>=rd?[
-      `A Vitta gira a um quarto da velocidade da DistriMax (${fmt(S.gV,1)} contra ${fmt(S.gD,1)}) e ainda assim rende mais: ${pct(rv)} contra ${pct(rd)}.`,
+      `A Vitta gira a ${fmt(S.gV/S.gD,2)} do giro da DistriMax (${fmt(S.gV,1)} contra ${fmt(S.gD,1)}) e ainda assim rende ${rv>rd?'mais':'o mesmo'}: ${pct(rv)} contra ${pct(rd)}.`,
       'A margem alta paga pelo giro baixo. As duas empresas estão perto da mesma linha de retorno no gráfico.',
       'O giro baixo vem das fábricas (67% do capital), não do estoque (15%). Uma distribuidora não tem fábrica.',
       'Marcos comparou só o giro: metade da conta. Giro baixo não é ineficiência quando a margem paga por ele.']:[
@@ -477,7 +482,8 @@ const STEPS_vitta=[
       ['Cortar catálogo e estoque','75','17,6% × 75 = **13**','**1,2**','3: **não cabe**'],
       ['Encurtar o prazo','90','17,6% × 90 = **16**','**1,4**','2: **não cabe**']]}));
     r.append(diag('good','O que a conta mostra',bl([
-      'Só a terceirização faz o retorno subir (18,5% contra 17,6%). Catálogo e prazo o derrubam, e o plano completo leva a 14,0%.',
+      'Só a terceirização faz o retorno subir (18,5% contra 17,6%); catálogo (15,5%) e prazo (16,9%) o derrubam, e o plano completo leva a 14,0%.',
+      'Para quem compara com os 12% de custo de capital: os 12% são depois do imposto. Antes do imposto, a régua é 18,2% (12% ÷ 0,66). Hoje a Vitta rende 17,6% antes do imposto, ou 11,6% depois: no limiar. Só a terceirização passa dos 18,2% (18,5%, ou 12,2% depois do imposto).',
       'A terceirização aguenta perder até 4,6 pontos de margem; o caso estima 4. A folga é de pouco mais de meio ponto: é essa estimativa que Renata precisa testar, em piloto.',
       'As frentes que mexem na promessa (catálogo, prateleira, prazo) são as que destroem valor: só valeriam se custassem menos de 1,2 e 1,4 ponto, e o caso estima 3 e 2.'])));
     return r;
@@ -512,6 +518,7 @@ const STEPS_autopar=[
     const r=el('div');
     r.append(dados([['Reserva de hoje','25 dias = R$ 50 mi, dimensionada para 98% de disponibilidade'],['Tabela da reserva (caso)','85% → 50 · 90% → 62 · 95% → 80 · 98% → 100 · 99% → 113']]));
     r.append(el('div',{class:'controls'},slider('Corte da reserva de segurança',S,'cut',0,100,5,v=>pct(v,0),rerender)));
+    if(S.cut===0)r.append(el('p',{class:'note',style:'font-size:15px;color:var(--terra);font-weight:600'},'A proposta de Carla é cortar a reserva pela metade: arraste o controle para 50% e veja o capital liberado e a disponibilidade.'));
     const dias=25*S.cut/100; const lib=dias*2; const z98=2.054; const z=z98*(1-S.cut/100); const disp=Phi(z)*100; const n=Math.max(1,Math.round(1/(1-disp/100)));
     r.append(el('div',{class:'kpis'},kpi('Capital liberado',money(lib),lib>=45?'good':'bad'),kpi('Meta',money(45)),kpi('Disponibilidade',pct(disp,0),disp>=97?'good':'bad'),kpi('Faltas',`1 em ${n}`)));
     r.append(calcBox('A conta',[
@@ -521,9 +528,10 @@ const STEPS_autopar=[
       ['Reserva que sobra (98% = 100)',`100 − ${pct(S.cut,0)}`,fmt(100-S.cut,0)],
       ['Disponibilidade com essa reserva','pela curva da tabela do caso','≈ '+pct(disp,0)],
       ['Reposições com falta','1 ÷ (1 − '+pct(disp,0)+')','1 em '+n]]));
-    r.append(diag(lib>=45?'warn':'bad',lib>=45?'Cumpre a meta, e derruba a promessa':'Não cumpre a meta',bl([
+    r.append(diag(S.cut===0?'':lib>=45?'warn':'bad',S.cut===0?'Mova o corte da reserva':lib>=45?'Cumpre a meta, e derruba a promessa':'Não cumpre a meta',bl(S.cut===0?['A proposta de Carla é cortar a reserva pela metade. Arraste o controle para 50% e veja o que acontece com o capital liberado e com a disponibilidade.','Na régua de Valuation: R$ 25 mi liberados uma vez equivalem a R$ 4,5 mi de lucro por ano (25 ÷ 5,5). Deixar de ter a peça uma vez em sete custa menos do que isso?']:[
       `Cortar ${pct(S.cut,0)} da reserva libera ${money(lib)}: ${lib>=45?'cumpre':'não cumpre'} os R$ 45 mi.`,
       `A disponibilidade cai de 98% para cerca de ${pct(disp,0)}: falta peça em uma a cada ${n} reposições.`,
+      `Na régua de Valuation: ${money(lib)} liberados uma vez equivalem a R$ ${fmt(lib/5.5,1)} mi de lucro por ano (${fmt(lib,0)} ÷ 5,5). Faltar peça em uma a cada ${n} reposições custa menos do que isso?`,
       'Quem percebe primeiro é o mecânico com o carro no elevador; depois Paula, quando as oficinas pararem de ligar.',
       'O caixa melhora no trimestre; a receita cai no seguinte.'])));
     return r;
@@ -555,7 +563,7 @@ const STEPS_autopar=[
     const ok=cash>=45&&S.reserveCut===0;
     r.append(diag(ok?'good':cash>=45?'warn':'bad',ok?'Meta cumprida sem tocar na reserva':cash>=45?'Meta cumprida, mas com a reserva':'Ainda falta',bl([
       S.freq===1?'Entregas mensais cortam o lote de 60 para 30 dias e o ciclo médio de 30 para 15: R$ 30 mi de caixa, sem mexer no serviço.':'Entregas a cada 2 meses mantêm 30 dias de ciclo: R$ 60 mi parados por causa do tamanho do lote.',
-      S.sell?`O obsoleto sai por ${pct(S.recov,0)} dos R$ 30 mi: R$ ${fmt(obsCash,0)} mi de caixa e R$ ${fmt(perda,0)} mi de perda no resultado. A perda já tinha acontecido quando as peças deixaram de vender; a venda só a reconhece.`:'O obsoleto continua parado: R$ 30 mi no balanço que já não valem isso.',
+      S.sell?`O obsoleto sai por ${pct(S.recov,0)} dos R$ 30 mi: R$ ${fmt(obsCash,0)} mi de caixa e R$ ${fmt(perda,0)} mi de perda no resultado, que reduz o imposto em cerca de R$ ${fmt(perda*0.34,0)} mi. A perda já tinha acontecido quando as peças deixaram de vender; a venda só a reconhece.`:'O obsoleto continua parado: R$ 30 mi no balanço que já não valem isso.',
       ...(S.reserveCut>0?[`Cortar ${pct(S.reserveCut,0)} da reserva derruba a disponibilidade para ${pct(disp,0)}.`]:[]),
       ...(ok?['Luís precisa de Henrique (fornecedores), de Paula (liquidar) e do CFO (aceitar a perda contábil no trimestre).']:[]),
       ...(cash<45?[`Faltam ${money(45-cash)} para a meta.`]:[])])));
@@ -582,7 +590,7 @@ const STEPS_bompreco=[
    body(s,S,rerender){
     const r=el('div');
     r.append(dados([['Ganho, igual nas três','R$ 90 mi deixam de custar o custo de capital da rede'],['Custo de A','o fornecedor carrega R$ 90 mi ao custo de capital dele e repassa no preço'],['Custo de B','R$ 20 mi uma vez + manutenção por ano'],['Custo de C','o banco cobra a taxa dele sobre os R$ 90 mi']]));
-    r.append(el('div',{class:'controls'},slider('Custo de capital da rede',S,'rede',6,20,0.5,v=>pct(v,1),rerender),slider('Custo de capital do fornecedor',S,'forn',6,30,1,v=>pct(v,0),rerender),slider('Taxa do banco (risco sacado)',S,'banco',6,20,0.5,v=>pct(v,1),rerender),slider('Custo anual da reposição automática',S,'bAnual',0,10,0.5,v=>money(v,1),rerender),slider('Investimento da reposição automática',S,'bInv',0,40,1,v=>money(v,0),rerender)));
+    r.append(el('div',{class:'controls'},slider('Custo de capital da rede',S,'rede',6,20,0.5,v=>pct(v,1),rerender),slider('Custo de capital do fornecedor',S,'forn',4,30,1,v=>pct(v,0),rerender),slider('Taxa do banco (risco sacado)',S,'banco',6,20,0.5,v=>pct(v,1),rerender),slider('Custo anual da reposição automática',S,'bAnual',0,10,0.5,v=>money(v,1),rerender),slider('Investimento da reposição automática',S,'bInv',0,40,1,v=>money(v,0),rerender)));
     const g=90*S.rede/100; const cA=90*S.forn/100, cC=90*S.banco/100; const a=g-cA, b=g-S.bAnual, c=g-cC;
     r.append(barChart([['A',a],['B',b],['C',c]]));
     r.append(el('div',{class:'kpis'},kpi('A · prazo',(a>=0?'+':'')+fmt(a,1)+'/ano',a>=0?'good':'bad'),kpi('B · reposição',(b>=0?'+':'')+fmt(b,1)+'/ano',b>=0?'good':'bad'),kpi('C · risco sacado',(c>=0?'+':'')+fmt(c,1)+'/ano',c>=0?'good':'bad'),kpi('Payback de B',b>0?fmt(S.bInv/b,1)+' anos':'não se paga',b>0?'good':'bad')));
@@ -597,8 +605,9 @@ const STEPS_bompreco=[
       ['C · resultado',`${fmt(g,1)} − ${fmt(cC,1)}`,(c>=0?'+':'')+fmt(c,1)]]));
     const best=[['A',a],['B',b],['C',c]].sort((x,y)=>y[1]-x[1])[0][0];
     r.append(diag(best==='B'?'good':'warn',`A melhor opção com estas taxas é ${best}`,bl([
-      `A ganha ${fmt(g,1)} e paga ${fmt(cA,1)} no preço: ${a>=0?'cria':'destrói'} valor. Empurrar a espera para quem tem dinheiro a ${pct(S.forn,0)} custa mais do que economiza.`,
-      `C quase empata (${fmt(g,1)} − ${fmt(cC,1)}): é um empréstimo do banco a ${pct(S.banco,1)}. A espera continua do mesmo tamanho, e a rede passa a dever ao banco.`,
+      `A ganha ${fmt(g,1)} e paga ${fmt(cA,1)} no preço: ${a>=0?'cria':'destrói'} valor. ${a>=0?'Quem tem dinheiro a '+pct(S.forn,0)+' carrega a espera mais barato que a rede.':'Empurrar a espera para quem tem dinheiro a '+pct(S.forn,0)+' custa mais do que economiza.'}`,
+      `C ${Math.abs(c)<2?'quase empata':'dá '+(c>=0?'+':'')+fmt(c,1)} (${fmt(g,1)} − ${fmt(cC,1)}): é um empréstimo do banco a ${pct(S.banco,1)}. A espera continua do mesmo tamanho, e a rede passa a dever ao banco.`,
+      `Ressalva: esta conta ignora o imposto, como o caso pede. Os ${fmt(g,1)} são custo de capital depois do imposto; os custos de A, B e C são dedutíveis. Depois do imposto: A ${fmt(g-cA*0.66,1)}, B ${fmt(g-S.bAnual*0.66,1)}, C ${fmt(g-cC*0.66,1)}.${((a>b)===((g-cA*0.66)>(g-S.bAnual*0.66))&&(b>c)===((g-S.bAnual*0.66)>(g-cC*0.66))&&(a>c)===((g-cA*0.66)>(g-cC*0.66)))?' A ordem não muda.':' A ordem muda: com estes números, o imposto decide.'}`,
       `B é a única que elimina a espera em vez de repassá-la${b>0?`, e paga o investimento em ${fmt(S.bInv/b,1)} anos`:''}. A conta nem inclui menos ruptura e menos perda de perecíveis.`])));
     return r;
    }},
@@ -633,9 +642,9 @@ const STEPS_embalagens=[
     r.append(el('div',{class:'controls'},slider('Imposto sobre o lucro',S,'tax',0,40,1,v=>pct(v,0),rerender),slider('Custo de capital',S,'wacc',6,20,0.5,v=>pct(v,1),rerender)));
     const reg=(1-S.tax/100)/(S.wacc/100);
     r.append(el('div',{class:'ruler'},`R$ 1 de lucro por ano vale R$ ${fmt(reg,2)} · R$ 1 de capital liberado vale R$ 1,00`));
-    r.append(el('div',{class:'controls'},slider('A · economia anual',S,'aEcon',0,15,0.5,v=>money(v,1),rerender),slider('A · investimento',S,'aInv',0,40,1,v=>money(v,0),rerender),slider('B · estoque liberado',S,'bLib',0,70,1,v=>money(v,0),rerender),slider('B · gasto único',S,'bInv',0,15,0.5,v=>money(v,1),rerender),slider('B · custo anual',S,'bAnual',0,6,0.5,v=>money(v,1),rerender)));
+    r.append(el('div',{class:'controls'},slider('A · economia anual',S,'aEcon',0,15,0.5,v=>money(v,1),rerender),slider('A · investimento',S,'aInv',0,40,1,v=>money(v,0),rerender),slider('B · estoque liberado',S,'bLib',0,60,1,v=>money(v,0),rerender),slider('B · gasto único',S,'bInv',0,15,0.5,v=>money(v,1),rerender),slider('B · custo anual',S,'bAnual',0,6,0.5,v=>money(v,1),rerender)));
     const vA=S.aEcon*reg-S.aInv, vB=S.bLib-S.bInv-S.bAnual*reg;
-    r.append(el('div',{class:'kpis'},kpi('Vale A',fmt(vA,1),vA>=vB?'good':''),kpi('Vale B',fmt(vB,1),vB>vA?'good':''),kpi('Payback de A',S.aEcon>0?fmt(S.aInv/S.aEcon,1)+' anos':'—'),kpi('Payback de B','não existe')));
+    r.append(el('div',{class:'kpis'},kpi('Vale A',fmt(vA,1),vA>=vB?'good':''),kpi('Vale B',fmt(vB,1),vB>vA?'good':''),kpi('Payback de A',S.aEcon>0?fmt(S.aInv/S.aEcon,1)+' anos':'—'),kpi('Payback de B (pela economia de custo)','não existe')));
     r.append(calcBox('A conta',[
       ['Régua: o que sobra de R$ 1 depois do imposto','1 − '+pct(S.tax,0),fmt(1-S.tax/100,2)],
       ['Régua: valor hoje de R$ 1 por ano',`${fmt(1-S.tax/100,2)} ÷ ${pct(S.wacc,1)}`,fmt(reg,2)],
@@ -645,7 +654,9 @@ const STEPS_embalagens=[
       ['B · custo anual × régua',`${fmt(S.bAnual,1)} × ${fmt(reg,2)}`,fmt(S.bAnual*reg,1)],
       ['B · vale',`${fmt(S.bLib,0)} − ${fmt(S.bInv,1)} − ${fmt(S.bAnual*reg,1)}`,fmt(vB,1)]]));
     r.append(diag(vB>vA?'good':'warn',vB>vA?'B vale mais':'A vale mais',bl(vB>vA?[
-      `B vale ${fmt(vB,1)} e A vale ${fmt(vA,1)}: B vale ${fmt(vB/vA,1)} vezes A, com um quinto do investimento.`,
+      `B vale ${fmt(vB,1)} e A vale ${fmt(vA,1)}: ${vA>0?'B vale '+fmt(vB/vA,1)+' vezes A':'B vale '+fmt(vB-vA,1)+' a mais que A'}, com ${fmt(S.bInv,1)} de investimento contra ${fmt(S.aInv,0)}.`,
+      ...((S.aEcon+S.bAnual)>0?[`A passa B se o custo de capital cair abaixo de ${pct((1-S.tax/100)/((S.bLib-S.bInv+S.aInv)/(S.aEcon+S.bAnual))*100,1)}: com dinheiro barato, lucro recorrente vale mais e capital devolvido vale menos.`]:[]),
+      'Ressalva: a régua supõe o ganho para sempre. Para uma máquina de dez anos, R$ 1 por ano vale 3,7, não 5,5: A cai para perto de 2. B continua na frente.',
       'Ricardo e Patrícia estavam certos ao mesmo tempo; faltava a unidade comum.',
       'O ganho de B está no balanço (capital devolvido ao caixa), e o payback não tem onde registrá-lo.']:[
       `Com estes números a máquina vence: A vale ${fmt(vA,1)} e B, ${fmt(vB,1)}.`,
@@ -656,7 +667,7 @@ const STEPS_embalagens=[
    explain:'O payback divide o investimento pela economia anual. Veja o que cada métrica enxerga.',
    body(s,S,rerender){
     const r=el('div');
-    r.append(el('div',{class:'tscroll'},(function(){const tb=el('table');tb.append(el('tr',{},el('th',{},'Efeito'),el('th',{},'Payback vê?'),el('th',{},'Régua vê?')));[['Economia anual de custo (A)','Sim','Sim, × 5,5'],['Investimento (A e B)','Sim','Sim, × 1'],['Capital liberado do estoque (B)','Não: não há onde registrar','Sim, × 1'],['Custo anual de B','Sim, como piora','Sim, × 5,5']].forEach(x=>tb.append(el('tr',{},...x.map((c,i)=>el('td',{class:i>0?(c.startsWith('Não')?'no':'ok'):''},c)))));return tb})()));
+    r.append(el('div',{class:'tscroll'},(function(){const tb=el('table');tb.append(el('tr',{},el('th',{},'Efeito'),el('th',{},'Payback vê?'),el('th',{},'Régua vê?')));[['Economia anual de custo (A)','Sim','Sim, × '+fmt((1-S.tax/100)/(S.wacc/100),2)],['Investimento (A e B)','Sim','Sim, × 1'],['Capital liberado do estoque (B)','Não: não há onde registrar','Sim, × 1'],['Custo anual de B','Sim, como piora','Sim, × '+fmt((1-S.tax/100)/(S.wacc/100),2)]].forEach(x=>tb.append(el('tr',{},...x.map((c,i)=>el('td',{class:i>0?(c.startsWith('Não')?'no':'ok'):''},c)))));return tb})()));
     r.append(diag('','O que Ricardo deveria exigir',bl([
       'B não economiza custo; acrescenta R$ 2 mi por ano. Para o payback, B só piora o resultado.',
       'O ganho de B são R$ 40 mi que voltam ao caixa e deixam de custar 12% ao ano: R$ 4,8 mi por ano de custo de capital evitado. Isso está no balanço, não na demonstração de resultado.',
@@ -677,7 +688,7 @@ const STEPS_embalagens=[
       ['Vale B com esta liberação',`${fmt(S.bLib,0)} − ${fmt(S.bInv,1)} − ${fmt(S.bAnual,1)} × ${fmt(reg,2)}`,fmt(vB,1)],
       ['Liberação de empate','vale A + gasto único + custo anual × régua = '+`${fmt(vA,1)} + ${fmt(S.bInv,1)} + ${fmt(S.bAnual*reg,1)}`,money(emp,0)]]));
     r.append(diag(vB>=vA?'good':'bad',vB>=vA?'B ainda vence':'A passa a vencer',bl([
-      `B empata com A quando libera ${money(emp,0)}. Abaixo disso, a máquina vale mais.`,
+      emp>0?`B empata com A quando libera ${money(emp,0)}. Abaixo disso, a máquina vale mais.`:'Com estes números a máquina não vale nada: B vence com qualquer liberação.',
       'Quem pode garantir esse número é Patrícia, com os três clientes; é ela que assina.',
       `Aprovação bem escrita: “liberar R$ 40 mi de estoque aceitando até R$ ${fmt(S.bAnual,1)} mi por ano de custo; se em doze meses não tiver liberado R$ ${fmt(emp,0)} mi, o comitê revê o projeto”.`])));
     return r;
@@ -708,10 +719,10 @@ const STEPS_vida=[
    body(s,S,rerender){
     const r=el('div');
     const r0=S.luc0/S.cap0*100, r1=S.luc1/S.cap1*100;
-    r.append(el('div',{class:'kpis'},kpi('Há três anos',pct(r0)),kpi('Hoje',pct(r1),r1>=S.wacc?'good':'bad'),kpi('Custo de capital',pct(S.wacc,0))));
+    r.append(el('div',{class:'kpis'},kpi('Há três anos',pct(r0)),kpi('Hoje',pct(r1),r1>=S.wacc?'good':'bad'),kpi('Custo de capital',pct(S.wacc,1))));
     r.append(calcBox('A conta',[['Retorno médio há três anos','240 ÷ 1.000',pct(r0)],['Retorno médio hoje','300 ÷ 1.800',pct(r1)],['Custo de capital','',pct(S.wacc,0)]]));
     r.append(diag('warn','A média prova menos do que parece',bl([
-      `Os ${pct(r1)} provam que a rede, no total, ainda cria valor (acima de ${pct(S.wacc,0)}).`,
+      `Os ${pct(r1)} provam que a rede, no total, ainda cria valor (acima de ${pct(S.wacc,1)}).`,
       'Não provam que o crescimento criou valor: a média mistura as lojas antigas, muito rentáveis, com o capital que acabou de entrar.',
       'A queda de 24% para 16,7% é o primeiro sinal: o capital novo rende menos que o antigo.',
       'Rogério pode usar a média para defender a rede; não para defender o plano.'])));
@@ -765,10 +776,10 @@ CASES.push({id:'autopar',tab:'Autopar',empresa:'Autopar',tema:'Onde o dinheiro f
   ['Estoque é tempo de espera','Dado o volume vendido por dia, o estoque é quantos dias cada peça espera, vezes o custo de um dia. Só há dois jeitos de reduzi-lo de forma duradoura: vender menos ou fazer cada peça esperar menos. É a lei de Little.','Notas 2.1'],
   ['As cinco formas do estoque','Ciclo (lote), trânsito (viagem), segurança (reserva), antecipação (pico) e obsoleto (nunca vende). Cada uma nasce de uma decisão de uma área diferente. O estoque é de todos e de ninguém.','Notas 2.2'],
   ['O ciclo médio é metade do lote','Logo depois da entrega há um lote inteiro; na véspera da seguinte, quase nada. Em média, metade. Dobrar a frequência de entrega corta o estoque de ciclo pela metade.','Notas 2.2'],
-  ['A reserva cresce depressa perto de 100%','Os últimos pontos de disponibilidade são os mais caros em reserva. Cortar a reserva pela metade não tira metade da disponibilidade; derruba-a para perto de 85%.','Notas 2.5'],
+  ['A reserva cresce depressa perto de 100%','Os últimos pontos de disponibilidade são os mais caros em reserva. Cortar a reserva pela metade não tira metade da proteção: a chance de faltar em cada reposição sobe de 2% para cerca de 15%.','Notas 2.5'],
   ['Caixa não é resultado','Vender o obsoleto libera caixa, mas por menos do que o balanço diz. A diferença aparece como perda no resultado. A perda já tinha acontecido; a venda só a reconhece.','Notas 2.2'],
  ],
- state:{owners:{Ciclo:null,'Trânsito':null,'Segurança':null,Obsoleto:null},cut:50,freq:2,sell:false,recov:50,reserveCut:0,rec:'',prem:''},
+ state:{owners:{Ciclo:null,'Trânsito':null,'Segurança':null,Obsoleto:null},cut:0,freq:2,sell:false,recov:50,reserveCut:0,rec:'',prem:''},
  steps:STEPS_autopar});
 
 // ---------- 3 · Bom Preço ----------
@@ -809,7 +820,7 @@ CASES.push({id:'vida',tab:'Vida',empresa:'Farmácias Vida',tema:'Crescer para a 
 
 const META={
  vitta:{
-  ponte:[['Operação','Fábricas próprias, 40 lançamentos por ano, prazo de 60 dias às farmácias'],['Capital e margem','R$ 1.000 mi presos, R$ 670 mi deles nas fábricas (67%); lucro de R$ 176 mi sobre receita de R$ 1.100 mi: margem de 16%'],['Indicador','Giro de 1,1 (1.100 ÷ 1.000) × margem de 16% = retorno de 17,6%'],['Valor','17,6% antes do imposto são 11,6% depois (× 0,66): a Vitta está no limiar do custo de capital de 12%']],
+  ponte:[['Operação','Fábricas próprias, 40 lançamentos por ano, prazo de 60 dias às farmácias'],['Capital e margem','R$ 1.000 mi presos, R$ 670 mi deles nas fábricas (67%); lucro de R$ 176 mi sobre receita de R$ 1.100 mi: margem de 16%'],['Indicador','Giro de 1,1 (1.100 ÷ 1.000) × margem de 16% = retorno de 17,6%'],['Valor','17,6% antes do imposto são 11,6% depois (× 0,66): no limiar dos 12%. Cada frente se julga pelo que muda: o capital que devolve contra o lucro que sacrifica']],
   aposta:{q:'Marcos quer levar o giro de 1,1 para 2,0. Antes de qualquer conta, de que lado o grupo está?',opts:['Marcos: o giro precisa subir','Sérgio e Lúcia: o plano destrói margem','Em parte: alguma frente pode valer']},
   contra:{quem:'Marcos Teixeira, diretor financeiro',fala:'Se terceirizar metade da produção cria valor, terceirizar tudo cria o dobro. E giro 2,0 é o que os analistas cobram de uma empresa eficiente.',
    dica:'Respondam com o mecanismo. O custo de margem cresce à medida que se terceiriza mais? O que acontece com a velocidade de lançamento, que é o 5 da promessa? E o que o acionista recebe: giro ou retorno?',
@@ -850,7 +861,7 @@ const CASOS=[{"n":1,"empresa":"Vitta Cosméticos","titulo":"Vitta Cosméticos: o
 const CONTEUDO={
 vitta:{
  problema:{decisao:"A Vitta deve aceitar a meta de giro 2,0 de Marcos? Se não, o que Renata recomenda no lugar?",
-  jogo:"O plano de Marcos libera R$ 450 mi de capital: 285 da terceirização, 75 do corte de catálogo e estoque, 90 do prazo menor às farmácias. Pelas estimativas de Sérgio e Lúcia, ele custa 9 pontos de margem (4 + 3 + 2): de 16% para 7%. Cada ponto de margem é 1% da receita de R$ 1.100 mi, ou R$ 11 mi de lucro por ano; os 9 pontos somam R$ 99 mi por ano.",
+  jogo:"O plano de Marcos libera R$ 450 mi de capital: 285 da terceirização, 75 do corte de catálogo e estoque, 90 do prazo menor às farmácias. Pelas estimativas de Sérgio e Lúcia, ele custa 9 pontos de margem (4 + 3 + 2): de 16% para 7%. Cada ponto de margem é 1% da receita de R$ 1.100 mi, ou R$ 11 mi de lucro por ano.",
   tutor:"Este caso parece uma discussão sobre estoque, mas não é. Antes de calcular, localizem onde está o capital da Vitta e o que o cliente dela paga para ter. A resposta certa não é “sim” nem “não” ao plano: é dizer qual parte dele cria valor."},
  pers:[["Marcos Teixeira","Diretor financeiro, veio da DistriMax","Giro 2,0 é o mínimo de uma empresa eficiente"],["Sérgio Prado","Diretor comercial","Catálogo, estoque e prazo sustentam a venda; cortar custa margem"],["Lúcia Andrade","Diretora industrial","Terceirizar custa 4 pontos e tira velocidade de lançamento"],["Renata Alves","Diretora de supply chain","Precisa responder ao plano; desconfia dele e das estimativas"]],
  tutor:[
@@ -979,7 +990,7 @@ bompreco:{q:[
   ['A é a melhor: não tem custo nenhum',0,'O fornecedor carrega R$ 90 mi a 20% e repassa R$ 18 mi por ano no preço. Ganho de 10,8 (90 × 12%) menos 18 = −7,2.'],
   ['B: +7,8 (10,8 − 3), payback de 2,6 anos (20 ÷ 7,8). A: −7,2. C: +0,9 (10,8 − 9,9)',1,'As três ganham 10,8 (90 × 12%). O que as separa é quanto custa quem carrega a espera: 20% do fornecedor, 11% do banco, ou R$ 3 mi por ano de manutenção.'],
   ['C é a melhor: o banco é mais barato que o fornecedor',0,'Mais barato que o fornecedor (11% contra 20%), mas é um empréstimo: na conta do caso, sobra 0,9 por ano, e a fila continua do mesmo tamanho.']]},
- {p:'Quando alongar o prazo com o fornecedor cria valor?',o:[
+ {p:'Quando alongar o prazo com o fornecedor deixa de destruir valor?',o:[
   ['Nunca: é sempre empurrar o problema para o outro',0,'Depende de quem é o outro. Uma multinacional a 8% carrega a espera mais barato do que a rede a 12%: a cadeia inteira paga menos.'],
   ['Quando o fornecedor tem custo de capital menor que o da rede (12%). O São Bento, a 20%, não: sobe o preço ou vai para a cooperativa',1,'Resultado de A = 90 × (12% − custo do fornecedor). Positivo abaixo de 12%, negativo acima. A mesma medida muda de sinal conforme quem a recebe.'],
   ['Sempre que o fornecedor aceitar',0,'O São Bento aceita e repassa na próxima tabela, ou vende para a cooperativa. Aceitar não é absorver.']]}],
@@ -991,7 +1002,7 @@ embalagens:{q:[
  {p:'Na régua, quanto vale cada projeto para o acionista?',o:[
   ['A vale 13 (6 × 5,5 − 20) e B vale 25 (40 − 4 − 2 × 5,5)',1,'R$ 1 de economia anual vale 5,5 (0,66 ÷ 0,12); R$ 1 de estoque liberado vale 1. B vale quase o dobro de A com um quinto do investimento.'],
   ['A vale 33 e B vale 40',0,'Esqueceu o investimento de A (−20), o gasto único de B (−4) e o custo anual de B (−2 × 5,5 = −11).'],
-  ['A vale 13 e B vale 36',0,'Esqueceu que o custo anual de B se repete: R$ 2 mi × 5,5 = 11, não 2. B vale 40 − 4 − 11 = 25.']]},
+  ['A vale 13 e B vale 34',0,'Esqueceu que o custo anual de B se repete: R$ 2 mi × 5,5 = 11, não 2. B vale 40 − 4 − 11 = 25.']]},
  {p:'Por que o payback não enxerga o Projeto B?',o:[
   ['Porque B é mais arriscado que a máquina',0,'O payback não mede risco de resultado; mede tempo de recuperação. O problema é outro: B não tem o que o payback conta.'],
   ['Porque B não reduz custo; o ganho é capital devolvido ao caixa, que fica no balanço, e o payback só conta economias de custo',1,'B até acrescenta R$ 2 mi por ano de custo. Os R$ 40 mi liberados deixam de custar 12% ao ano (R$ 4,8 mi), mas isso não aparece na demonstração de resultado.'],
@@ -1041,7 +1052,7 @@ autopar:{
   ["Entregas mensais e venda do obsoleto, sem tocar na reserva",1,"R$ 30 mi do ciclo + R$ 15 mi do obsoleto = R$ 45 mi, com os 98% preservados."],
   ["Pedir ao CFO que abandone a meta",0,"A meta é atingível sem cortar a reserva; abandoná-la é deixar R$ 45 mi parados."]],
  num:[["R$ 45 mi de caixa (30 + 15) com 98% preservados, contra R$ 25 mi e cerca de 85% na proposta de Carla",1,"Compara as duas propostas em caixa e em serviço ao cliente."],
-  ["R$ 60 mi a menos de estoque no balanço",0,"É o que sai do balanço (30 do ciclo + 30 do obsoleto), mas o caixa é 45: o obsoleto vale metade."],
+  ["R$ 60 mi a menos de estoque no balanço",0,"Verdadeiro e necessário: é o que sai do balanço (30 do ciclo + 30 do obsoleto). Mas o número que sustenta a decisão é o caixa, 45: o obsoleto vale metade."],
   ["Estoque de 90 para 60 dias",0,"É o efeito em dias no balanço (15 de ciclo e 15 de obsoleto), mas não mostra o caixa (45) nem o que acontece com a disponibilidade."]],
  prem:[["Que os fornecedores mantenham o desconto com entregas mensais e o obsoleto saia por metade do valor",1,"Se uma das duas falhar, o caixa fica abaixo de 45 e a reserva volta a ser tentação."],
   ["Que as oficinas aceitem 85% de disponibilidade",0,"Essa é a premissa da proposta de Carla, e o caso diz que não aceitam: compram de outro distribuidor."],
@@ -1195,6 +1206,43 @@ vida:{
  val:{formula:"Crescer só cria valor se o retorno do capital novo (RONIC) for maior que o WACC",
   pontos:["Na fórmula do direcionador de valor, Valor = NOPAT × (1 − g ÷ RONIC) ÷ (WACC − g): com RONIC abaixo do WACC, crescer reduz o valor, mesmo com o ROIC médio acima.","Cada R$ 100 de capital novo trouxe R$ 7,50 por ano; se ficar assim, a 12% valem R$ 62,50 (7,5 ÷ 0,12).","A maturação das lojas é a premissa do DCF: o Valuation pede a curva por safra, não o lucro total."]}}};
 
+
+// Ressalvas metodológicas, declaradas por passo de análise (índice 0..2). Aparecem num bloco recolhido.
+const RESSALVAS={
+vitta:[
+ ['O retorno é antes do imposto e sobre o capital de hoje. Para comparar com os 12% de custo de capital, que são depois do imposto, multiplique por 0,66 (17,6% → 11,6%) ou compare com 18,2% (12% ÷ 0,66).',
+  'A conta serve para comparar os dois modelos de negócio, não para dizer se cada empresa cria valor.'],
+ ['A promessa 5-4-3 e o critério de Fisher são leituras qualitativas; o caso não mede quanto do estoque de 110 dias é lançamento que fracassou.'],
+ ['“Cria valor” aqui quer dizer “o retorno sobe”. O teste rigoroso é: o lucro sacrificado × 0,66 é menor que o capital devolvido × 12%? Os dois dão a mesma resposta neste caso; o empate da terceirização vai de 4,6 para 4,7 pontos.',
+  'Os R$ 285 mi são o valor da fábrica no balanço; o caixa da venda depende do preço e do imposto sobre o ganho ou a perda.',
+  'A receita é mantida constante em todas as frentes, como no plano de Marcos. Se a terceirização atrasar lançamentos e tirar 5% da receita, o retorno cai para 17,5%: empate.']],
+autopar:[
+ ['Estoque de ciclo igual a metade do lote vale para consumo uniforme e para o conjunto dos 30 mil itens; peça por peça, varia.'],
+ ['A curva mede quantas reposições terminam com falta (nível de serviço por ciclo), não quantas peças faltam (fill rate). A promessa de 98% do caso lê-se como fill rate: o efeito no pedido do mecânico é menor do que 98% → 85%, mas na mesma direção.',
+  'A curva supõe demanda normal e navio pontual. Com atraso frequente, a reserva de hoje já é pequena, e cortá-la custa mais.'],
+ ['A perda de R$ 15 mi é dedutível: reduz o imposto em cerca de R$ 5 mi. O caixa do obsoleto fica perto de 20, não 15.',
+  'Entregar todo mês dobra pedidos e fretes; o caso garante só o desconto. Cada R$ 1 mi por ano de frete a mais tira R$ 5,5 mi dos R$ 30 mi de caixa, na régua.',
+  'Financiar a expansão com estoque liberado ou com dívida não muda o valor da expansão; “sem dívida” é escolha de política financeira, não de valor.']],
+bompreco:[
+ ['Em A e C a mercadoria não espera menos; em B, parte dos 30 dias pode voltar como estoque no centro de distribuição. O gatilho deveria medir a cadeia, não só a loja.'],
+ ['A conta ignora o imposto, como o caso pede. Os 10,8 são custo de capital depois do imposto; os custos de A e C são dedutíveis. Depois do imposto, A ≈ −1,1 e C ≈ +4,3 por ano; a ordem B > C > A não muda.',
+  'Os 11% do banco são juro de dívida; os 12% da rede são o custo médio de dívida e capital próprio. Risco sacado é empréstimo e, para a análise de crédito, conta como dívida: o teste justo de C é contra o que o banco já cobra da rede (11%): zero.',
+  'O payback de 2,6 anos divide o investimento pelo ganho econômico (12% dos 90). Em caixa, B se paga no primeiro ano: entram 90, saem 20.'],
+ ['Os 20% são a taxa bancária do fornecedor e o repasse integral no preço é a premissa decisiva. Com repasse pela metade, A vai de −7,2 para +1,8; os outros 9 ficam com o fornecedor, a 20%, e é aí que mora o risco de perdê-lo.']],
+embalagens:[
+ ['A régua supõe o ganho para sempre. Para uma máquina de dez anos, R$ 1 por ano vale 3,7, não 5,5: A cai de 13 para perto de 2 (uns 6 contando a depreciação, que o caso manda ignorar). B com dez anos de processo cai para uns 16. B continua na frente.',
+  'O payback de A (3,3 anos) é antes do imposto; depois dele, 5,1 anos. O payback de B “não existe” pela economia de custo; em caixa, B se paga no primeiro ano (entram 40, saem 4).',
+  'Os 12% são só o aluguel do dinheiro. Armazém, seguro, avaria e obsolescência vêm por cima e jogam a favor de B.'],
+ ['Os R$ 4,8 mi de custo de capital evitado (40 × 12%) são depois do imposto; para comparar com a máquina, use 6 × 0,66 = R$ 4,0 mi por ano.'],
+ ['A liberação de R$ 40 mi conta 1 por 1 só se for permanente; se a empresa crescer, o estoque cresce junto (lei de Little), mas os dias de espera ganhos ficam.',
+  'A mesma taxa de desconto é usada para a economia “certa” da máquina e para a liberação incerta do S&OP. O risco é tratado no número (meta de 28, revisão em doze meses), não na taxa.']],
+vida:[
+ ['Parte dos R$ 480 mi das lojas é ativo que deprecia; como o lucro já é líquido de depreciação, capital e lucro estão em bases coerentes.'],
+ ['O retorno de 16,7% é sobre o capital do fim do período; sobre o capital médio dos três anos (1.400) daria 21,4%. O problema continuaria escondido.'],
+ ['Os 7,5% supõem que as lojas antigas teriam ficado em 240 de lucro, e juntam lojas de um, dois e três anos. O número que decide é o retorno de cada safra madura, que o caso não dá: por isso a recomendação é por fases.',
+  'O empate de 96 é em regime. Contando os anos de perda até amadurecer, as lojas precisam render mais do que isso.',
+  'A conta supõe o mesmo custo de capital com 120 lojas a mais e nenhuma venda tirada das lojas antigas.']]};
+
 // ============ componentes ============
 function slider(label,S,key,min,max,step,f,rerender){
   const id='in-'+key;
@@ -1271,7 +1319,9 @@ function analise(c,st,k){return {t:st.t,fase:1,explain:st.explain,
   r.append(fio(FIO[c.id][k]));
   r.append(el('div',{class:'qbox'},el('div',{class:'pl'},'Pergunta '+(k+1)+' do caso'),el('p',{},caso(c).perguntas[k])));
   const node=st.body(s,S,rerender);const diags=[...node.querySelectorAll('.diag')];diags.forEach(d=>d.remove());r.append(node);
+  if(node.querySelector('.controls')&&c.state0){const ctl=node.querySelector('.controls');const mudou=Object.keys(c.state0).some(x=>(typeof c.state0[x]==='number'||typeof c.state0[x]==='boolean')&&S[x]!==c.state0[x]);ctl.append(el('div',{class:'ctl',style:'justify-content:flex-end'},el('small',{class:'note',style:'margin:0 0 4px'},'Os controles são opcionais: o essencial é a interpretação abaixo.'),el('button',{class:'btn secondary',disabled:mudou?null:'',onclick:()=>{Object.keys(c.state0).forEach(x=>{if(typeof c.state0[x]==='number'||typeof c.state0[x]==='boolean')S[x]=c.state0[x]});rerender()}},'Voltar aos valores do caso')))}
   r.append(mcBlock('A interpretação do grupo',MC[c.id].q[k],S.mc[k],i=>{S.mc[k]=i;rerender()},null,[el('h4',{class:'subh'},'O que os números na tela dizem'),...diags]));
+  if(typeof RESSALVAS!=='undefined'&&RESSALVAS[c.id]&&RESSALVAS[c.id][k]&&RESSALVAS[c.id][k].length){r.append(el('details',{class:'ressalvas'},el('summary',{},'Ressalvas desta conta · para quem estudou Valuation'),el('ul',{},...RESSALVAS[c.id][k].map(t=>el('li',{},t)))))}
   return r}}}
 function contraStep(c){return {fase:2,t:'O contra-argumento',
  explain:'Uma boa recomendação sobrevive à objeção mais forte de quem discorda. Escolham a resposta que o grupo daria. Uma resposta de executivo concorda com o que é verdade, traz o mecanismo e termina num número.',
@@ -1289,13 +1339,14 @@ function notaStep(c){return {fase:2,t:'A decisão do grupo',
    const list=el('div',{class:'mc'});const n=E[k].length;const rot=E[k].some(o=>/^[ABC] · /.test(o[0]))?0:(IDX[c.id]*2+ESC_ITENS.findIndex(x=>x[0]===k))%n;[...Array(n).keys()].map(j=>(j+rot)%n).forEach((i,pos)=>{const [t,ok]=E[k][i];list.append(el('button',{class:'mco'+(sel===i?(ok?' good':' bad'):''),'aria-pressed':String(sel===i),onclick:()=>{N.sel[k]=i;N[k]=t;rerender()}},el('span',{class:'mcl'},String.fromCharCode(65+pos)),el('span',{},t)))});
    r.append(list);
    if(sel!=null){const [t,ok,fb]=E[k][sel];r.append(diag(ok?'good':'warn',ok?'É a escolha mais forte':'Vale discutir',fb))}});
+  r.append(el('h4',{},'Antes de apresentar: onde isso acontece na empresa de alguém do grupo?'),el('textarea',{id:'nt-emp-'+s,placeholder:'Uma frase: a empresa, a decisão parecida e o que ela fez com o capital. Vai para a última lâmina.',oninput:e=>{S.empresa=e.target.value;store.set('state:'+s,S)}},S.empresa||''));
   r.append(el('h4',{},'Integrantes do grupo'),el('input',{type:'text',id:'nt-int-'+s,placeholder:'Nomes de quem fez este minicaso',value:S.integrantes||'',oninput:e=>{S.integrantes=e.target.value;store.set('state:'+s,S)}}));
   {const msg=el('span',{class:'tmsg',role:'status'});const bar=el('div',{class:'toolbar'});bar.append(exportBtn(c,msg,bar),el('button',{class:'btn secondary',onclick:()=>copiar(notaTexto(c),msg,bar)},'Copiar a nota'),msg);r.append(bar)}
   return r}}}
 
 
 function ponteCard(c){const p=META[c.id].transicao;const i=CASES.indexOf(c);const nx=i+1<CASES.length?i+1:null;
- return el('div',{class:'pontecard'},el('div',{class:'pl'},p[0]),el('p',{class:'pq'},'“'+p[1]+'”'),el('p',{class:'hint'},p[2]),nx?el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{go(nx);window.scrollTo(0,0)}},'Ir para o minicaso '+nx+' · '+CASES[nx].empresa)):null)}
+ return el('div',{class:'pontecard'},el('div',{class:'pl'},p[0]),el('p',{class:'pq'},'“'+p[1]+'”'),nx?el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{go(nx);window.scrollTo(0,0)}},'Ir para o minicaso '+nx+' · '+CASES[nx].empresa)):null)}
 // ---------- apresentação: a ponte entre operação e finanças ----------
 const APRES=[['caso','O caso em duas frases','A situação e a decisão que a empresa precisa tomar.'],['decisao','A decisão do grupo','A alternativa que o grupo escolheu no passo da decisão.'],['conc','Conceitos centrais','Os conceitos do minicaso que o grupo leva para a turma.'],
  ['op','Elo 1 · Operação','O que muda na cadeia: lote, prazo, fábrica, previsão, loja.'],['cap','Elo 2 · Capital e margem','O que isso faz com o dinheiro preso e com a margem, em R$. Na planilha do fluxo de caixa livre, é custo (todo ano) ou investimento em capital de giro e Capex (uma vez)?'],
@@ -1306,7 +1357,7 @@ const OPC_ITENS=['op','cap','ind','val','perg'];
 function concSel(c,A){const L=c.concepts||[];const sel=Array.isArray(A.concSel)?A.concSel:[0,1];return L.map((x,i)=>[x,i]).filter(([x,i])=>sel.includes(i))}
 function concTexto(c,A){return concSel(c,A).map(([x])=>x[0]+': '+x[1]).join(' ')}
 function apresStep(c){return {fase:3,t:'A apresentação: a ponte entre operação e finanças',
- explain:'A apresentação conta o <b>caminho que o grupo percorreu</b>: o ponto de partida e a aposta, as três perguntas da análise com o que o grupo concluiu, o contra-argumento e a resposta, a decisão em quatro escolhas, a <b>ponte em quatro elos</b> (hoje e com a decisão), quem perde e como a decisão sobrevive, os conceitos e pontos de aprendizagem do minicaso, e a pergunta para a turma. Quase tudo já vem das escolhas feitas nos passos anteriores; aqui o grupo escolhe a formulação dos quatro elos, marca os conceitos que leva e escreve a pergunta. Cada elo precisa de um mecanismo e de um número.',
+ explain:'A apresentação conta o <b>caminho que o grupo percorreu</b> e já vem montada com as escolhas dos passos anteriores. Aqui o grupo escolhe a formulação dos <b>quatro elos da ponte</b>, marca os conceitos que leva e escreve a pergunta para a turma. Cada elo precisa de um mecanismo e de um número.',
  body(s,S,rerender){const A=S.apres=S.apres||{};const N=S.nota||{};const r=el('div',{class:'lamina'});r.append(fio(FIO2.apres));
   r.append(tutorCard('Uma boa ponte pode ser lida nos dois sentidos. Um diretor de operações deve reconhecer a operação no primeiro elo; um diretor financeiro deve reconhecer a conta no quarto. Se um dos dois não se reconhecer, falta um elo. Teste útil para o segundo elo: na planilha do fluxo de caixa livre que vocês montaram em Análise de Desempenho, em que linha a decisão aparece? Custos e despesas pesam todo ano; capital de giro e Capex, uma vez.'));
   const derivado=()=>{const P=CONTEUDO[c.id].problema;const cs=MC[c.id].contra;const m=META[c.id].contra;const quem=m&&m.quem?m.quem:'';return {caso:P.decisao||'',decisao:N.decisao||'',prem:N.prem?('Premissa: '+N.prem+(N.gatilho?'\nGatilho: '+N.gatilho:'')):'',perde:(S.contraSel!=null&&cs&&cs.o&&cs.o[S.contraSel])?('Quem perde: '+(quem||'quem fez a objeção')+'.\nComo a decisão sobrevive: '+cs.o[S.contraSel][0]):''}};
@@ -1337,8 +1388,9 @@ function notaHTML(c){const S=c.state,N=S.nota||{},i=CASES.indexOf(c);
  <h3>A decisão</h3><table>${NOTA.map(([k,l])=>`<tr><th>${l}</th><td>${esc(N[k])||'—'}</td></tr>`).join('')}</table>
  <h3>A apresentação: a ponte entre operação e finanças</h3><table>${APRES.map(([k,l])=>`<tr><th>${l}</th><td>${k==='conc'?esc(concTexto(c,S.apres||{})):(esc((S.apres||{})[k])||'—')}</td></tr>`).join('')}</table></section>`}
 function docHTML(list){const tt=list.length===1?`${gl(list[0])} · ${list[0].empresa} · Nota ao Conselho`:SESS.titulo+' · Notas ao Conselho';return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Simulador Sessão 1</title><style>body{font:15px/1.5 Georgia,serif;color:#111;max-width:760px;margin:32px auto;padding:0 16px}h1{font-size:22px;color:#0b2545}h2{font-size:20px;color:#0b2545;margin:4px 0 12px}h3{font-size:15px;color:#b5462b;text-transform:uppercase;letter-spacing:.05em}.k{font:700 12px Arial,sans-serif;color:#b5462b;letter-spacing:.08em;text-transform:uppercase;margin:0}table{border-collapse:collapse;width:100%;margin-bottom:14px}th{width:30%;text-align:left;vertical-align:top;background:#0b2545;color:#fff;padding:8px;font:600 13px Arial,sans-serif}td{border-bottom:1px solid #ccc;padding:8px;vertical-align:top}section{page-break-after:always;margin-bottom:28px}</style></head><body><h1>Operações, Risco e Capital · '+SESS.titulo+' · Nota ao Conselho</h1>${list.map(notaHTML).join('')}</body></html>`}
-async function getDL(){if(DL)return DL;try{for(let i=0;i<20&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,150));if(window.claude&&window.claude.use)DL=await window.claude.use('downloads')}catch(e){}return DL}
-function baixarLocal(list,nome,msg,host){try{const url=URL.createObjectURL(new Blob([docHTML(list)],{type:'text/html'}));const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Se o arquivo não baixou, use “Copiar a nota”.'}catch(e){msg.textContent='O download não está disponível aqui. Use “Copiar a nota”.'}}
+let DLchecked=false;
+function getDL(){if(DL||DLchecked)return DL;DLchecked=true;return (async()=>{try{for(let i=0;i<8&&!(window.claude&&window.claude.use);i++)await new Promise(r=>setTimeout(r,150));if(window.claude&&window.claude.use)DL=await window.claude.use('downloads')}catch(e){}return DL})()}
+function baixarLocal(list,nome,msg,host){try{const url=URL.createObjectURL(new Blob([docHTML(list)],{type:'text/html'}));const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Arquivo gerado: '+nome+' (na pasta de downloads). Se não apareceu, use “Copiar a nota”.'}catch(e){msg.textContent='O download não está disponível aqui. Use “Copiar a nota”.'}}
 async function baixar(list,nome,msg,host){msg.textContent='Preparando o arquivo…';const dl=await getDL();if(!dl){baixarLocal(list,nome,msg,host);return}try{await dl.save({filename:nome,data:docHTML(list)});msg.textContent='Arquivo salvo.'}catch(e){const code=e&&e.code;if(code==='declined'){msg.textContent='Download cancelado.'}else if(code==='rate_limited'){msg.textContent='Já há uma confirmação aberta; responda a ela.'}else{DL=null;baixarLocal(list,nome,msg,host)}}}
 function copiar(txt,msg,host){const done=()=>msg.textContent='Copiado.';const fb=()=>{const ta=el('textarea',{class:'copyfb'},txt);host.append(ta);ta.select();msg.textContent='Selecione e copie o texto abaixo.'};try{navigator.clipboard.writeText(txt).then(done,fb)}catch(e){fb()}}
 function apresentar(c){const S=c.state,N=S.nota||{};const ov=el('div',{class:'present',role:'dialog','aria-modal':'true','aria-label':'Modo apresentação'});
@@ -1356,25 +1408,35 @@ CASES.forEach(c=>{if(c.steps){c.steps=[problemaStep(c),...c.steps.map((st,k)=>an
 // ============ motor ============
 let current=store.get('tab',0);
 const progress=store.get('progress',{});
-CASES.forEach((c,i)=>{if(c.state){const saved=store.get('state:'+c.id,null);if(saved)Object.assign(c.state,saved)}});
+const DATA_VERSION='2026-10-09a';
+if(store.get('v',null)!==DATA_VERSION){try{Object.keys(localStorage).filter(k=>k.startsWith(SESSKEY+':state:')||k===SESSKEY+':progress').forEach(k=>localStorage.removeItem(k))}catch(e){}store.set('v',DATA_VERSION)}
+CASES.forEach((c,i)=>{if(c.state){c.state0=JSON.parse(JSON.stringify(c.state));const saved=store.get('state:'+c.id,null);if(saved)Object.assign(c.state,saved);
+ const clamp=(x,n)=>Number.isInteger(x)&&x>=0&&x<n?x:undefined;const S=c.state,M=MC[c.id];if(M){
+ if(S.mc)Object.keys(S.mc).forEach(k=>{S.mc[k]=clamp(S.mc[k],(M.q[k]||{o:[]}).o.length)});
+ S.contraSel=clamp(S.contraSel,M.contra.o.length);
+ if(S.nota&&S.nota.sel)Object.keys(S.nota.sel).forEach(k=>{S.nota.sel[k]=clamp(S.nota.sel[k],((ESCOLHAS[c.id]||{})[k]||[]).length)});
+ if(S.apres&&S.apres.sel)Object.keys(S.apres.sel).forEach(k=>{S.apres.sel[k]=clamp(S.apres.sel[k],(((typeof PONTE_OPC!=='undefined'&&PONTE_OPC[c.id])||{})[k]||[]).length)});
+ if(S.apres&&!Array.isArray(S.apres.concSel))delete S.apres.concSel;}}});
 function go(i){current=i;store.set('tab',i);render()}
-function render(soft){
+function render(soft){try{renderInner(soft)}catch(err){console.error(err);const app=$('#app');app.replaceChildren(el('div',{class:'diag bad'},el('span',{class:'t'},'Algo deu errado ao abrir o minicaso'),'Os dados guardados neste navegador podem ser de uma versão anterior. ',el('button',{class:'btn',style:'margin-left:8px',onclick:()=>{try{Object.keys(localStorage).filter(k=>k.startsWith(SESSKEY+':')).forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()}},'Limpar e recomeçar')))}}
+function renderInner(soft){
   const tabs=$('#tabs');tabs.innerHTML='';
   CASES.forEach((c,i)=>{const b=el('button',{class:'tab'+(progress[c.id]>= (c.steps?c.steps.length:0)&&c.steps?' done':''),role:'tab','aria-selected':String(i===current),onclick:()=>go(i)},i>0?el('span',{class:'n'},i):null,c.tab);tabs.append(b)});
   const app=$('#app');
   if(!soft){app.innerHTML=''}
   const c=CASES[current];
   if(!c.steps){app.innerHTML='';c.render(app);return}
-  const S=c.state; const unlocked=progress[c.id]||0;
+  const S=c.state; const unlocked=GRUPO[c.id]?(progress[c.id]||0):c.steps.length-1;
   const rerender=()=>{store.set('state:'+c.id,S);render(true)};
   const grid=el('div',{class:'grid'});
   const main=el('div',{class:'steps'});
   c.steps.forEach((st,i)=>{
     const locked=i>unlocked;
-    const box=el('div',{class:'step'+(locked?' locked':''),id:'st-'+i},el('div',{class:'step-h'},el('span',{class:'idx'},'Fase '+(st.fase+1)+' · '+FASES[st.fase]+' · Passo '+(i+1)+' de '+c.steps.length),el('h3',{},st.t)));
+    const box=el('div',{class:'step'+(locked?' locked':''),id:'st-'+i},el('div',{class:'step-h'},el('span',{class:'idx'},el('b',{},'Passo '+(i+1)+' de '+c.steps.length),' · '+FASES[st.fase]+(i===4&&GRUPO[c.id]?' · se sobrar tempo':'')+(locked?' · bloqueado':'')),el('h3',{},st.t)));
     const body=el('div',{class:'body'});
     if(!locked){body.append(el('p',{class:'explain',html:st.explain}));body.append(st.body(c.id,S,rerender));
-      if(i<c.steps.length-1) body.append(el('div',{class:'row'},el('button',{class:'btn'+(i<unlocked?' secondary':''),onclick:()=>{progress[c.id]=Math.max(progress[c.id]||0,i+1);store.set('progress',progress);render(true);requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=document.getElementById('st-'+(i+1));if(n){const y=n.getBoundingClientRect().top+window.scrollY-150;window.scrollTo({top:y,behavior:'smooth'})}}))}},i<unlocked?'Passo seguinte':'Concluí este passo')));
+      if(i<c.steps.length-1){const falta=i===0?!S.aposta:(i>=1&&i<=3?!(S.mc&&S.mc[i-1]!=null):(i===4?S.contraSel==null:(i===5?!(S.nota&&S.nota.sel&&Object.keys(S.nota.sel).length>=4):false)));const aviso=el('small',{class:'note',style:'margin:0;color:var(--bad)',role:'status'});
+      body.append(el('div',{class:'row'},el('button',{class:'btn'+(i<unlocked?' secondary':''),onclick:function(){if(falta&&i>=unlocked&&!this.dataset.ok){this.dataset.ok='1';aviso.textContent=i===0?'Falta a aposta do grupo. Clique de novo para seguir mesmo assim.':i===5?'Faltam escolhas da decisão. Clique de novo para seguir mesmo assim.':'Falta a escolha do grupo neste passo; a lâmina ficaria vazia. Clique de novo para seguir mesmo assim.';return}progress[c.id]=Math.max(progress[c.id]||0,i+1);store.set('progress',progress);render(true);requestAnimationFrame(()=>requestAnimationFrame(()=>{const n=document.getElementById('st-'+(i+1));if(n){const y=n.getBoundingClientRect().top+window.scrollY-150;window.scrollTo({top:y,behavior:'smooth'})}}))}},i<unlocked?'Passo seguinte':'Concluí este passo'),aviso))}
       else body.append(el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{progress[c.id]=c.steps.length;store.set('progress',progress);render(true)}},'Marcar minicaso como concluído')));}
     box.append(body);main.append(box);
   });
@@ -1396,29 +1458,32 @@ function render(soft){
      return el('button',{class:'rstep'+(done?' done':'')+(cur?' cur':''),onclick:()=>{const n=document.getElementById('st-'+idx[0]);n&&n.scrollIntoView({behavior:'smooth',block:'start'})}},el('span',{class:'rn'},done?'✓':String(k+1)),f)})));
   main.append(ponteCard(c));
   grid.append(main,aside);
+  main.querySelectorAll('button:not([id]),input:not([id])').forEach((b,j)=>{b.id='b-'+c.id+'-'+j});
   const scrollY=window.scrollY; const focusId=document.activeElement&&document.activeElement.id;
   if(soft){app.style.minHeight=app.offsetHeight+'px'}
   app.replaceChildren(head,grid);
   if(soft){window.scrollTo(0,scrollY);if(focusId){const f=document.getElementById(focusId);f&&f.focus({preventScroll:true})}requestAnimationFrame(()=>{app.style.minHeight='';window.scrollTo(0,scrollY)})}
+  else if(GRUPO[c.id]&&unlocked>0&&!window.__scrolledOnce){window.__scrolledOnce=true;requestAnimationFrame(()=>{const n=document.getElementById('st-'+Math.min(unlocked,c.steps.length-1));if(n)window.scrollTo({top:n.getBoundingClientRect().top+window.scrollY-150})})}
 }
 // ---------- exportar em PowerPoint ----------
 async function baixarBlob(blob,nome,msg){msg.textContent='Preparando o arquivo…';const dl=await getDL();if(dl){try{await dl.save({filename:nome,data:blob});msg.textContent='Arquivo salvo.';return}catch(e){const code=e&&e.code;if(code==='declined'){msg.textContent='Download cancelado.';return}if(code==='rate_limited'){msg.textContent='Já há uma confirmação aberta; responda a ela.';return}DL=null}}
- try{const url=URL.createObjectURL(blob);const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Arquivo gerado.'}catch(e){msg.textContent='O download não está disponível aqui.'}}
+ try{const url=URL.createObjectURL(blob);const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Arquivo gerado: '+nome+' (na pasta de downloads).'}catch(e){msg.textContent='O download não está disponível aqui.'}}
 // ---------- a apresentação como narrativa: o caminho do grupo + o que o minicaso ensina ----------
 function deck(c){const S=c.state,A=S.apres||{},N=S.nota||{};const i=CASES.indexOf(c);const m=META[c.id];const C=CONTEUDO[c.id];const v=k=>A[k]||(k==='decisao'?N.decisao:'')||'—';
  const fio=FIO[c.id]||[];const F2=(typeof FIO2!=='undefined'&&FIO2)||{};const LI=(typeof LICOES!=='undefined'&&LICOES[c.id])||null;const D=[];
  D.push({layout:'cover',kick:`Minicaso ${i} · ${gl(c)} · ${c.empresa}`,title:c.titulo,big:v('caso'),sub:'Integrantes: '+(S.integrantes||'—')});
  D.push({layout:'two',kick:'O ponto de partida',fio:'Antes das contas, a pergunta e a aposta do grupo.',title:'A decisão a tomar',blocks:[['A pergunta do caso',C.problema.decisao],['Nossa aposta, antes das contas',S.aposta||'—']]});
- MC[c.id].q.forEach((q,k)=>{const sel=S.mc&&S.mc[k];const o=sel!=null?q.o[sel]:null;D.push({layout:'answer',kick:`A análise · passo ${k+1} de ${MC[c.id].q.length}`,fio:fio[k]||'',title:q.p,blocks:[['O que concluímos',o?o[0]:'—'],['Por quê',o?o[2]:'—']]})});
+ MC[c.id].q.forEach((q,k)=>{const sel=S.mc&&S.mc[k];const o=sel!=null?q.o[sel]:null;D.push({layout:'answer',kick:`A análise · passo ${k+1} de ${MC[c.id].q.length}`,fio:fio[k]||'',title:q.p,blocks:[['O que concluímos',o?o[0]:'—'],[o&&o[1]?'Por quê':'O que a sala vai cobrar',o?o[2]:'—']],notes:o?o[2]:''})});
  {const ct=MC[c.id].contra;const r=S.contraSel!=null?ct.o[S.contraSel][0]:'—';D.push({layout:'quote',kick:'O contra-argumento',fio:F2.contra||'',quote:m.contra.fala,cite:m.contra.quem,blocks:[['A resposta do grupo',r]]})}
  D.push({layout:'decision',kick:'A decisão do grupo',fio:F2.nota||'',title:v('decisao'),blocks:[['O número que sustenta a decisão',N.num||'—']]});
  D.push({layout:'two',kick:'O que pode mudar a decisão',fio:'Uma decisão de executivo diz o que precisa ser verdade e quando será revista.',title:'Premissa e gatilho',blocks:[['A premissa que pode inverter a decisão',N.prem||'—'],['O gatilho de revisão',N.gatilho||'—']]});
- D.push({layout:'bridge',kick:'A ponte entre operação e finanças',fio:F2.apres||'',title:'Da operação ao valor: hoje e com a decisão',rows:[['Hoje',m.ponte.map(([l,t])=>[l,t])],['Com a decisão',[['Operação',v('op')],['Capital e margem',v('cap')],['Indicador',v('ind')],['Valor',v('val')]]]]});
+ D.push({layout:'bridge',kick:'A ponte entre operação e finanças · hoje',fio:F2.apres||'',title:'Da operação ao valor: a situação de hoje',rows:[['Hoje',m.ponte.map(([l,t])=>[l,t])]]});
+ D.push({layout:'bridge',kick:'A ponte entre operação e finanças · com a decisão',fio:'O mesmo caminho, depois da decisão do grupo.',title:'Da operação ao valor: o efeito da decisão',rows:[['Com a decisão',[['Operação',v('op')],['Capital e margem',v('cap')],['Indicador',v('ind')],['Valor',v('val')]]]]});
  D.push({layout:'one',kick:'A decisão na empresa',fio:'Uma decisão só vale se sobreviver à reunião em que será apresentada.',title:'Quem perde e como a decisão sobrevive',text:v('perde')});
  if(LI)D.push({layout:'list',kick:'O que o caso ensina',fio:'Até aqui: o caminho do grupo. Agora: o que levamos dele para qualquer empresa.',title:'Três lições',items:LI.licoes});
  {const L=concSel(c,A);D.push({layout:'cards',kick:'Conceitos centrais',fio:'Os conceitos que sustentam as lições, com a referência nas Notas de ensino.',title:'Os conceitos por trás do caso',items:L.map(([x])=>({t:x[0],d:x[1],ref:x[2]}))})}
  if(LI)D.push({layout:'list',kick:'A conexão com Valuation',fio:'O mesmo caso, lido com as ferramentas da ênfase em Valuation.',title:LI.val.formula,items:LI.val.pontos});
- {const bl=[];if(m.transicao)bl.push([m.transicao[0],m.transicao[1]]);D.push({layout:'big',kick:'Para a turma',fio:'Para terminar: uma pergunta para a empresa de quem está ouvindo.',title:v('perg'),blocks:bl})}
+ {const bl=[];if(S.empresa)bl.push(['Onde isso acontece na nossa empresa',S.empresa]);if(m.transicao)bl.push([m.transicao[0],m.transicao[1]]);D.push({layout:'big',kick:'Para a turma',fio:'Para terminar: uma pergunta para a empresa de quem está ouvindo.',title:v('perg'),blocks:bl})}
  return D}
 function slides(c){const D=deck(c);
  const blk=(l,t,cls)=>el('div',{class:'pitem'+(cls?' '+cls:'')},el('div',{class:'pl'},l),el('div',{class:'pv'},t));
@@ -1438,8 +1503,13 @@ function slides(c){const D=deck(c);
   return out});
  let i=0;const ov=el('div',{class:'present',role:'dialog','aria-modal':'true','aria-label':'Apresentação do grupo'});const body=el('div',{class:'pslide'});const cnt=el('span',{class:'pcount'});
  const show=()=>{body.replaceChildren(...T[i]());cnt.textContent=(i+1)+' / '+T.length;ov.scrollTo(0,0)};
- const close=()=>{ov.remove();document.removeEventListener('keydown',k)};const k=e=>{if(e.key==='Escape')close();if(e.key==='ArrowRight'&&i<T.length-1){i++;show()}if(e.key==='ArrowLeft'&&i>0){i--;show()}};document.addEventListener('keydown',k);
- ov.append(el('button',{class:'pclose',onclick:close},'Fechar ✕'),body,el('div',{class:'pnav'},el('button',{class:'pbtn',onclick:()=>{if(i>0){i--;show()}}},'← Anterior'),cnt,el('button',{class:'pbtn',onclick:()=>{if(i<T.length-1){i++;show()}}},'Próxima →')));
+ const opener=document.activeElement;const next=()=>{if(i<T.length-1){i++;show()}};const prev=()=>{if(i>0){i--;show()}};
+ const close=()=>{ov.remove();document.removeEventListener('keydown',k);if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});if(opener&&opener.focus)opener.focus()};
+ const k=e=>{if(e.key==='Escape'){close();return}if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev()}else if(e.key==='Home'){i=0;show()}else if(e.key==='End'){i=T.length-1;show()}};document.addEventListener('keydown',k);
+ body.addEventListener('click',e=>{if(e.target.closest('button'))return;next()});
+ try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}
+ document.addEventListener('fullscreenchange',function fc(){if(!document.fullscreenElement&&ov.isConnected){document.removeEventListener('fullscreenchange',fc);close()}});
+ ov.append(el('button',{class:'pclose',onclick:close},'Fechar ✕'),body,el('div',{class:'pnav'},el('button',{class:'pbtn',onclick:prev},'← Anterior'),cnt,el('button',{class:'pbtn',onclick:next},'Próxima →')));
  show();document.body.append(ov);ov.querySelector('.pclose').focus()}
 async function pptx(c,msg){if(typeof PptxGenJS==='undefined'){msg.textContent='A exportação em PowerPoint não está disponível nesta cópia.';return}
  const S=c.state;const g=GRUPO[c.id];const i=CASES.indexOf(c);const D=deck(c);
@@ -1459,14 +1529,14 @@ async function pptx(c,msg){if(typeof PptxGenJS==='undefined'){msg.textContent='A
   switch(d.layout){
    case 'cover':txt(sl,d.title,{x:X,y:0.95,w:W,h:1.4,fontSize:30,bold:true,color:NAVY});txt(sl,d.big,{x:X,y:2.5,w:W,h:1.4,fontSize:18,color:INK});txt(sl,d.sub,{x:X,y:4.3,w:W,h:0.5,fontSize:12,color:GRAY});break;
    case 'two':{title(0.6,22);const h=bottom-y;const w=(W-0.3)/2;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.3),y,w,h,16));break}
-   case 'answer':{title(0.75,20);txt(sl,d.blocks[0][1],{x:X,y,w:W,h:1.5,fontSize:20,color:NAVY,bold:true});y+=1.6;card(sl,d.blocks[1][0],d.blocks[1][1],X,y,W,bottom-y,14);break}
+   case 'answer':{title(0.75,20);txt(sl,d.blocks[0][1],{x:X,y,w:W,h:1.5,fontSize:20,color:NAVY,bold:true});y+=1.6;card(sl,d.blocks[1][0],d.blocks[1][1],X,y,W,bottom-y,14);if(d.notes)sl.addNotes(d.notes);break}
    case 'quote':{txt(sl,'“'+d.quote+'”',{x:X,y,w:W,h:1.5,fontSize:20,italic:true,color:NAVY});txt(sl,'— '+d.cite,{x:X,y:y+1.5,w:W,h:0.35,fontSize:12,color:GRAY});y+=2.0;card(sl,d.blocks[0][0],d.blocks[0][1],X,y,W,bottom-y,16);break}
    case 'decision':{sl.addShape(P.ShapeType.rect,{x:X,y,w:W,h:1.6,fill:{color:NAVY},line:{color:NAVY}});txt(sl,d.title,{x:X+0.25,y,w:W-0.5,h:1.6,fontSize:24,bold:true,color:'FFFFFF',valign:'middle'});y+=1.8;card(sl,d.blocks[0][0],d.blocks[0][1],X,y,W,bottom-y,18);break}
    case 'bridge':{title(0.5,20);const rows=d.rows;const rh=(bottom-y-0.15)/rows.length;rows.forEach(([rl,nodes],r)=>{const yy=y+r*(rh+0.15);txt(sl,rl.toUpperCase(),{x:X,y:yy,w:1.1,h:rh,fontSize:10,bold:true,color:NAVY,charSpacing:1,valign:'middle'});const w=(W-1.2-3*0.2)/4;nodes.forEach(([l,t],j)=>{const x=X+1.2+j*(w+0.2);sl.addShape(P.ShapeType.rect,{x,y:yy,w,h:rh,fill:{color:r?TINT:'FFFFFF'},line:{color:NAVY,width:1}});label(sl,l,x+0.1,yy+0.08,w-0.2);txt(sl,t,{x:x+0.1,y:yy+0.38,w:w-0.2,h:rh-0.45,fontSize:11});if(j<3)txt(sl,'→',{x:x+w-0.04,y:yy+rh/2-0.25,w:0.28,h:0.5,fontSize:14,bold:true,color:NAVY,align:'center'})})});break}
    case 'one':{title(0.6,22);txt(sl,d.text,{x:X,y,w:W,h:bottom-y,fontSize:20,color:INK});break}
    case 'list':{title(0.9,22);const n=d.items.length;const h=(bottom-y)/n;d.items.forEach((t,j)=>{const yy=y+j*h;sl.addShape(P.ShapeType.ellipse,{x:X,y:yy+0.08,w:0.42,h:0.42,fill:{color:TERRA},line:{color:TERRA}});txt(sl,String(j+1),{x:X,y:yy+0.08,w:0.42,h:0.42,fontSize:14,bold:true,color:'FFFFFF',align:'center',valign:'middle'});txt(sl,t,{x:X+0.6,y:yy,w:W-0.6,h:h-0.1,fontSize:16})});break}
    case 'cards':{title(0.6,22);const n=Math.max(d.items.length,1);const cols=n<=3?n:2;const rows=Math.ceil(n/cols);const w=(W-(cols-1)*0.25)/cols;const h=(bottom-y-(rows-1)*0.2)/rows;d.items.forEach((it,j)=>{const x=X+(j%cols)*(w+0.25),yy=y+Math.floor(j/cols)*(h+0.2);sl.addShape(P.ShapeType.rect,{x,y:yy,w,h,fill:{color:'FFFFFF'},line:{color:NAVY,width:1}});sl.addShape(P.ShapeType.rect,{x,y:yy,w:0.07,h,fill:{color:TERRA},line:{color:TERRA}});txt(sl,it.t,{x:x+0.2,y:yy+0.12,w:w-0.35,h:0.6,fontSize:n>3?13:15,bold:true,color:NAVY});txt(sl,it.d,{x:x+0.2,y:yy+0.72,w:w-0.35,h:h-1.15,fontSize:n>3?10.5:12});txt(sl,it.ref,{x:x+0.2,y:yy+h-0.4,w:w-0.35,h:0.3,fontSize:9,italic:true,color:GRAY})});break}
-   case 'big':{const hb=d.blocks.length?1.3:0;txt(sl,d.title,{x:X,y,w:W,h:bottom-y-hb-0.1,fontSize:26,bold:true,color:NAVY,align:'center',valign:'middle'});if(hb)card(sl,d.blocks[0][0],d.blocks[0][1],X,bottom-hb,W,hb,13);break}
+   case 'big':{const n=d.blocks.length;const hb=n?1.3:0;txt(sl,d.title,{x:X,y,w:W,h:bottom-y-hb-0.1,fontSize:26,bold:true,color:NAVY,align:'center',valign:'middle'});if(n){const w=(W-(n-1)*0.25)/n;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.25),bottom-hb,w,hb,n>1?11:13))}break}
   }});
  const nome=g?`grupo-${g}-${c.id}-apresentacao.pptx`:`plenaria-${c.id}-apresentacao.pptx`;
  try{const blob=await P.write({outputType:'blob'});await baixarBlob(blob,nome,msg)}catch(e){msg.textContent='Não foi possível gerar o PowerPoint: '+(e&&e.message||e)}}
