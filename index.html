@@ -248,6 +248,11 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .ressalvas ul{margin:8px 0 2px;padding-left:20px;font-size:14px;line-height:1.45;color:var(--fg)}
 .ressalvas li{margin-bottom:6px}
 @media (max-width:600px){nav.tabs{mask-image:linear-gradient(90deg,#000 85%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent)}.step-h{flex-direction:column;gap:2px}}
+.numero{background:var(--navy-tint);border-left:4px solid var(--navy);border-radius:6px;padding:10px 14px;margin:10px 0 14px}
+.numero p{margin:2px 0 0;font:600 16px/1.45 var(--ui);color:var(--navy)}
+.legenda{font-size:14px;color:var(--muted);margin:8px 0 0}
+.decidem ol{margin:6px 0 0;padding-left:20px;font-size:14px;line-height:1.4}.decidem li{margin-bottom:5px}
+.ressalvas .efeito{color:var(--navy)}
 </style>
 </head>
 <body>
@@ -373,7 +378,7 @@ function Phi(z){const t=1/(1+0.2316419*Math.abs(z));const d=0.3989423*Math.exp(-
 function fio(t){return el('div',{class:'fio'},el('span',{class:'fl'},'Fio'),el('span',{},t))}
 function dados(rows){return el('div',{class:'dados'},el('div',{class:'pl'},'Dados do caso usados aqui'),el('dl',{},...rows.flatMap(([k,v])=>[el('dt',{},k),el('dd',{},v)])))}
 function bl(items){return el('ul',{class:'bl'},...items.map(t=>el('li',{},t)))}
-function calcBox(title,rows){const tb=el('table',{class:'calc'});tb.append(el('tr',{},el('th',{},'O quê'),el('th',{},'Como se calcula'),el('th',{class:'num'},'Resultado')));rows.forEach(([a,b,c])=>tb.append(el('tr',{},el('td',{},a),el('td',{class:'how'},b),el('td',{class:'num res'},c))));return el('details',{class:'calcw',open:''},el('summary',{},title),el('div',{class:'tscroll'},tb))}
+function calcBox(title,rows){const tb=el('table',{class:'calc'});tb.append(el('tr',{},el('th',{},'O quê'),el('th',{},'Como se calcula'),el('th',{class:'num'},'Resultado')));rows.forEach(([a,b,c])=>tb.append(el('tr',{},el('td',{},a),el('td',{class:'how'},b),el('td',{class:'num res'},c))));return el('details',{class:'calcw'},el('summary',{},title+' · abrir'),el('div',{class:'tscroll'},tb))}
 
 const SESS={key:'sim1',titulo:'Sessão 1',kicker:'Operações, Risco e Capital · Sessão 1 · Desenho da cadeia e capital'};
 const CASES=[];
@@ -1210,38 +1215,64 @@ vida:{
 // Ressalvas metodológicas, declaradas por passo de análise (índice 0..2). Aparecem num bloco recolhido.
 const RESSALVAS={
 vitta:[
- ['O retorno é antes do imposto e sobre o capital de hoje. Para comparar com os 12% de custo de capital, que são depois do imposto, multiplique por 0,66 (17,6% → 11,6%) ou compare com 18,2% (12% ÷ 0,66).',
-  'A conta serve para comparar os dois modelos de negócio, não para dizer se cada empresa cria valor.'],
- ['A promessa 5-4-3 e o critério de Fisher são leituras qualitativas; o caso não mede quanto do estoque de 110 dias é lançamento que fracassou.'],
- ['“Cria valor” aqui quer dizer “o retorno sobe”. O teste rigoroso é: o lucro sacrificado × 0,66 é menor que o capital devolvido × 12%? Os dois dão a mesma resposta neste caso; o empate da terceirização vai de 4,6 para 4,7 pontos.',
-  'Os R$ 285 mi são o valor da fábrica no balanço; o caixa da venda depende do preço e do imposto sobre o ganho ou a perda.',
-  'A receita é mantida constante em todas as frentes, como no plano de Marcos. Se a terceirização atrasar lançamentos e tirar 5% da receita, o retorno cai para 17,5%: empate.']],
+ [['O retorno é antes do imposto e sobre o capital de hoje. Para comparar com os 12% de custo de capital, que são depois do imposto, multiplique por 0,66 (17,6% → 11,6%) ou compare com 18,2% (12% ÷ 0,66).','Não muda a resposta: a comparação entre as duas empresas vale na mesma base.'],
+  ['A conta serve para comparar os dois modelos de negócio, não para dizer se cada empresa cria valor.','Mantém: Marcos continua sem razão sobre a “ineficiência”.']],
+ [['A promessa 5-4-3 e o critério de Fisher são leituras qualitativas; o caso não mede quanto do estoque de 110 dias é lançamento que fracassou.','Mantém: o estoque é o custo da promessa; o que Renata deve procurar é o estoque sem função dentro dele.']],
+ [['“Cria valor” aqui quer dizer “o retorno sobe”. O teste rigoroso é: o lucro sacrificado × 0,66 é menor que o capital devolvido × 12%? Neste caso os dois testes dão a mesma resposta; o empate da terceirização vai de 4,6 para 4,7 pontos.','Mantém: só a terceirização passa pelos dois testes.'],
+  ['Os R$ 285 mi são o valor da fábrica no balanço; o caixa da venda depende do preço e do imposto sobre o ganho ou a perda.','Mantém, com uma premissa a testar antes do piloto.'],
+  ['A receita é mantida constante em todas as frentes, como no plano de Marcos. Se a terceirização atrasar lançamentos e tirar 5% da receita, o retorno cai para 17,5%: empate.','Mantém, e mostra por que a decisão é um piloto com teto, e não a aprovação direta.']]],
 autopar:[
- ['Estoque de ciclo igual a metade do lote vale para consumo uniforme e para o conjunto dos 30 mil itens; peça por peça, varia.'],
- ['A curva mede quantas reposições terminam com falta (nível de serviço por ciclo), não quantas peças faltam (fill rate). A promessa de 98% do caso lê-se como fill rate: o efeito no pedido do mecânico é menor do que 98% → 85%, mas na mesma direção.',
-  'A curva supõe demanda normal e navio pontual. Com atraso frequente, a reserva de hoje já é pequena, e cortá-la custa mais.'],
- ['A perda de R$ 15 mi é dedutível: reduz o imposto em cerca de R$ 5 mi. O caixa do obsoleto fica perto de 20, não 15.',
-  'Entregar todo mês dobra pedidos e fretes; o caso garante só o desconto. Cada R$ 1 mi por ano de frete a mais tira R$ 5,5 mi dos R$ 30 mi de caixa, na régua.',
-  'Financiar a expansão com estoque liberado ou com dívida não muda o valor da expansão; “sem dívida” é escolha de política financeira, não de valor.']],
+ [['Estoque de ciclo igual a metade do lote vale para consumo uniforme e para o conjunto dos 30 mil itens; peça por peça, varia.','Mantém: a ordem de grandeza (R$ 60 mi de ciclo) é a que importa.']],
+ [['A curva mede quantas reposições terminam com falta (nível de serviço por ciclo), não quantas peças faltam (fill rate). A promessa de 98% do caso lê-se como fill rate: o efeito no pedido do mecânico é menor do que 98% → 85%, mas na mesma direção.','Mantém: cortar metade da reserva tira muito mais do que metade da proteção, e não cumpre a meta de qualquer jeito.'],
+  ['A curva supõe demanda normal e navio pontual. Com atraso frequente, a reserva de hoje já é pequena, e cortá-la custa mais.','Reforça: a proposta de Carla fica ainda pior.']],
+ [['A perda de R$ 15 mi é dedutível: reduz o imposto em cerca de R$ 5 mi. O caixa do obsoleto fica perto de 20, não 15.','Reforça: a alternativa supera a meta.'],
+  ['Entregar todo mês dobra pedidos e fretes; o caso garante só o desconto. Cada R$ 1 mi por ano de frete a mais tira R$ 5,5 mi dos R$ 30 mi de caixa, na régua.','Mantém, com uma premissa a confirmar com Henrique.'],
+  ['Financiar a expansão com estoque liberado ou com dívida não muda o valor da expansão; “sem dívida” é escolha de política financeira, não de valor.','Mantém: os 45 valem 45; o que muda é de onde saem sem custar serviço.']]],
 bompreco:[
- ['Em A e C a mercadoria não espera menos; em B, parte dos 30 dias pode voltar como estoque no centro de distribuição. O gatilho deveria medir a cadeia, não só a loja.'],
- ['A conta ignora o imposto, como o caso pede. Os 10,8 são custo de capital depois do imposto; os custos de A e C são dedutíveis. Depois do imposto, A ≈ −1,1 e C ≈ +4,3 por ano; a ordem B > C > A não muda.',
-  'Os 11% do banco são juro de dívida; os 12% da rede são o custo médio de dívida e capital próprio. Risco sacado é empréstimo e, para a análise de crédito, conta como dívida: o teste justo de C é contra o que o banco já cobra da rede (11%): zero.',
-  'O payback de 2,6 anos divide o investimento pelo ganho econômico (12% dos 90). Em caixa, B se paga no primeiro ano: entram 90, saem 20.'],
- ['Os 20% são a taxa bancária do fornecedor e o repasse integral no preço é a premissa decisiva. Com repasse pela metade, A vai de −7,2 para +1,8; os outros 9 ficam com o fornecedor, a 20%, e é aí que mora o risco de perdê-lo.']],
+ [['Em A e C a mercadoria não espera menos; em B, parte dos 30 dias pode voltar como estoque no centro de distribuição. O gatilho deveria medir a cadeia, não só a loja.','Mantém: só B muda o desenho; o gatilho fica mais exigente.']],
+ [['A conta ignora o imposto, como o caso pede. Os 10,8 são custo de capital depois do imposto; os custos de A, B e C são dedutíveis. Depois do imposto, A ≈ −1,1 e C ≈ +4,3 por ano.','Mantém: a ordem B > C > A não muda.'],
+  ['Os 11% do banco são juro de dívida; os 12% da rede são o custo médio de dívida e capital próprio. Risco sacado é empréstimo e, para a análise de crédito, conta como dívida: o teste justo de C é contra o que o banco já cobra da rede (11%), e dá zero.','Mantém: C continua atrás de B e à frente de A; deixa de parecer um ganho e passa a ser dívida com outro nome.'],
+  ['O payback de 2,6 anos divide o investimento pelo ganho econômico (12% dos 90). Em caixa, B se paga no primeiro ano: entram 90, saem 20.','Reforça B.']],
+ [['Os 20% são a taxa bancária do fornecedor e o repasse integral no preço é a premissa decisiva. Com repasse pela metade, A vai de −7,2 para +1,8; os outros 9 ficam com o fornecedor, a 20%, e é aí que mora o risco de perdê-lo.','Mantém: mesmo no melhor caso para A, B rende mais (+7,8).']]],
 embalagens:[
- ['A régua supõe o ganho para sempre. Para uma máquina de dez anos, R$ 1 por ano vale 3,7, não 5,5: A cai de 13 para perto de 2 (uns 6 contando a depreciação, que o caso manda ignorar). B com dez anos de processo cai para uns 16. B continua na frente.',
-  'O payback de A (3,3 anos) é antes do imposto; depois dele, 5,1 anos. O payback de B “não existe” pela economia de custo; em caixa, B se paga no primeiro ano (entram 40, saem 4).',
-  'Os 12% são só o aluguel do dinheiro. Armazém, seguro, avaria e obsolescência vêm por cima e jogam a favor de B.'],
- ['Os R$ 4,8 mi de custo de capital evitado (40 × 12%) são depois do imposto; para comparar com a máquina, use 6 × 0,66 = R$ 4,0 mi por ano.'],
- ['A liberação de R$ 40 mi conta 1 por 1 só se for permanente; se a empresa crescer, o estoque cresce junto (lei de Little), mas os dias de espera ganhos ficam.',
-  'A mesma taxa de desconto é usada para a economia “certa” da máquina e para a liberação incerta do S&OP. O risco é tratado no número (meta de 28, revisão em doze meses), não na taxa.']],
+ [['A régua supõe o ganho para sempre. Para uma máquina de dez anos, R$ 1 por ano vale 3,7, não 5,5: A cai de 13 para perto de 2 (uns 6 contando a depreciação, que o caso manda ignorar). B com dez anos de processo cai para uns 16.','Reforça B: a economia da máquina tem prazo de validade.'],
+  ['O payback de A (3,3 anos) é antes do imposto; depois dele, 5,1 anos. O payback de B “não existe” pela economia de custo; em caixa, B se paga no primeiro ano (entram 40, saem 4).','Reforça B.'],
+  ['Os 12% são só o aluguel do dinheiro. Armazém, seguro, avaria e obsolescência vêm por cima.','Reforça B: a conta da régua é o piso do valor do S&OP.']],
+ [['Os R$ 4,8 mi de custo de capital evitado (40 × 12%) são depois do imposto; para comparar com a máquina, use 6 × 0,66 = R$ 4,0 mi por ano.','Mantém: na mesma base, 4,8 contra 4,0, e B ainda devolve os 40 de uma vez.']],
+ [['A liberação de R$ 40 mi conta 1 por 1 só se for permanente; se a empresa crescer, o estoque cresce junto (lei de Little), mas os dias de espera ganhos ficam.','Mantém: é exatamente por isso que a aprovação traz meta e revisão.'],
+  ['A mesma taxa de desconto é usada para a economia “certa” da máquina e para a liberação incerta do S&OP. O risco é tratado no número (meta de 28, revisão em doze meses), não na taxa.','Mantém: B só perde se a chance de liberar os 40 for menor que 70%.']]],
 vida:[
- ['Parte dos R$ 480 mi das lojas é ativo que deprecia; como o lucro já é líquido de depreciação, capital e lucro estão em bases coerentes.'],
- ['O retorno de 16,7% é sobre o capital do fim do período; sobre o capital médio dos três anos (1.400) daria 21,4%. O problema continuaria escondido.'],
- ['Os 7,5% supõem que as lojas antigas teriam ficado em 240 de lucro, e juntam lojas de um, dois e três anos. O número que decide é o retorno de cada safra madura, que o caso não dá: por isso a recomendação é por fases.',
-  'O empate de 96 é em regime. Contando os anos de perda até amadurecer, as lojas precisam render mais do que isso.',
-  'A conta supõe o mesmo custo de capital com 120 lojas a mais e nenhuma venda tirada das lojas antigas.']]};
+ [['Parte dos R$ 480 mi das lojas é ativo que deprecia; como o lucro já é líquido de depreciação, capital e lucro estão em bases coerentes.','Mantém.']],
+ [['O retorno de 16,7% é sobre o capital do fim do período; sobre o capital médio dos três anos (1.400) daria 21,4%.','Mantém: a média fica mais alta e esconde o problema ainda melhor.']],
+ [['Os 7,5% supõem que as lojas antigas teriam ficado em 240 de lucro, e juntam lojas de um, dois e três anos. O número que decide é o retorno de cada safra madura, que o caso não dá.','Mantém: por isso a recomendação é crescer em fases, por safra, e não parar.'],
+  ['O empate de 96 é em regime. Contando os anos de perda até amadurecer, as lojas precisam render mais do que isso.','Reforça: o empate é otimista para Tiago.'],
+  ['A conta supõe o mesmo custo de capital com 120 lojas a mais e nenhuma venda tirada das lojas antigas.','Mantém: canibalização e risco maior só pioram o capital novo.']]]};
+
+// O que cada passo de análise responde, em uma frase com o número (orientação)
+const NUMERO={
+vitta:['Vitta: 16% × 1,1 = 17,6%. DistriMax: 4% × 4,0 = 16%. A que gira devagar rende mais, porque 67% do capital dela está nas fábricas.',
+ 'Os 110 dias de estoque são R$ 150 mi: 15% do capital, e são o custo da promessa (produto 5, acesso 4).',
+ 'Plano completo: 14,0%. Só a terceirização: 18,5%. Hoje: 17,6%. A terceirização aguenta perder até 4,6 pontos de margem; o caso estima 4.'],
+autopar:['90 dias × R$ 2 mi = R$ 180 mi em quatro esperas, cada uma com um dono. A meta de 25% são R$ 45 mi.',
+ 'Metade da reserva libera R$ 25 mi (não cumpre os 45) e derruba a disponibilidade de 98% para cerca de 85%.',
+ 'Entregas mensais (30) + obsoleto (15) = R$ 45 mi de caixa, com os 98% intactos e R$ 15 mi de perda contábil.'],
+bompreco:['Só a reposição automática faz a mercadoria esperar menos (45 → 15 dias). Prazo e risco sacado mudam quem paga pela mesma espera.',
+ 'Os mesmos R$ 90 mi rendem: prazo −7,2, reposição +7,8, risco sacado +0,9 por ano.',
+ 'Alongar o prazo só cria valor com quem tem dinheiro mais barato que os 12% da rede. O laticínio paga 20%.'],
+embalagens:['Na régua (R$ 1 por ano vale R$ 5,50): a máquina vale 13; o S&OP vale 25.',
+ 'O payback só conta economia de custo. O S&OP devolve capital, e o payback não tem onde registrar isso.',
+ 'O S&OP empata com a máquina se liberar R$ 28 mi dos 40 prometidos. Quem garante é Patrícia.'],
+vida:['Receita +50%, lucro +25%, capital +80%: R$ 800 mi novos, 480 deles em lojas.',
+ 'Retorno médio de 24% para 16,7%: ainda acima de 12%, mas mistura o capital antigo com o novo.',
+ 'Capital novo: 60 ÷ 800 = 7,5% contra 12% de custo: −R$ 36 mi por ano. Empata se o lucro novo chegar a 96.']};
+
+// Os três números que decidem cada caso (painel lateral)
+const DECIDEM={
+vitta:['17,6% hoje · 14,0% com o plano · 18,5% só com a terceirização','Um ponto de margem = R$ 11 mi por ano','Empate da terceirização: 4,6 pontos (o caso estima 4)'],
+autopar:['R$ 2 mi por dia de estoque · 90 dias = R$ 180 mi · meta R$ 45 mi','Carla: R$ 25 mi e disponibilidade de 98% → 85%','Alternativa: 30 + 15 = R$ 45 mi, reserva intacta'],
+bompreco:['R$ 90 mi liberados nas três · aluguel de 12% = R$ 10,8 mi por ano','Prazo −7,2 · Reposição +7,8 · Risco sacado +0,9','Fornecedor a 20% · banco a 11% · rede a 12%'],
+embalagens:['Régua: R$ 1 por ano = R$ 5,50 (0,66 ÷ 0,12)','Máquina 6 × 5,5 − 20 = 13 · S&OP 40 − 4 − 11 = 25','Empate: S&OP precisa liberar R$ 28 mi'],
+vida:['Receita +50% · lucro +25% · capital +80% (R$ 800 mi)','Retorno médio 24% → 16,7% (acima de 12%)','Capital novo: 60 ÷ 800 = 7,5% contra 12% → −36 por ano · empate em 96']};
 
 // ============ componentes ============
 function slider(label,S,key,min,max,step,f,rerender){
@@ -1318,10 +1349,11 @@ function analise(c,st,k){return {t:st.t,fase:1,explain:st.explain,
  body(s,S,rerender){S.mc=S.mc||{};const r=el('div');
   r.append(fio(FIO[c.id][k]));
   r.append(el('div',{class:'qbox'},el('div',{class:'pl'},'Pergunta '+(k+1)+' do caso'),el('p',{},caso(c).perguntas[k])));
+  if(typeof NUMERO!=='undefined'&&NUMERO[c.id]&&NUMERO[c.id][k])r.append(el('div',{class:'numero'},el('div',{class:'pl'},'O que este passo responde'),el('p',{},NUMERO[c.id][k]),el('small',{class:'note',style:'margin:4px 0 0'},'Abaixo: os controles (opcionais), a conta (recolhida) e a interpretação do grupo (obrigatória).')));
   const node=st.body(s,S,rerender);const diags=[...node.querySelectorAll('.diag')];diags.forEach(d=>d.remove());r.append(node);
   if(node.querySelector('.controls')&&c.state0){const ctl=node.querySelector('.controls');const mudou=Object.keys(c.state0).some(x=>(typeof c.state0[x]==='number'||typeof c.state0[x]==='boolean')&&S[x]!==c.state0[x]);ctl.append(el('div',{class:'ctl',style:'justify-content:flex-end'},el('small',{class:'note',style:'margin:0 0 4px'},'Os controles são opcionais: o essencial é a interpretação abaixo.'),el('button',{class:'btn secondary',disabled:mudou?null:'',onclick:()=>{Object.keys(c.state0).forEach(x=>{if(typeof c.state0[x]==='number'||typeof c.state0[x]==='boolean')S[x]=c.state0[x]});rerender()}},'Voltar aos valores do caso')))}
   r.append(mcBlock('A interpretação do grupo',MC[c.id].q[k],S.mc[k],i=>{S.mc[k]=i;rerender()},null,[el('h4',{class:'subh'},'O que os números na tela dizem'),...diags]));
-  if(typeof RESSALVAS!=='undefined'&&RESSALVAS[c.id]&&RESSALVAS[c.id][k]&&RESSALVAS[c.id][k].length){r.append(el('details',{class:'ressalvas'},el('summary',{},'Ressalvas desta conta · para quem estudou Valuation'),el('ul',{},...RESSALVAS[c.id][k].map(t=>el('li',{},t)))))}
+  if(typeof RESSALVAS!=='undefined'&&RESSALVAS[c.id]&&RESSALVAS[c.id][k]&&RESSALVAS[c.id][k].length){r.append(el('details',{class:'ressalvas'},el('summary',{},'Segunda passada · a mesma conta com o rigor de Valuation'),el('p',{class:'note',style:'margin:6px 0 2px'},'Cada ressalva diz o que faz com a decisão. Nenhuma muda a resposta do caso.'),el('ul',{},...RESSALVAS[c.id][k].map(x=>el('li',{},Array.isArray(x)?x[0]:x,Array.isArray(x)&&x[1]?el('b',{class:'efeito'},' → '+x[1]):null)))))}
   return r}}}
 function contraStep(c){return {fase:2,t:'O contra-argumento',
  explain:'Uma boa recomendação sobrevive à objeção mais forte de quem discorda. Escolham a resposta que o grupo daria. Uma resposta de executivo concorda com o que é verdade, traz o mecanismo e termina num número.',
@@ -1449,11 +1481,12 @@ function renderInner(soft){
    caso(c).perguntas.forEach((q,k)=>{const j=1+k;const done=unlocked>j;const cur=unlocked===j;
     aside.append(el('button',{class:'pq-item'+(done?' done':'')+(cur?' cur':''),onclick:()=>goStep(j)},el('span',{class:'pqn'},done?'✓':String(k+1)),el('span',{},q)))});
    aside.append(el('small',{class:'note'},'Clique numa pergunta para ir ao passo que a responde.'));
+   if(typeof DECIDEM!=='undefined'&&DECIDEM[c.id])aside.append(el('div',{class:'concept decidem'},el('div',{class:'pl'},'Os números que decidem'),el('ol',{},...DECIDEM[c.id].map(t=>el('li',{},t)))));
   } else {
    const X=CONTEUDO[c.id].conc;
    c.concepts.forEach(([t,p,ref],i)=>{const x=X[i]||[];aside.append(el('details',{class:'concept',open:i===0?'':null},el('summary',{},t),el('p',{},p),...x.map(l=>{const m=l.match(/^([^:]+):\s*(.*)$/);return el('p',{class:'cx'},el('b',{},m?m[1]+'. ':''),m?m[2]:l)}),el('p',{class:'ref'},ref)))});
   }
-  const head=el('div',{class:'casehead'},el('div',{class:'kicker'},'Minicaso '+current+' · '+gl(c)+' · '+c.tema),el('h2',{},c.titulo),el('p',{class:'lead'},c.frase),GRUPO[c.id]?null:diag('warn','Plenária','Este minicaso não tem grupo: o professor o conduz com a turma inteira, com esta tela projetada. Os grupos não precisam fazê-lo na salinha.'),toolbar(c),el('p',{class:'aside-title',style:'margin-top:18px'},'Da operação ao valor'),ponte(c),
+  const head=el('div',{class:'casehead'},el('div',{class:'kicker'},'Minicaso '+current+' · '+gl(c)+' · '+c.tema),el('h2',{},c.titulo),el('p',{class:'lead'},c.frase),GRUPO[c.id]?null:diag('warn','Plenária','Este minicaso não tem grupo: o professor o conduz com a turma inteira, com esta tela projetada. Os grupos não precisam fazê-lo na salinha.'),toolbar(c),el('p',{class:'legenda'},el('b',{},'Como ler cada passo: '),'a pergunta → o número que responde → a conta (abra se quiser) → a interpretação do grupo.'),el('p',{class:'aside-title',style:'margin-top:18px'},'Da operação ao valor'),ponte(c),
    el('div',{class:'rail'},...FASES.map((f,k)=>{const idx=c.steps.map((st,j)=>st.fase===k?j:-1).filter(j=>j>=0);const done=unlocked>Math.max(...idx);const cur=!done&&idx.includes(Math.min(unlocked,c.steps.length-1));
      return el('button',{class:'rstep'+(done?' done':'')+(cur?' cur':''),onclick:()=>{const n=document.getElementById('st-'+idx[0]);n&&n.scrollIntoView({behavior:'smooth',block:'start'})}},el('span',{class:'rn'},done?'✓':String(k+1)),f)})));
   main.append(ponteCard(c));
