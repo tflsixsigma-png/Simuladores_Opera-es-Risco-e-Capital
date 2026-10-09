@@ -1403,7 +1403,7 @@ function apresStep(c){return {fase:3,t:'A apresentação: a ponte entre operaç�
   const checks=el('ul',{class:'checks'});
   const paint=()=>{checks.innerHTML='';[[hasNum(A.cap),'O elo de capital e margem tem um valor em R$'],[hasNum(A.ind),'O elo do indicador diz quanto ele muda'],[hasNum(A.val),'O elo de valor compara com o custo de capital ou usa a régua'],[words(A.op)>=6,'O elo de operação diz o que muda na cadeia, não um adjetivo'],[words(A.perde)>=6,'A apresentação diz quem perde e como a decisão sobrevive']].forEach(([ok,t])=>checks.append(el('li',{class:ok?'ok':''},(ok?'✓ ':'○ ')+t)))};
   paint();
-  const pmsg=el('span',{class:'tmsg',role:'status'});r.append(el('h4',{},'Teste da ponte'),checks,el('div',{class:'row'},el('button',{class:'btn',onclick:()=>slides(c)},'Apresentar em tela cheia'),el('button',{class:'btn secondary',onclick:()=>pptx(c,pmsg)},'⤓ Exportar em PowerPoint'),pmsg),el('small',{class:'note'},'Setas ← → mudam de tela; Esc fecha. O PowerPoint é editável e pode ser aberto no computador da sala.'));
+  const pmsg=el('span',{class:'tmsg',role:'status'});r.append(el('h4',{},'Teste da ponte'),checks,el('div',{class:'row'},el('button',{class:'btn',onclick:()=>slides(c)},'Apresentar em tela cheia'),el('button',{class:'btn secondary',onclick:()=>htmlApres(c,pmsg)},'⤓ Baixar apresentação (HTML)'),el('button',{class:'btn secondary',onclick:()=>pptx(c,pmsg)},'⤓ Exportar em PowerPoint'),pmsg),el('small',{class:'note'},'Setas ← → mudam de tela; Esc fecha. O arquivo HTML é a mesma apresentação em tela preta: envie ao professor e ele abre em qualquer navegador, sem instalar nada. O PowerPoint é a alternativa editável.'));
   return r}}}
 /* slides(): ver deck */
 // ---------- exportar e apresentar ----------
@@ -1518,7 +1518,7 @@ function deck(c){const S=c.state,A=S.apres||{},N=S.nota||{};const i=CASES.indexO
  if(LI)D.push({layout:'list',kick:'A conexão com Valuation',fio:'O mesmo caso, lido com as ferramentas da ênfase em Valuation.',title:LI.val.formula,items:LI.val.pontos});
  {const bl=[];if(S.empresa)bl.push(['Onde isso acontece na nossa empresa',S.empresa]);if(m.transicao)bl.push([m.transicao[0],m.transicao[1]]);D.push({layout:'big',kick:'Para a turma',fio:'Para terminar: uma pergunta para a empresa de quem está ouvindo.',title:v('perg'),blocks:bl})}
  return D}
-function slides(c){const D=deck(c);
+function slideTs(c){const D=deck(c);
  const blk=(l,t,cls)=>el('div',{class:'pitem'+(cls?' '+cls:'')},el('div',{class:'pl'},l),el('div',{class:'pv'},t));
  const bridge=rows=>el('div',{class:'pbridge2'},...rows.map(([rl,nodes])=>el('div',{class:'prow'},el('div',{class:'prl'},rl),el('div',{class:'pbridge'},...nodes.flatMap(([l,t],j)=>[el('div',{class:'pnode2'},el('div',{class:'pl'},l),el('div',{class:'pv'},t)),j<nodes.length-1?el('div',{class:'parr','aria-hidden':'true'},'→'):null])))));
  const T=D.map(d=>()=>{const out=[el('p',{class:'pk'},d.kick)];if(d.fio)out.push(el('p',{class:'pfio'},d.fio));
@@ -1534,6 +1534,8 @@ function slides(c){const D=deck(c);
    case 'answer':out.push(el('h2',{},d.title),el('p',{class:'pbig'},d.blocks[0][1]),blk(d.blocks[1][0],d.blocks[1][1],'psmallblk'));break;
    default:out.push(el('h2',{},d.title),el('div',{class:'pgrid'},...d.blocks.map(([l,t])=>blk(l,t))))}
   return out});
+ return T}
+function slides(c){const T=slideTs(c);
  let i=0;const ov=el('div',{class:'present',role:'dialog','aria-modal':'true','aria-label':'Apresentação do grupo'});const body=el('div',{class:'pslide'});const cnt=el('span',{class:'pcount'});
  const show=()=>{body.replaceChildren(...T[i]());cnt.textContent=(i+1)+' / '+T.length;ov.scrollTo(0,0)};
  const opener=document.activeElement;const next=()=>{if(i<T.length-1){i++;show()}};const prev=()=>{if(i>0){i--;show()}};
@@ -1544,6 +1546,25 @@ function slides(c){const D=deck(c);
  document.addEventListener('fullscreenchange',function fc(){if(!document.fullscreenElement&&ov.isConnected){document.removeEventListener('fullscreenchange',fc);close()}});
  ov.append(el('button',{class:'pclose',onclick:close},'Fechar ✕'),body,el('div',{class:'pnav'},el('button',{class:'pbtn',onclick:prev},'← Anterior'),cnt,el('button',{class:'pbtn',onclick:next},'Próxima →')));
  show();document.body.append(ov);ov.querySelector('.pclose').focus()}
+
+async function baixarTexto(data,nome,mime,msg){msg.textContent='Preparando o arquivo…';const dl=await getDL();if(dl){try{await dl.save({filename:nome,data});msg.textContent='Arquivo salvo: '+nome;return}catch(e){const code=e&&e.code;if(code==='declined'){msg.textContent='Download cancelado.';return}if(code==='rate_limited'){msg.textContent='Já há uma confirmação aberta; responda a ela.';return}DL=null}}
+ try{const url=URL.createObjectURL(new Blob([data],{type:mime}));const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Arquivo gerado: '+nome+' (na pasta de downloads).'}catch(e){msg.textContent='O download não está disponível aqui.'}}
+function htmlApres(c,msg){const S=c.state;const i=CASES.indexOf(c);const T=slideTs(c);const D=deck(c);
+ const css=Array.from(document.querySelectorAll('style')).map(x=>x.textContent).join('\n');
+ const slides=T.map((f,k)=>{const d=el('section',{class:'pslide'+(k===0?' on':''),'data-n':String(k+1)},...f());return d.outerHTML}).join('\n');
+ const titulo=`${c.empresa} · ${gl(c)} · Minicaso ${i}`;
+ const extra=`.present{position:static;min-height:100vh}.pslide{display:none}.pslide.on{display:flex}.phelp{position:fixed;top:12px;left:12px;color:#aaa;font:13px var(--ui)}@media print{.present{position:static}.pslide{display:flex!important;page-break-after:always;min-height:auto}.pnav,.pclose,.phelp{display:none}}`;
+ const js=`(function(){var S=document.querySelectorAll('.pslide'),i=0,cnt=document.getElementById('pcount');function go(n){if(n<0||n>=S.length)return;S[i].classList.remove('on');i=n;S[i].classList.add('on');cnt.textContent=(i+1)+' / '+S.length;window.scrollTo(0,0);location.hash='#'+(i+1)}var h=parseInt((location.hash||'').slice(1),10);if(h>=1&&h<=S.length){S[0].classList.remove('on');i=h-1;S[i].classList.add('on')}cnt.textContent=(i+1)+' / '+S.length;function next(){go(i+1)}function prev(){go(i-1)}document.getElementById('pnext').onclick=next;document.getElementById('pprev').onclick=prev;document.getElementById('pfull').onclick=function(){var d=document.documentElement;if(document.fullscreenElement){document.exitFullscreen()}else if(d.requestFullscreen){d.requestFullscreen()}};document.addEventListener('keydown',function(e){if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();prev()}else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(S.length-1)}else if(e.key==='f'||e.key==='F'){document.getElementById('pfull').click()}});document.querySelector('.present').addEventListener('click',function(e){if(e.target.closest('button'))return;next()})})();`;
+ const doc=`<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Simulador Sessão 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<style>${css}\n${extra}</style></head>
+<body><div class="present" role="document" aria-label="Apresentação do grupo"><div class="phelp">${esc(titulo)} · setas ou clique avançam · F tela cheia · Esc sai da tela cheia</div>
+${slides}
+<div class="pnav"><button class="pbtn" id="pprev">← Anterior</button><span class="pcount" id="pcount">1 / ${T.length}</span><button class="pbtn" id="pnext">Próxima →</button><button class="pbtn" id="pfull">Tela cheia</button></div></div>
+<script>${js}<\/script></body></html>`;
+ const nome=`apresentacao-minicaso-${i}-${gl(c).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-')}-${c.empresa.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-')}.html`;
+ baixarTexto(doc,nome,'text/html',msg)}
 async function pptx(c,msg){if(typeof PptxGenJS==='undefined'){msg.textContent='A exportação em PowerPoint não está disponível nesta cópia.';return}
  const S=c.state;const g=GRUPO[c.id];const i=CASES.indexOf(c);const D=deck(c);
  const NAVY='0B2545',TERRA='B5462B',INK='17202B',GRAY='5B6672',TINT='E9EEF5',F='Calibri';
