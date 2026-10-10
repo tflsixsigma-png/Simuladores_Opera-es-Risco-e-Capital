@@ -255,6 +255,15 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .legenda{font-size:14px;color:var(--muted);margin:8px 0 0}
 .decidem ol{margin:6px 0 0;padding-left:20px;font-size:14px;line-height:1.4}.decidem li{margin-bottom:5px}
 .ressalvas .efeito{color:var(--navy)}
+
+.regua{background:var(--navy);color:var(--navy-ink,#fff);border-radius:6px;padding:18px 20px;margin-top:16px}
+.regua .pl{color:#f3d27a}.regua dl{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:8px 0 0}.regua dt{font-weight:700}.regua dd{margin:0}.regua .rfrase{margin:14px 0 0;font-family:var(--display);font-size:17px;line-height:1.45}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:10px}.sgrid.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:22px}
+.scard{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--terra);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.scard .n{font:700 12px var(--ui);color:var(--terra);letter-spacing:.06em}.scard h3{font-family:var(--display);font-size:20px;margin:2px 0 8px;color:var(--navy);line-height:1.25}
+.scard .pl{margin-top:6px}.scard p{margin:0;font-size:14px;line-height:1.45}.scard .conta{font-variant-numeric:tabular-nums}.scard .levar{font-weight:600}.scard .btn{margin-top:10px;align-self:flex-start}
+.sintese table td{vertical-align:top}.fecho{margin:24px 0 0;font-family:var(--display);font-size:17px;color:var(--navy);border-left:4px solid var(--terra);padding-left:12px}
+@media (max-width:560px){.regua dl{grid-template-columns:1fr}.regua dt{margin-top:6px}}
 </style>
 </head>
 <body>
@@ -410,7 +419,7 @@ const home={id:'home',tab:'Início',render(root){
   root.append(el('div',{class:'home'},
     el('div',{class:'casehead'},el('h2',{},'Cinco empresas, cinco decisões'),
       el('p',{class:'lead'},'Cada minicaso é uma trilha de sete passos: o problema, as três perguntas do caso, o contra-argumento, a decisão e a apresentação. As contas a ferramenta faz na sua frente; o que ela pede do grupo é interpretar os números e contar a decisão como uma ponte entre operação e finanças.')),
-    el('div',{class:'cards'},...CASES.slice(1).map((c,i)=>el('button',{class:'card',onclick:()=>go(i+1)},el('div',{class:'n'},'MINICASO '+(i+1)+' · '+gl(c).toUpperCase()),el('h3',{},c.empresa),el('p',{},c.tema)))),
+    el('div',{class:'cards'},...CASES.filter(c=>c.steps).map((c,i)=>el('button',{class:'card',onclick:()=>go(CASES.indexOf(c))},el('div',{class:'n'},'MINICASO '+(i+1)+' · '+gl(c).toUpperCase()),el('h3',{},c.empresa),el('p',{},c.tema))),el('button',{class:'card',style:'border-top:4px solid var(--terra)',onclick:()=>go(CASES.findIndex(c=>c.id==='sintese'))},el('div',{class:'n'},'SÍNTESE'),el('h3',{},'O que levar da Sessão 1'),el('p',{},'A régua, as cinco decisões e os conceitos na linguagem de Valuation.'))),
     el('div',{class:'howto'},el('strong',{},'Como usar na salinha'),
       el('ol',{},el('li',{},'Leiam o minicaso impresso primeiro. A ferramenta não substitui a leitura; ela ajuda a fazer e a entender as contas.'),
         el('li',{},'São quatro grupos: Vitta (Grupo 1), Bom Preço (Grupo 2), Embalagens Sul (Grupo 3) e Farmácias Vida (Grupo 4). A Autopar é resolvida em plenária, com o professor e o simulador projetado.'),
@@ -1276,6 +1285,86 @@ bompreco:['R$ 90 mi liberados nas três · aluguel de 12% = R$ 10,8 mi por ano',
 embalagens:['Régua: R$ 1 por ano = R$ 5,50 (0,66 ÷ 0,12)','Máquina 6 × 5,5 − 20 = 13 · S&OP 40 − 4 − 11 = 25','Empate: S&OP precisa liberar R$ 28 mi'],
 vida:['Receita +50% · lucro +25% · capital +80% (R$ 800 mi)','Retorno médio 24% → 16,7% (acima de 12%)','Capital novo: 60 ÷ 800 = 7,5% contra 12% → −36 por ano · empate em 96']};
 
+// ---------- Síntese da Sessão 1: o que levar ----------
+const SINTESE={
+ lead:'Cinco decisões de operações, uma régua de Valuation. Esta página reúne o que atravessa os cinco minicasos: a régua, as decisões, os conceitos na linguagem de quem avalia empresas e as perguntas que um executivo faz antes de aprovar uma mudança na cadeia.',
+ regua:{t:'A régua da aula',
+  linhas:[['R$ 1 de capital liberado','vale R$ 1, uma vez.'],['R$ 1 de lucro a mais por ano','vale (1 − 34%) ÷ 12% = R$ 5,50 hoje.'],['Custo do capital','12% ao ano depois do imposto (WACC); 12% ÷ 0,66 = 18,2% antes do imposto, para comparar com retornos operacionais.']],
+  frase:'Toda decisão desta sessão cabe em uma linha: o capital que muda, uma vez, contra o lucro que muda, todo ano, vezes 5,5. Em Valuation, é a perpetuidade do fluxo de caixa livre: fluxo anual depois do imposto dividido pelo custo de capital.'},
+ decisoes:[
+  {id:'vitta',n:1,empresa:'Vitta Cosméticos',dec:'Aceitar a meta de giro 2,0 do CFO?',
+   val:'O retorno (margem × giro) cobre o custo do capital? E, frente a frente, cada parte do plano devolve mais capital do que o lucro que sacrifica × 5,5?',
+   conta:'Vitta rende 17,6% antes do imposto (≈ 11,6% depois), no limiar dos 12%. Terceirizar: 285 − 44 × 5,5 = +43. O plano inteiro: 450 − 99 × 5,5 = −94,5.',
+   levar:'Benchmark de giro só vale entre modelos de negócio iguais. Um plano se julga frente a frente, não no total.'},
+  {id:'autopar',n:2,empresa:'Autopar',dec:'Cortar um quarto do estoque: de onde?',
+   val:'Capital de giro liberado é fluxo de caixa livre uma vez; receita perdida é NOPAT menor todo ano. Qual espera tem função e qual não tem?',
+   conta:'Os R$ 25 mi da reserva valem o mesmo que R$ 4,5 mi de lucro por ano (25 ÷ 5,5): somem se a falta de peça custar isso. Baixar o obsoleto reconhece uma perda já ocorrida e economiza imposto (15 × 34% ≈ 5).',
+   levar:'Estoque são esperas, cada uma com dono e função. Corte primeiro a espera sem função; a que sustenta a promessa de 98% é a última.'},
+  {id:'bompreco',n:3,empresa:'Supermercados Bom Preço',dec:'Qual das três propostas liberar os R$ 90 mi?',
+   val:'A proposta muda o desenho (a mercadoria espera menos) ou só muda quem financia a espera? Capital liberado vale uma vez; custo que se repete vale 5,5 vezes.',
+   conta:'Prazo alongado: o repasse de R$ 18 mi por ano custa 18 × 5,5 = 99, mais do que os 90 que devolve. Reposição automática: 90 − 20 − 3 × 5,5 = +53,5. Risco sacado: o banco cobra 11% por financiar a mesma espera.',
+   levar:'Prazo alongado e risco sacado são financiamento, e a análise de crédito os conta como dívida. Só a reposição automática é eficiência operacional.'},
+  {id:'embalagens',n:4,empresa:'Embalagens Sul',dec:'A máquina ou o S&OP?',
+   val:'Custo por ano e capital de uma vez só se comparam na mesma régua. O payback não enxerga capital liberado; o VPL enxerga.',
+   conta:'Máquina: 6 × 5,5 − 20 = 13. S&OP: 40 − 4 − 2 × 5,5 = 25. Empatam quando o S&OP libera 28. Com dez anos de vida em vez de perpetuidade, R$ 1 por ano vale 3,7, não 5,5.',
+   levar:'Capital liberado só vale se for permanente: aprove com meta e data de revisão. Quanto mais caro o capital, mais vale o projeto que o devolve.'},
+  {id:'vida',n:5,empresa:'Farmácias Vida',dec:'Continuar crescendo 50%?',
+   val:'Crescer só cria valor se o retorno do capital novo (RONIC) for maior que o WACC. O retorno médio não responde; o do capital novo, sim.',
+   conta:'Cada R$ 100 de capital novo trouxe R$ 7,50 por ano, contra 12% de custo: a 12%, valem R$ 62,50 (7,5 ÷ 0,12). O lucro bateu recorde e o valor econômico caiu.',
+   levar:'Lucro recorde e valor destruído cabem na mesma empresa. Cresça em safras, condicionado ao retorno de cada uma, com menos capital por loja.'}],
+ conceitos:{t:'Os conceitos da sessão, na linguagem de Valuation',
+  nota:'A coluna da esquerda é como a operação fala; a do meio, como o Valuation escreve a mesma coisa. Os dois idiomas descrevem a mesma conta.',
+  linhas:[
+   ['Retorno é margem × giro','Árvore DuPont: ROIC = NOPAT ÷ Receita × Receita ÷ Capital investido','Vitta, Vida'],
+   ['Custo do capital de 12%; régua 5,5','WACC; valor de uma perpetuidade = fluxo anual ÷ WACC','Todos'],
+   ['Lucro menos o aluguel do capital','EVA = NOPAT − WACC × Capital investido','Vitta, Vida'],
+   ['Estoque é tempo de espera (lei de Little)','Capital de giro no fluxo de caixa livre: FCF = NOPAT − ΔCapital de giro − Capex','Autopar, Bom Preço'],
+   ['Mudar o desenho ou mudar quem paga','Eficiência operacional vs. dívida; o analista de crédito reclassifica prazo alongado e risco sacado','Bom Preço'],
+   ['Custo por ano vs. capital de uma vez','VPL: fluxos anuais trazidos a valor presente contra o investimento; o payback ignora o capital liberado','Embalagens Sul'],
+   ['Retorno do capital novo','RONIC; Valor = NOPAT × (1 − g ÷ RONIC) ÷ (WACC − g)','Vida'],
+   ['O produto escolhe a cadeia (Fisher)','A premissa operacional do DCF: margem e capital por real de receita dependem do que o cliente paga para ter','Vitta']]},
+ erros:{t:'Cinco erros que a sessão ensina a evitar',
+  itens:['Comparar giro entre modelos de negócio diferentes, como se fábrica e distribuidora fossem a mesma empresa.',
+   'Tratar estoque como um número só, sem perguntar qual espera tem função e quem é o dono de cada uma.',
+   'Chamar de eficiência o que é financiamento: alongar prazo ou vender a dívida libera o indicador, não a espera.',
+   'Somar custo anual com capital de uma vez, ou julgar com payback um projeto cujo ganho é capital liberado.',
+   'Celebrar lucro recorde sem olhar o retorno do capital que entrou para produzi-lo.']},
+ checklist:{t:'Antes de aprovar uma decisão de operações, pergunte',
+  itens:['Quanto capital muda, uma vez? Quanto lucro muda, todo ano? Já estão na mesma régua (× 5,5)?',
+   'A mudança encurta uma espera ou só transfere a espera para outro bolso?',
+   'O ganho é permanente? Qual é a meta, e quando a decisão será revista?',
+   'Que premissa precisa ser verdade para a decisão se inverter, e quem vai medi-la?',
+   'Quem perde com a decisão, e como ela sobrevive à reunião em que será apresentada?']},
+ fecho:'Na Sessão 2, a mesma régua encontra o risco: o que acontece com capital, lucro e valor quando a cadeia falha.'
+};
+
+CASES.push({id:'sintese',tab:'O que levar',render(root){
+  const X=SINTESE;const wrap=el('div',{class:'home sintese'});
+  const msg=el('span',{class:'tmsg',role:'status'});
+  wrap.append(el('div',{class:'casehead'},el('div',{class:'kicker'},SESS.kicker),el('h2',{},'O que levar da Sessão 1'),el('p',{class:'lead'},X.lead),
+    el('div',{class:'toolbar'},el('button',{class:'btn secondary',onclick:()=>{const d=wrap.cloneNode(true);d.querySelector('.toolbar').remove();const css=Array.from(document.querySelectorAll('style')).map(x=>x.textContent).join('\n');const doc=`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Simulador Sessão 1</title><style>${css}\nbody{padding:24px}.wrap{max-width:1100px;margin:0 auto}</style></head><body><div class="wrap">${d.outerHTML}</div></body></html>`;baixarTexto(doc,'sessao-1-o-que-levar.html','text/html',msg)}},'⤓ Baixar esta página (HTML)'),msg)));
+  // régua
+  wrap.append(el('div',{class:'regua'},el('div',{class:'pl'},X.regua.t),el('dl',{},...X.regua.linhas.flatMap(([a,b])=>[el('dt',{},a),el('dd',{},b)])),el('p',{class:'rfrase'},X.regua.frase)));
+  // decisões
+  wrap.append(el('p',{class:'aside-title',style:'margin-top:26px'},'As cinco decisões'));
+  wrap.append(el('div',{class:'sgrid'},...X.decisoes.map(d=>{const c=CASES.find(x=>x.id===d.id);
+    return el('div',{class:'scard'},el('div',{class:'n'},'MINICASO '+d.n+' · '+d.empresa.toUpperCase()),el('h3',{},d.dec),
+      el('div',{class:'pl'},'O que o Valuation pergunta'),el('p',{},d.val),
+      el('div',{class:'pl'},'A conta que decide'),el('p',{class:'conta'},d.conta),
+      el('div',{class:'pl'},'O que levar'),el('p',{class:'levar'},d.levar),
+      c?el('button',{class:'btn secondary',onclick:()=>{go(CASES.indexOf(c));window.scrollTo(0,0)}},'Abrir o minicaso'):null)})));
+  // conceitos
+  wrap.append(el('p',{class:'aside-title',style:'margin-top:26px'},X.conceitos.t),el('p',{class:'note'},X.conceitos.nota));
+  wrap.append(el('div',{class:'tscroll'},el('table',{},el('thead',{},el('tr',{},el('th',{},'Como a operação fala'),el('th',{},'Como o Valuation escreve'),el('th',{},'Onde apareceu'))),
+    el('tbody',{},...X.conceitos.linhas.map(([a,b,c])=>el('tr',{},el('td',{},el('b',{},a)),el('td',{},b),el('td',{},c)))))));
+  // erros + checklist
+  wrap.append(el('div',{class:'sgrid two'},
+    el('div',{class:'howto'},el('strong',{},X.erros.t),el('ol',{},...X.erros.itens.map(t=>el('li',{},t)))),
+    el('div',{class:'howto'},el('strong',{},X.checklist.t),el('ol',{},...X.checklist.itens.map(t=>el('li',{},t))))));
+  wrap.append(el('p',{class:'fecho'},X.fecho));
+  root.append(wrap);
+}});
+
 // ============ componentes ============
 function slider(label,S,key,min,max,step,f,rerender){
   const id='in-'+key;
@@ -1379,8 +1468,8 @@ function notaStep(c){return {fase:2,t:'A decisão do grupo',
   return r}}}
 
 
-function ponteCard(c){const p=META[c.id].transicao;const i=CASES.indexOf(c);const nx=i+1<CASES.length?i+1:null;
- return el('div',{class:'pontecard'},el('div',{class:'pl'},p[0]),el('p',{class:'pq'},'“'+p[1]+'”'),nx?el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{go(nx);window.scrollTo(0,0)}},'Ir para o minicaso '+nx+' · '+CASES[nx].empresa)):null)}
+function ponteCard(c){const p=META[c.id].transicao;const i=CASES.indexOf(c);const nx=i+1<CASES.length?i+1:null;const nc=nx?CASES[nx]:null;
+ return el('div',{class:'pontecard'},el('div',{class:'pl'},p[0]),el('p',{class:'pq'},'“'+p[1]+'”'),nx?el('div',{class:'row'},el('button',{class:'btn secondary',onclick:()=>{go(nx);window.scrollTo(0,0)}},nc.steps?'Ir para o minicaso '+nx+' · '+nc.empresa:'Ir para a síntese · '+nc.tab)):null)}
 // ---------- apresentação: a ponte entre operação e finanças ----------
 const APRES=[['caso','O caso em duas frases','A situação e a decisão que a empresa precisa tomar.'],['decisao','A decisão do grupo','A alternativa que o grupo escolheu no passo da decisão.'],['conc','Conceitos centrais','Abrem a apresentação, antes dos números do caso: a lente de Valuation que o grupo leva para a turma.'],
  ['op','Elo 1 · Operação','O que muda na cadeia: lote, prazo, fábrica, previsão, loja.'],['cap','Elo 2 · Capital e margem','O que isso faz com o dinheiro preso e com a margem, em R$. Na planilha do fluxo de caixa livre, é custo (todo ano) ou investimento em capital de giro e Capex (uma vez)?'],
@@ -1455,7 +1544,7 @@ function go(i){current=i;store.set('tab',i);render()}
 function render(soft){try{renderInner(soft)}catch(err){console.error(err);const app=$('#app');app.replaceChildren(el('div',{class:'diag bad'},el('span',{class:'t'},'Algo deu errado ao abrir o minicaso'),'Os dados guardados neste navegador podem ser de uma versão anterior. ',el('button',{class:'btn',style:'margin-left:8px',onclick:()=>{try{Object.keys(localStorage).filter(k=>k.startsWith(SESSKEY+':')).forEach(k=>localStorage.removeItem(k))}catch(e){}location.reload()}},'Limpar e recomeçar')))}}
 function renderInner(soft){
   const tabs=$('#tabs');tabs.innerHTML='';
-  CASES.forEach((c,i)=>{const b=el('button',{class:'tab'+(progress[c.id]>= (c.steps?c.steps.length:0)&&c.steps?' done':''),role:'tab','aria-selected':String(i===current),onclick:()=>go(i)},i>0?el('span',{class:'n'},i):null,c.tab);tabs.append(b)});
+  CASES.forEach((c,i)=>{const b=el('button',{class:'tab'+(progress[c.id]>= (c.steps?c.steps.length:0)&&c.steps?' done':''),role:'tab','aria-selected':String(i===current),onclick:()=>go(i)},i>0&&c.steps?el('span',{class:'n'},i):null,c.tab);tabs.append(b)});
   const app=$('#app');
   if(!soft){app.innerHTML=''}
   const c=CASES[current];
