@@ -411,7 +411,7 @@ const FIO={
         "Até aqui: com as portas 1 e 2, B cria R$ 3,35 mi por ano. Agora: o conselheiro do fundo, que tem razão em parte, e a resposta que o grupo deve construir."]};
 const FIO2={contra:'Até aqui: as três perguntas interpretadas. Agora: a interpretação precisa sobreviver a quem discorda.',nota:'Até aqui: a objeção respondida. Agora: fechar a decisão em quatro escolhas.',apres:'Até aqui: a decisão fechada. Agora: a parte que a ferramenta não faz: contar a decisão como uma ponte entre operação e finanças.'};
 
-const GRUPO={autopar:null,embalagens:1,vitta:2,bompreco:3,vida:4};
+const GRUPO={autopar:null,embalagens:3,vitta:1,bompreco:2,vida:4};
 const gl=c=>GRUPO[c.id]?'Grupo '+GRUPO[c.id]:'Plenária';
 
 // ---------- 0 · Início ----------
@@ -422,7 +422,7 @@ const home={id:'home',tab:'Início',render(root){
     el('div',{class:'cards'},...CASES.filter(c=>c.steps).map((c,i)=>el('button',{class:'card',onclick:()=>go(CASES.indexOf(c))},el('div',{class:'n'},'MINICASO '+(i+1)+' · '+gl(c).toUpperCase()),el('h3',{},c.empresa),el('p',{},c.tema))),el('button',{class:'card',style:'border-top:4px solid var(--terra)',onclick:()=>go(CASES.findIndex(c=>c.id==='sintese'))},el('div',{class:'n'},'SÍNTESE'),el('h3',{},'O que levar da Sessão 2'),el('p',{},'A régua do risco, as cinco decisões e os conceitos das Notas de Ensino 2, na linguagem de Valuation.'))),
     el('div',{class:'howto'},el('strong',{},'Como usar na salinha'),
       el('ol',{},el('li',{},'Leiam o minicaso impresso primeiro. A ferramenta não substitui a leitura; ela ajuda a fazer e a entender as contas.'),
-        el('li',{},'São quatro grupos: Embalagens Sul (Grupo 1), Vitta (Grupo 2), Bom Preço (Grupo 3) e Farmácias Vida (Grupo 4). A Autopar é resolvida em plenária, com o professor e o simulador projetado, antes de os grupos irem para as salinhas.'),
+        el('li',{},'São quatro grupos, e cada um volta à empresa que analisou na Sessão 1: Vitta (Grupo 1), Bom Preço (Grupo 2), Embalagens Sul (Grupo 3) e Farmácias Vida (Grupo 4). A Autopar é resolvida em plenária, com o professor e o simulador projetado, antes de os grupos irem para as salinhas.'),
         el('li',{},'Abram o minicaso do grupo. Os passos seguem as perguntas do enunciado. Cada passo libera o seguinte.'),
         el('li',{},'Mexam nos controles. A probabilidade é o controle mais importante desta sessão: ninguém sabe o número certo, e é por isso que a pergunta a fazer é “em que valor a decisão muda?”.'),
         el('li',{},'O painel Conceitos, ao lado, traz a teoria do ponto de aprendizagem. Use quando travar.'),
