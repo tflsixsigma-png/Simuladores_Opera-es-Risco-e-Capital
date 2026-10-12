@@ -242,7 +242,7 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .plist{font-size:clamp(18px,2vw,30px);line-height:1.4;padding-left:1.4em;max-width:60ch}
 .plist li{margin-bottom:14px}
 .plist li::marker{color:#ffcf5a;font-weight:700}
-.present .psmall{font-size:clamp(15px,1.5vw,22px)}
+.present .psmall{font-size:clamp(17px,1.6vw,24px)}
 .present .psmallblk .pv{font-size:clamp(15px,1.5vw,22px)}
 .present .pref{display:block;opacity:.75;margin-top:4px}
 .ressalvas{margin:14px 0 0;border:1px dashed #9a948a;border-radius:6px;padding:8px 12px;background:var(--surface)}
@@ -264,6 +264,16 @@ table.calc{font-size:14px}table.calc td.how{color:var(--muted)}table.calc td.res
 .scard .pl{margin-top:6px}.scard p{margin:0;font-size:14px;line-height:1.45}.scard .conta{font-variant-numeric:tabular-nums}.scard .levar{font-weight:600}.scard .btn{margin-top:10px;align-self:flex-start}
 .sintese table td{vertical-align:top}.fecho{margin:24px 0 0;font-family:var(--display);font-size:17px;color:var(--navy);border-left:4px solid var(--terra);padding-left:12px}
 @media (max-width:560px){.regua dl{grid-template-columns:1fr}.regua dt{margin-top:6px}}
+
+.pqa{display:grid;gap:2.4vh;margin-top:6px}
+.pqa-row{border-top:3px solid #ffcf5a;padding-top:8px}
+.pqa-row .pl{font:600 clamp(15px,1.35vw,21px) var(--ui);color:#ffcf5a;margin-bottom:4px;letter-spacing:0;text-transform:none}
+.pqa-row .pv{font-size:clamp(18px,1.95vw,29px);line-height:1.35;color:#fff}
+.present .psub2{margin:2.4vh 0 0;font-family:var(--display);font-size:clamp(18px,1.9vw,28px);color:#ffcf5a}
+.present .psub{color:#d8d8d8}
+.pnote{display:none;margin-top:2vh;padding:1.2vh 1.2vw;border:2px dashed #f3d27a;color:#fff;font-size:clamp(15px,1.15vw,20px);line-height:1.4;white-space:pre-line;max-width:110ch}
+.pnote b{display:block;color:#ffcf5a;margin-bottom:4px}
+.notes-on .pnote{display:block}
 </style>
 </head>
 <body>
@@ -1663,20 +1673,16 @@ async function baixarBlob(blob,nome,msg){msg.textContent='Preparando o arquivo�
  try{const url=URL.createObjectURL(blob);const a=el('a',{href:url,download:nome});document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);msg.textContent='Arquivo gerado: '+nome+' (na pasta de downloads).'}catch(e){msg.textContent='O download não está disponível aqui.'}}
 // ---------- a apresentação como narrativa: o caminho do grupo + o que o minicaso ensina ----------
 function deck(c){const S=c.state,A=S.apres||{},N=S.nota||{};const i=CASES.indexOf(c);const m=META[c.id];const C=CONTEUDO[c.id];const v=k=>A[k]||(k==='decisao'?N.decisao:'')||'—';
- const fio=FIO[c.id]||[];const F2=(typeof FIO2!=='undefined'&&FIO2)||{};const LI=(typeof LICOES!=='undefined'&&LICOES[c.id])||null;const D=[];
- D.push({layout:'cover',kick:`Minicaso ${i} · ${gl(c)} · ${c.empresa}`,title:c.titulo,big:v('caso'),sub:'Integrantes: '+(S.integrantes||'—')});
- {const L=concSel(c,A);D.push({layout:'cards',kick:'Antes do caso · a lente de Valuation',fio:'Um caso de operações, lido com a régua de quem avalia empresas. Os conceitos que vamos usar:',title:LI?LI.val.formula:'O que este caso ensina a quem faz Valuation',items:L.map(([x])=>({t:x[0],d:x[1],ref:x[2]}))})}
- D.push({layout:'two',kick:'O ponto de partida',fio:'Antes das contas, a pergunta e a aposta do grupo.',title:'A decisão a tomar',blocks:[['A pergunta do caso',C.problema.decisao],['Nossa aposta, antes das contas',S.aposta||'—']]});
- MC[c.id].q.forEach((q,k)=>{const sel=S.mc&&S.mc[k];const o=sel!=null?q.o[sel]:null;D.push({layout:'answer',kick:`A análise · passo ${k+1} de ${MC[c.id].q.length}`,fio:fio[k]||'',title:q.p,blocks:[['O que concluímos',o?o[0]:'—'],[o&&o[1]?'Por quê':'O que a sala vai cobrar',o?o[2]:'—']],notes:o?o[2]:''})});
- {const ct=MC[c.id].contra;const r=S.contraSel!=null?ct.o[S.contraSel][0]:'—';D.push({layout:'quote',kick:'O contra-argumento',fio:F2.contra||'',quote:m.contra.fala,cite:m.contra.quem,blocks:[['A resposta do grupo',r]]})}
- D.push({layout:'decision',kick:'A decisão do grupo',fio:F2.nota||'',title:v('decisao'),blocks:[['O número que sustenta a decisão',N.num||'—']]});
- D.push({layout:'two',kick:'O que pode mudar a decisão',fio:'Uma decisão de executivo diz o que precisa ser verdade e quando será revista.',title:'Premissa e gatilho',blocks:[['A premissa que pode inverter a decisão',N.prem||'—'],['O gatilho de revisão',N.gatilho||'—']]});
- D.push({layout:'bridge',kick:'A ponte entre operação e finanças · hoje',fio:F2.apres||'',title:'Da operação ao valor: a situação de hoje',rows:[['Hoje',m.ponte.map(([l,t])=>[l,t])]]});
- D.push({layout:'bridge',kick:'A ponte entre operação e finanças · com a decisão',fio:'O mesmo caminho, depois da decisão do grupo.',title:'Da operação ao valor: o efeito da decisão',rows:[['Com a decisão',[['Operação',v('op')],['Capital e margem',v('cap')],['Indicador',v('ind')],['Valor',v('val')]]]]});
- D.push({layout:'one',kick:'A decisão na empresa',fio:'Uma decisão só vale se sobreviver à reunião em que será apresentada.',title:'Quem perde e como a decisão sobrevive',text:v('perde')});
- if(LI)D.push({layout:'list',kick:'O que o caso ensina',fio:'Até aqui: o caminho do grupo. Agora: o que levamos dele para qualquer empresa.',title:'Três lições',items:LI.licoes});
- if(LI)D.push({layout:'list',kick:'A conexão com Valuation',fio:'O mesmo caso, lido com as ferramentas da ênfase em Valuation.',title:LI.val.formula,items:LI.val.pontos});
- {const bl=[];if(S.empresa)bl.push(['Onde isso acontece na nossa empresa',S.empresa]);if(m.transicao)bl.push([m.transicao[0],m.transicao[1]]);D.push({layout:'big',kick:'Para a turma',fio:'Para terminar: uma pergunta para a empresa de quem está ouvindo.',title:v('perg'),blocks:bl})}
+ const LI=(typeof LICOES!=='undefined'&&LICOES[c.id])||null;const D=[];
+ D.push({layout:'cover',kick:`Minicaso ${i} · ${gl(c)} · ${c.empresa}`,title:c.titulo,big:(A.caso&&A._d&&A.caso!==A._d.caso)?A.caso:(c.frase||v('caso')),sub:'Integrantes: '+(S.integrantes||'—'),notes:'Abram com o caso em duas frases: quem é a empresa e que decisão ela precisa tomar. Sem números ainda.'});
+ {const L=concSel(c,A);D.push({layout:'cards',kick:'A lente de Valuation',title:LI?LI.val.formula:'O que este caso ensina a quem faz Valuation',items:L.map(([x])=>({t:x[0],d:x[1],ref:x[2]})),notes:'Antes do caso, os conceitos que a turma de Valuation já conhece e que o caso usa. Um minuto, no máximo.'+(LI?'\n'+LI.val.pontos.join('\n'):'')})}
+ D.push({layout:'two',kick:'O dilema',title:C.problema.decisao,blocks:[['O que está em jogo',C.problema.jogo],['A aposta do grupo, antes das contas',S.aposta||'—']],notes:'Contem o dilema como uma história: quem quer o quê e por que a resposta não é óbvia. Digam qual foi a aposta do grupo antes das contas; se as contas a contrariaram, digam isso também.'});
+ {const R=MC[c.id].q.map((q,k)=>{const sel=S.mc&&S.mc[k];const o=sel!=null?q.o[sel]:null;return [q.p,o?o[0]:'—',o?o[2]:'']});D.push({layout:'qa',kick:'O que a análise mostrou',title:'Três perguntas, três respostas',rows:R.map(r=>[r[0],r[1]]),notes:'Uma frase por pergunta; o número só se a turma pedir.\n'+R.map((r,k)=>(k+1)+'. '+r[1]+(r[2]?' Por quê: '+r[2]:'')).join('\n')})}
+ {const ct=MC[c.id].contra;const r=S.contraSel!=null?ct.o[S.contraSel][0]:'—';D.push({layout:'quote',kick:'Quem discorda',quote:m.contra.fala,cite:m.contra.quem,blocks:[['A resposta do grupo',r]],notes:'Leiam a objeção como quem a defende de verdade. Depois, a resposta do grupo.'+(v('perde')!=='—'?'\n'+v('perde'):'')})}
+ D.push({layout:'decision',kick:'A decisão do grupo',title:v('decisao'),blocks:[['O número que a sustenta',N.num||'—'],['O que pode inverter a decisão',N.prem||'—'],['Quando revisar',N.gatilho||'—']],notes:'A decisão em uma frase, o número que a sustenta e a condição em que o grupo mudaria de ideia.'});
+ D.push({layout:'bridge',kick:'Da operação ao valor',title:'O que a decisão muda, elo por elo',rows:[['Com a decisão',[['Operação',v('op')],['Capital e margem',v('cap')],['Indicador',v('ind')],['Valor',v('val')]]]],notes:'Leiam da esquerda para a direita: o que muda na operação, o que isso faz com o capital e a margem, que indicador se move e quanto vale.\nHoje: '+m.ponte.map(([l,t])=>l+': '+t).join(' · ')});
+ if(LI)D.push({layout:'list',kick:'O que o caso ensina',title:'Três lições',items:LI.licoes,sub:'Em Valuation: '+LI.val.formula,notes:LI.val.pontos.join('\n')});
+ {const bl=[];if(S.empresa)bl.push(['Onde isso acontece na nossa empresa',S.empresa]);D.push({layout:'big',kick:'Para a turma',title:v('perg'),blocks:bl,notes:'Terminem com a pergunta e passem a palavra à turma.'+(m.transicao?'\n'+m.transicao[0]+': '+m.transicao[1]:'')})}
  return D}
 function slideTs(c){const D=deck(c);
  const blk=(l,t,cls)=>el('div',{class:'pitem'+(cls?' '+cls:'')},el('div',{class:'pl'},l),el('div',{class:'pv'},t));
@@ -1687,12 +1693,14 @@ function slideTs(c){const D=deck(c);
    case 'quote':out.push(el('blockquote',{class:'pquote'},el('p',{},'“'+d.quote+'”'),el('cite',{},d.cite)),el('div',{class:'pgrid'},...d.blocks.map(([l,t])=>blk(l,t))));break;
    case 'big':out.push(el('h2',{class:'pcenter'},d.title));if(d.blocks.length)out.push(el('div',{class:'pgrid'},...d.blocks.map(([l,t])=>blk(l,t))));break;
    case 'one':out.push(el('h2',{},d.title),el('p',{class:'pbig'},d.text));break;
-   case 'list':out.push(el('h2',{},d.title),el('ol',{class:'plist'},...d.items.map(x=>el('li',{},x))));break;
+   case 'list':out.push(el('h2',{},d.title),el('ol',{class:'plist'},...d.items.map(x=>el('li',{},x))));if(d.sub)out.push(el('p',{class:'psub2'},d.sub));break;
+   case 'qa':out.push(el('h2',{},d.title),el('div',{class:'pqa'},...d.rows.map(([q,a])=>el('div',{class:'pqa-row'},el('div',{class:'pl'},q),el('div',{class:'pv'},a)))));break;
    case 'cards':out.push(el('h2',{},d.title),el('div',{class:'pgrid'},...d.items.map(it=>el('div',{class:'pitem'},el('div',{class:'pl'},it.t),el('div',{class:'pv psmall'},it.d),el('small',{class:'pref'},it.ref)))));break;
    case 'bridge':out.push(el('h2',{},d.title),bridge(d.rows));break;
    case 'decision':out.push(el('h2',{},d.title),el('div',{class:'pgrid'},...d.blocks.map(([l,t])=>blk(l,t))));break;
    case 'answer':out.push(el('h2',{},d.title),el('p',{class:'pbig'},d.blocks[0][1]),blk(d.blocks[1][0],d.blocks[1][1],'psmallblk'));break;
-   default:out.push(el('h2',{},d.title),el('div',{class:'pgrid'},...d.blocks.map(([l,t])=>blk(l,t))))}
+   default:out.push(el('h2',{},d.title),el('div',{class:'pgrid'},...(d.blocks||[]).map(([l,t])=>blk(l,t))))}
+  if(d.notes)out.push(el('aside',{class:'pnote'},el('b',{},'Notas para quem apresenta'),d.notes));
   return out});
  return T}
 function slides(c){const T=slideTs(c);
@@ -1700,7 +1708,7 @@ function slides(c){const T=slideTs(c);
  const show=()=>{body.replaceChildren(...T[i]());cnt.textContent=(i+1)+' / '+T.length;ov.scrollTo(0,0)};
  const opener=document.activeElement;const next=()=>{if(i<T.length-1){i++;show()}};const prev=()=>{if(i>0){i--;show()}};
  const close=()=>{ov.remove();document.removeEventListener('keydown',k);if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});if(opener&&opener.focus)opener.focus()};
- const k=e=>{if(e.key==='Escape'){close();return}if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev()}else if(e.key==='Home'){i=0;show()}else if(e.key==='End'){i=T.length-1;show()}};document.addEventListener('keydown',k);
+ const k=e=>{if(e.key==='Escape'){close();return}if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev()}else if(e.key==='Home'){i=0;show()}else if(e.key==='End'){i=T.length-1;show()}else if(e.key==='n'||e.key==='N'){ov.classList.toggle('notes-on')}};document.addEventListener('keydown',k);
  body.addEventListener('click',e=>{if(e.target.closest('button'))return;next()});
  try{if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{})}catch(e){}
  document.addEventListener('fullscreenchange',function fc(){if(!document.fullscreenElement&&ov.isConnected){document.removeEventListener('fullscreenchange',fc);close()}});
@@ -1714,12 +1722,12 @@ function htmlApres(c,msg){const S=c.state;const i=CASES.indexOf(c);const T=slide
  const slides=T.map((f,k)=>{const d=el('section',{class:'pslide'+(k===0?' on':''),'data-n':String(k+1)},...f());return d.outerHTML}).join('\n');
  const titulo=`${c.empresa} · ${gl(c)} · Minicaso ${i}`;
  const extra=`.present{position:static;min-height:100vh}.pslide{display:none}.pslide.on{display:flex}.phelp{position:fixed;top:12px;left:12px;color:#aaa;font:13px var(--ui)}@media print{.present{position:static}.pslide{display:flex!important;page-break-after:always;min-height:auto}.pnav,.pclose,.phelp{display:none}}`;
- const js=`(function(){var S=document.querySelectorAll('.pslide'),i=0,cnt=document.getElementById('pcount');function go(n){if(n<0||n>=S.length)return;S[i].classList.remove('on');i=n;S[i].classList.add('on');cnt.textContent=(i+1)+' / '+S.length;window.scrollTo(0,0);location.hash='#'+(i+1)}var h=parseInt((location.hash||'').slice(1),10);if(h>=1&&h<=S.length){S[0].classList.remove('on');i=h-1;S[i].classList.add('on')}cnt.textContent=(i+1)+' / '+S.length;function next(){go(i+1)}function prev(){go(i-1)}document.getElementById('pnext').onclick=next;document.getElementById('pprev').onclick=prev;document.getElementById('pfull').onclick=function(){var d=document.documentElement;if(document.fullscreenElement){document.exitFullscreen()}else if(d.requestFullscreen){d.requestFullscreen()}};document.addEventListener('keydown',function(e){if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();prev()}else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(S.length-1)}else if(e.key==='f'||e.key==='F'){document.getElementById('pfull').click()}});document.querySelector('.present').addEventListener('click',function(e){if(e.target.closest('button'))return;next()})})();`;
+ const js=`(function(){var S=document.querySelectorAll('.pslide'),i=0,cnt=document.getElementById('pcount');function go(n){if(n<0||n>=S.length)return;S[i].classList.remove('on');i=n;S[i].classList.add('on');cnt.textContent=(i+1)+' / '+S.length;window.scrollTo(0,0);location.hash='#'+(i+1)}var h=parseInt((location.hash||'').slice(1),10);if(h>=1&&h<=S.length){S[0].classList.remove('on');i=h-1;S[i].classList.add('on')}cnt.textContent=(i+1)+' / '+S.length;function next(){go(i+1)}function prev(){go(i-1)}document.getElementById('pnext').onclick=next;document.getElementById('pprev').onclick=prev;document.getElementById('pfull').onclick=function(){var d=document.documentElement;if(document.fullscreenElement){document.exitFullscreen()}else if(d.requestFullscreen){d.requestFullscreen()}};document.addEventListener('keydown',function(e){if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();next()}else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();prev()}else if(e.key==='Home'){go(0)}else if(e.key==='End'){go(S.length-1)}else if(e.key==='f'||e.key==='F'){document.getElementById('pfull').click()}else if(e.key==='n'||e.key==='N'){document.body.classList.toggle('notes-on')}});document.querySelector('.present').addEventListener('click',function(e){if(e.target.closest('button'))return;next()})})();`;
  const doc=`<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Simulador Sessão 2</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>${css}\n${extra}</style></head>
-<body><div class="present" role="document" aria-label="Apresentação do grupo"><div class="phelp">${esc(titulo)} · setas ou clique avançam · F tela cheia · Esc sai da tela cheia</div>
+<body><div class="present" role="document" aria-label="Apresentação do grupo"><div class="phelp">${esc(titulo)} · setas ou clique avançam · N mostra as notas de quem apresenta · F tela cheia · Esc sai da tela cheia</div>
 ${slides}
 <div class="pnav"><button class="pbtn" id="pprev">← Anterior</button><span class="pcount" id="pcount">1 / ${T.length}</span><button class="pbtn" id="pnext">Próxima →</button><button class="pbtn" id="pfull">Tela cheia</button></div></div>
 <script>${js}<\/script></body></html>`;
@@ -1727,31 +1735,30 @@ ${slides}
  baixarTexto(doc,nome,'text/html',msg)}
 async function pptx(c,msg){if(typeof PptxGenJS==='undefined'){msg.textContent='A exportação em PowerPoint não está disponível nesta cópia.';return}
  const S=c.state;const g=GRUPO[c.id];const i=CASES.indexOf(c);const D=deck(c);
- const NAVY='0B2545',TERRA='B5462B',INK='17202B',GRAY='5B6672',TINT='E9EEF5',F='Calibri';
- const P=new PptxGenJS();P.layout='LAYOUT_16x9';P.title=`${c.empresa} · ${gl(c)}`;P.author=S.integrantes||gl(c);
+ const Y='F3D27A',WH='FFFFFF',GR='D8D8D8',F='Calibri';
+ const P=new PptxGenJS();P.layout='LAYOUT_WIDE';P.title=`${c.empresa} · ${gl(c)}`;P.author=S.integrantes||gl(c);
  const rod=`Operações, Risco e Capital · ${SESS.titulo} · Minicaso ${i} · ${gl(c)} · ${c.empresa}`;
- const X=0.6,W=8.8; // margens
- const txt=(sl,t,o)=>sl.addText(t||'—',Object.assign({fontFace:F,color:INK,valign:'top',fit:'shrink',margin:2},o));
- const label=(sl,l,x,y,w)=>txt(sl,l.toUpperCase(),{x,y,w,h:0.3,fontSize:10,bold:true,color:TERRA,charSpacing:1});
- const card=(sl,l,t,x,y,w,h,fs,fill)=>{sl.addShape(P.ShapeType.rect,{x,y,w,h,fill:{color:fill||TINT},line:{color:fill?NAVY:TINT,width:1}});label(sl,l,x+0.18,y+0.14,w-0.36);txt(sl,t,{x:x+0.18,y:y+0.46,w:w-0.36,h:h-0.6,fontSize:fs||15})};
- D.forEach(d=>{const sl=P.addSlide();sl.background={color:'FFFFFF'};sl.addShape(P.ShapeType.rect,{x:0,y:0,w:10,h:0.1,fill:{color:NAVY},line:{color:NAVY}});
-  txt(sl,d.kick.toUpperCase(),{x:X,y:0.28,w:W,h:0.3,fontSize:11,bold:true,color:TERRA,charSpacing:2});
-  let y=0.62;if(d.fio){txt(sl,d.fio,{x:X,y,w:W,h:0.36,fontSize:11,italic:true,color:GRAY});y+=0.42}
-  txt(sl,rod,{x:X,y:5.22,w:8,h:0.25,fontSize:8,color:GRAY});sl.slideNumber={x:9.0,y:5.22,w:0.5,h:0.25,fontFace:F,fontSize:8,color:GRAY};
-  const title=(h,fs)=>{txt(sl,d.title,{x:X,y,w:W,h,fontSize:fs,bold:true,color:NAVY,valign:'top'});y+=h+0.1};
-  const bottom=5.1;
+ const X=0.6,W=12.13,BOT=6.8;
+ const txt=(sl,t,o)=>sl.addText(t||'—',Object.assign({fontFace:F,color:WH,valign:'top',fit:'shrink',margin:2},o));
+ const label=(sl,l,x,y,w)=>txt(sl,String(l).toUpperCase(),{x,y,w,h:0.38,fontSize:13,bold:true,color:Y,charSpacing:1});
+ const card=(sl,l,t,x,y,w,h,fs)=>{sl.addShape(P.ShapeType.line,{x,y,w,h:0,line:{color:Y,width:2.5}});label(sl,l,x,y+0.1,w);txt(sl,t,{x,y:y+0.52,w,h:Math.max(0.5,h-0.58),fontSize:fs||18})};
+ D.forEach((d,n)=>{const sl=P.addSlide();sl.background={color:'000000'};
+  txt(sl,d.kick.toUpperCase(),{x:X,y:0.35,w:W,h:0.4,fontSize:14,bold:true,color:Y,charSpacing:2});
+  txt(sl,rod,{x:X,y:7.05,w:10.5,h:0.3,fontSize:10,color:GR});txt(sl,(n+1)+' / '+D.length,{x:11.6,y:7.05,w:1.1,h:0.3,fontSize:10,color:GR,align:'right'});
+  let y=0.85;const title=(h,fs)=>{txt(sl,d.title,{x:X,y,w:W,h,fontSize:fs,bold:true});y+=h+0.2};
   switch(d.layout){
-   case 'cover':txt(sl,d.title,{x:X,y:0.95,w:W,h:1.4,fontSize:30,bold:true,color:NAVY});txt(sl,d.big,{x:X,y:2.5,w:W,h:1.4,fontSize:18,color:INK});txt(sl,d.sub,{x:X,y:4.3,w:W,h:0.5,fontSize:12,color:GRAY});break;
-   case 'two':{title(0.6,22);const h=bottom-y;const w=(W-0.3)/2;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.3),y,w,h,16));break}
-   case 'answer':{title(0.75,20);txt(sl,d.blocks[0][1],{x:X,y,w:W,h:1.5,fontSize:20,color:NAVY,bold:true});y+=1.6;card(sl,d.blocks[1][0],d.blocks[1][1],X,y,W,bottom-y,14);if(d.notes)sl.addNotes(d.notes);break}
-   case 'quote':{txt(sl,'“'+d.quote+'”',{x:X,y,w:W,h:1.5,fontSize:20,italic:true,color:NAVY});txt(sl,'— '+d.cite,{x:X,y:y+1.5,w:W,h:0.35,fontSize:12,color:GRAY});y+=2.0;card(sl,d.blocks[0][0],d.blocks[0][1],X,y,W,bottom-y,16);break}
-   case 'decision':{sl.addShape(P.ShapeType.rect,{x:X,y,w:W,h:1.6,fill:{color:NAVY},line:{color:NAVY}});txt(sl,d.title,{x:X+0.25,y,w:W-0.5,h:1.6,fontSize:24,bold:true,color:'FFFFFF',valign:'middle'});y+=1.8;card(sl,d.blocks[0][0],d.blocks[0][1],X,y,W,bottom-y,18);break}
-   case 'bridge':{title(0.5,20);const rows=d.rows;const rh=(bottom-y-0.15)/rows.length;rows.forEach(([rl,nodes],r)=>{const yy=y+r*(rh+0.15);txt(sl,rl.toUpperCase(),{x:X,y:yy,w:1.1,h:rh,fontSize:10,bold:true,color:NAVY,charSpacing:1,valign:'middle'});const w=(W-1.2-3*0.2)/4;nodes.forEach(([l,t],j)=>{const x=X+1.2+j*(w+0.2);sl.addShape(P.ShapeType.rect,{x,y:yy,w,h:rh,fill:{color:r?TINT:'FFFFFF'},line:{color:NAVY,width:1}});label(sl,l,x+0.1,yy+0.08,w-0.2);txt(sl,t,{x:x+0.1,y:yy+0.38,w:w-0.2,h:rh-0.45,fontSize:11});if(j<3)txt(sl,'→',{x:x+w-0.04,y:yy+rh/2-0.25,w:0.28,h:0.5,fontSize:14,bold:true,color:NAVY,align:'center'})})});break}
-   case 'one':{title(0.6,22);txt(sl,d.text,{x:X,y,w:W,h:bottom-y,fontSize:20,color:INK});break}
-   case 'list':{title(0.9,22);const n=d.items.length;const h=(bottom-y)/n;d.items.forEach((t,j)=>{const yy=y+j*h;sl.addShape(P.ShapeType.ellipse,{x:X,y:yy+0.08,w:0.42,h:0.42,fill:{color:TERRA},line:{color:TERRA}});txt(sl,String(j+1),{x:X,y:yy+0.08,w:0.42,h:0.42,fontSize:14,bold:true,color:'FFFFFF',align:'center',valign:'middle'});txt(sl,t,{x:X+0.6,y:yy,w:W-0.6,h:h-0.1,fontSize:16})});break}
-   case 'cards':{title(0.6,22);const n=Math.max(d.items.length,1);const cols=n<=3?n:2;const rows=Math.ceil(n/cols);const w=(W-(cols-1)*0.25)/cols;const h=(bottom-y-(rows-1)*0.2)/rows;d.items.forEach((it,j)=>{const x=X+(j%cols)*(w+0.25),yy=y+Math.floor(j/cols)*(h+0.2);sl.addShape(P.ShapeType.rect,{x,y:yy,w,h,fill:{color:'FFFFFF'},line:{color:NAVY,width:1}});sl.addShape(P.ShapeType.rect,{x,y:yy,w:0.07,h,fill:{color:TERRA},line:{color:TERRA}});txt(sl,it.t,{x:x+0.2,y:yy+0.12,w:w-0.35,h:0.6,fontSize:n>3?13:15,bold:true,color:NAVY});txt(sl,it.d,{x:x+0.2,y:yy+0.72,w:w-0.35,h:h-1.15,fontSize:n>3?10.5:12});txt(sl,it.ref,{x:x+0.2,y:yy+h-0.4,w:w-0.35,h:0.3,fontSize:9,italic:true,color:GRAY})});break}
-   case 'big':{const n=d.blocks.length;const hb=n?1.3:0;txt(sl,d.title,{x:X,y,w:W,h:bottom-y-hb-0.1,fontSize:26,bold:true,color:NAVY,align:'center',valign:'middle'});if(n){const w=(W-(n-1)*0.25)/n;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.25),bottom-hb,w,hb,n>1?11:13))}break}
-  }});
+   case 'cover':txt(sl,d.title,{x:X,y:1.4,w:W,h:1.6,fontSize:40,bold:true});txt(sl,d.big,{x:X,y:3.25,w:W,h:2.3,fontSize:24});txt(sl,d.sub,{x:X,y:5.8,w:W,h:0.5,fontSize:16,color:GR});break;
+   case 'two':{title(1.2,28);const w=(W-0.5)/2;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.5),y,w,BOT-y,18));break}
+   case 'qa':{title(0.7,30);const k=d.rows.length;const h=(BOT-y)/k;d.rows.forEach(([q,a],j)=>{const yy=y+j*h;sl.addShape(P.ShapeType.line,{x:X,y:yy,w:W,h:0,line:{color:Y,width:2}});txt(sl,q,{x:X,y:yy+0.08,w:W,h:0.62,fontSize:15,bold:true,color:Y});txt(sl,a,{x:X,y:yy+0.68,w:W,h:Math.max(0.4,h-0.76),fontSize:19})});break}
+   case 'quote':{txt(sl,'“'+d.quote+'”',{x:X,y,w:W,h:2.3,fontSize:26,italic:true});txt(sl,'— '+d.cite,{x:X,y:y+2.35,w:W,h:0.45,fontSize:15,bold:true,color:Y});y+=3.0;card(sl,d.blocks[0][0],d.blocks[0][1],X,y,W,BOT-y,19);break}
+   case 'decision':{txt(sl,d.title,{x:X,y,w:W,h:1.8,fontSize:30,bold:true,color:Y});y+=2.05;const k=d.blocks.length;const w=(W-(k-1)*0.4)/k;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.4),y,w,BOT-y,16));break}
+   case 'bridge':{title(0.7,30);const nodes=d.rows[d.rows.length-1][1];const w=(W-3*0.45)/4;nodes.forEach(([l,t],j)=>{const x=X+j*(w+0.45);card(sl,l,t,x,y+0.1,w,BOT-y-0.1,15);if(j<3)txt(sl,'→',{x:x+w+0.02,y:y+1.2,w:0.42,h:0.5,fontSize:22,bold:true,color:Y,align:'center'})});break}
+   case 'list':{title(0.7,30);const k=d.items.length;const hs=d.sub?0.85:0;const h=(BOT-y-hs)/k;d.items.forEach((t,j)=>{const yy=y+j*h;txt(sl,String(j+1),{x:X,y:yy,w:0.55,h:0.6,fontSize:28,bold:true,color:Y});txt(sl,t,{x:X+0.75,y:yy+0.05,w:W-0.75,h:h-0.1,fontSize:21})});if(d.sub)txt(sl,d.sub,{x:X,y:BOT-0.75,w:W,h:0.75,fontSize:18,italic:true,color:Y});break}
+   case 'cards':{title(1.0,26);const k=Math.max(d.items.length,1);const cols=k<=3?k:2;const rows=Math.ceil(k/cols);const w=(W-(cols-1)*0.45)/cols;const h=(BOT-y-(rows-1)*0.25)/rows;d.items.forEach((it,j)=>{const x=X+(j%cols)*(w+0.45),yy=y+Math.floor(j/cols)*(h+0.25);sl.addShape(P.ShapeType.line,{x,y:yy,w,h:0,line:{color:Y,width:2.5}});txt(sl,it.t,{x,y:yy+0.1,w,h:0.6,fontSize:k>3?16:19,bold:true,color:Y});txt(sl,it.d,{x,y:yy+0.75,w,h:Math.max(0.5,h-1.15),fontSize:k>3?13:16});txt(sl,it.ref,{x,y:yy+h-0.38,w,h:0.32,fontSize:11,italic:true,color:GR})});break}
+   case 'big':{const k=d.blocks.length;const hb=k?1.6:0;txt(sl,d.title,{x:X,y:y+0.2,w:W,h:BOT-y-hb-0.4,fontSize:34,bold:true,align:'center',valign:'middle'});if(k){const w=(W-(k-1)*0.45)/k;d.blocks.forEach(([l,t],j)=>card(sl,l,t,X+j*(w+0.45),BOT-hb,w,hb,16))}break}
+   default:{title(1.0,28);const bl=d.blocks||[];bl.forEach(([l,t],j)=>{const w=(W-(bl.length-1)*0.45)/bl.length;card(sl,l,t,X+j*(w+0.45),y,w,BOT-y,18)});if(d.text)txt(sl,d.text,{x:X,y,w:W,h:BOT-y,fontSize:22})}
+  }
+  if(d.notes)sl.addNotes(d.notes)});
  const nome=g?`grupo-${g}-${c.id}-apresentacao.pptx`:`${typeof SEMGRUPO!=='undefined'?SEMGRUPO.slug:'plenaria'}-${c.id}-apresentacao.pptx`;
  try{const blob=await P.write({outputType:'blob'});await baixarBlob(blob,nome,msg)}catch(e){msg.textContent='Não foi possível gerar o PowerPoint: '+(e&&e.message||e)}}
 
