@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<title>Vitta Cosméticos · Quem paga a fila · Sessão 3</title>
+<style>
+:root{--bg:#0B1220;--bg2:#121C30;--bg3:#1A2742;--fg:#F5F2EA;--mut:#BFC8D6;--line:#2E3D5C;
+ --amb:#FFCF5A;--blu:#6EC6FF;--cor:#FF9E7A;--grn:#7CE0A6;--red:#FF7A7A;
+ --ui:"IBM Plex Sans","Segoe UI",Helvetica,Arial,sans-serif;--ser:"Source Serif 4",Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:19px/1.45 var(--ui)}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 24px 10px}
+.hrow{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.kick{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--amb);font-weight:700}
+h1{font:600 23px/1.15 var(--ser);margin:2px 0 0}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps span{font-size:13px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--bg3);color:var(--mut);cursor:pointer}
+.steps span.cur{background:var(--amb);color:#111}.steps span.done{background:var(--grn);color:#111}
+.tools{margin-top:6px;font-size:14px;color:var(--mut);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+main{max-width:1180px;margin:0 auto;padding:26px 24px 90px}
+.eq{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;margin:0 0 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.eq .f{font:italic 24px var(--ser);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.eq .fr{display:inline-flex;flex-direction:column;align-items:center;line-height:1.05}
+.eq .fr span{padding:0 6px}.eq .fr span:first-child{border-bottom:2px solid var(--fg)}
+.eq .t{font:15px var(--ui);color:var(--mut);flex:1 1 240px}
+.on-amb{color:var(--amb)}.on-blu{color:var(--blu)}.dim{opacity:.38}
+h2{font:600 32px/1.12 var(--ser);margin:0 0 6px}
+.lead{font:19px/1.5 var(--ser);color:var(--mut);margin:0 0 18px;max-width:78ch}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:0 0 18px}
+.card h3{margin:0 0 10px;font:700 13px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--amb)}
+.card h3 .sub{color:var(--mut);font-weight:400;letter-spacing:0;text-transform:none;font-size:14px;margin-left:8px}
+table{border-collapse:collapse;width:100%;font-size:17px;font-variant-numeric:tabular-nums}
+th{text-align:left;color:var(--mut);font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:bottom}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.f{color:var(--mut);font-size:15px}
+input.in{width:96px;background:var(--bg3);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:7px 9px;font:600 17px var(--ui);text-align:right}
+.in.ok{border-color:var(--grn)}.in.ko{border-color:var(--red)}
+.ans{display:block;font-size:13px;margin-top:3px;white-space:nowrap;text-align:right}
+.ans.ok{color:var(--grn)}.ans.ko{color:var(--red)}
+.ctl{margin:0 0 12px}.ctl label{display:flex;justify-content:space-between;font-size:16px;color:var(--mut)}.ctl label b{color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--amb);height:28px}
+input[type=text],textarea{width:100%;background:var(--bg3);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+textarea{min-height:150px;font:italic 20px/1.45 var(--ser)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.chip{background:var(--bg3);border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:8px 16px;font:600 16px var(--ui);cursor:pointer}
+.chip[aria-pressed=true]{background:var(--amb);color:#111;border-color:var(--amb)}
+.chip:disabled{opacity:.45;cursor:default}
+.btn{background:var(--amb);color:#111;border:0;border-radius:8px;padding:12px 20px;font:700 17px var(--ui);cursor:pointer}
+.btn.sec{background:transparent;color:var(--fg);border:1px solid var(--mut)}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;justify-content:space-between}
+.note{font-size:14px;color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:8px 0 14px}
+.kpi{background:var(--bg3);border-radius:10px;padding:12px 14px}
+.kpi .l{font-size:13px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em}
+.kpi .v{font:600 30px/1.1 var(--ser);margin-top:4px;font-variant-numeric:tabular-nums}
+.v.amb{color:var(--amb)}.v.cor{color:var(--cor)}.v.grn{color:var(--grn)}.v.red{color:var(--red)}
+.com{background:#161f33;border:1px solid var(--line);border-left:5px solid var(--blu);border-radius:10px;padding:16px 20px;margin:16px 0}
+.com h4{margin:0 0 8px;font:700 13px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--blu)}
+.com p{font:18px/1.55 var(--ser);margin:0 0 10px}.com p:last-child{margin:0}
+.com b{color:var(--amb)}
+details.con{background:var(--bg3);border-radius:10px;padding:12px 16px;margin:10px 0 0}
+details.con summary{cursor:pointer;font:700 13px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--amb)}
+details.con .b{font:17px/1.5 var(--ser);margin-top:8px}details.con .b p{margin:0 0 8px}
+.opt{display:grid;gap:10px}
+.opt label{display:flex;align-items:flex-start;gap:12px;background:var(--bg3);border:2px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer}
+.opt label.on{border-color:var(--amb)}
+.opt input{width:22px;height:22px;margin-top:3px;accent-color:var(--amb)}
+.dec{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.dec button{background:var(--bg3);border:2px solid var(--line);color:var(--fg);border-radius:10px;padding:14px;font:600 17px var(--ui);cursor:pointer}
+.dec button[aria-pressed=true]{border-color:var(--amb);background:#3a2f12}
+.years{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:10px 0}
+.yr{background:var(--bg3);border-radius:8px;padding:8px 4px;text-align:center;font-size:13px}
+.yr b{display:block;font:600 21px var(--ser)}
+.yr.ev{background:#4a2a1a}.yr.cov{background:#5a1e1e;outline:2px solid var(--red)}
+.code{font:700 38px/1 var(--ui);letter-spacing:.1em;color:var(--amb);background:var(--bg3);padding:16px 22px;border-radius:10px;display:inline-block}
+.cmp th:first-child{width:200px}
+.formula{font:italic 17px var(--ser);color:var(--mut);margin:4px 0 10px}
+.calc{font:700 19px var(--ui);color:var(--amb);font-variant-numeric:tabular-nums;white-space:nowrap}
+</style>
+</head>
+<body>
+<header>
+ <div class="hrow"><div><div class="kick">Operações, Risco e Capital · Sessão 3 · Quem financia a cadeia</div><h1>Vitta Cosméticos: quem paga a fila</h1></div><div class="steps" id="steps"></div></div>
+ <div class="tools"><label style="cursor:pointer"><input type="checkbox" id="livre" style="accent-color:var(--amb)"> Navegação livre (uso do professor)</label><span class="note">Números do caso (Exhibits 1 a 4). As decisões do grupo ficam registradas apenas neste navegador.</span><button id="zerar" class="chip" style="font-size:13px;padding:4px 12px">Recomeçar</button></div>
+</header>
+<main id="main"></main>
+
+<script>
+// ===================== DADOS DO CASO =====================
+const GR=[
+ {k:'g1',n:'1. Grandes',q:'Multinacionais de químicos; grandes fabricantes de embalagens plásticas',c:0.8,r:0.09,fu:'Nenhuma'},
+ {k:'g2',n:'2. Médios',q:'Gráficas; tampas e válvulas; transportadoras',c:0.7,r:0.16,fu:'Nenhuma'},
+ {k:'g3',n:'3. Pequenos e especializados',q:'Guará Vidros; segunda casa de fragrâncias; componentes sob medida',c:0.5,r:0.26,fu:'Frascos de vidro (até outubro); segundas fontes recém-homologadas'}];
+const KV=0.12, BANK=0.11, ANT=5, REGUA=5.5, EBITDA=220, DIV=500, COV=2.5, INV=90, P0=45, SETOR=60, EPIS=30, DISP=12;
+const CC={ins:{n:'Estoque de insumos e componentes',s:60,v:2.0,d:30,q:'A Vitta'},pa:{n:'Estoque de produto acabado',s:90,v:2.0,d:45,q:'A Vitta'},cr:{n:'Contas a receber das redes',s:270,v:3.0,d:90,q:'A Vitta'},cp:{n:'Contas a pagar a fornecedores',s:-90,v:2.0,d:-45,q:'Os fornecedores'}};
+
+// ===================== ESTADO =====================
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const DEF={step:0,grupo:'',livre:false,q1:{d:null,ok:false},q2:{rep:null,ok:false},q3:{p:{g1:90,g2:90,g3:90},prog:{g1:true,g2:true,g3:true},c:false,ok:false},q4:{d:null,ok:false},q5:{ind:{},ok:false,frase:'',auto:'',fechado:false}};
+let S=JSON.parse(JSON.stringify(DEF));try{Object.assign(S,JSON.parse(LS.get('vitta-s3')||'{}'))}catch(e){}
+const save=()=>LS.set('vitta-s3',JSON.stringify(S));
+const qp=new URLSearchParams(location.search).get('quadro');if(qp!==null)S.step=parseInt(qp);
+const fmt=(v,d=0)=>v.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const mi=(v,d=1)=>'R$ '+fmt(v,d)+' mi';
+const sg=(v,d=1)=>(Math.abs(v)<0.05?'':v>=0?'+':'−')+mi(Math.abs(v),d);
+const pct=(v,d=0)=>fmt(v*100,d)+'%';
+const el=(t,a={},...c)=>{const e=document.createElement(t);for(const k in a){if(k.startsWith('on'))e[k]=a[k];else e.setAttribute(k,a[k])}c.flat().forEach(x=>e.append(x==null?'':x.nodeType?x:document.createTextNode(x)));return e};
+const H=(s)=>{const d=document.createElement('div');d.innerHTML=s;return d};
+
+// ===================== CÁLCULOS =====================
+// custo anual, para o fornecedor, de financiar as vendas à Vitta
+const antecipa=(g,prog)=>prog&&g.r>BANK;
+const custoF=(g,prazo,prog)=>antecipa(g,prog)?ANT*g.c*g.r+(prazo-ANT)*g.c*BANK:prazo*g.c*g.r;
+function desenho(q){const out={g:{},lib:0,dc:0,dcPos:0,rLo:0,rHi:0};
+ GR.forEach(g=>{const p=q.p[g.k],pr=q.prog[g.k];const lib=(p-P0)*g.c,antes=custoF(g,P0,false),dep=custoF(g,p,pr),d=dep-antes;
+  const rHi=pr&&p>P0?(p-P0)*g.c:0,rLo=pr?Math.max(0,p-SETOR)*g.c:0;
+  out.g[g.k]={p,pr,lib,antes,dep,d,ant:antecipa(g,pr),cadeia:lib*KV-d,rHi,rLo};out.lib+=lib;out.dc+=d;out.dcPos+=Math.max(0,d);out.rLo+=rLo;out.rHi+=rHi});
+ out.c=q.c?45:0;out.cAno=q.c?15:0;out.valC=q.c?45-3-2*REGUA:0;return out}
+const repasse=()=>(S.q2.rep??50)/100;
+
+// ===================== COMPONENTES =====================
+const calc=(t)=>el('span',{class:'calc'},t);
+const chip=(t,on,fn,dis)=>{const b=el('button',{class:'chip','aria-pressed':String(!!on),onclick:fn});b.append(t);if(dis)b.disabled=true;return b};
+const kpi=(l,v,c)=>el('div',{class:'kpi'},el('div',{class:'l'},l),el('div',{class:'v '+(c||'')},v));
+const com=(...ps)=>el('div',{class:'com'},el('h4',{},'Comentário'),...ps.map(p=>H('<p>'+p+'</p>').firstChild));
+const jn=(t,html)=>el('details',{class:'con'},el('summary',{},t),H(`<div class="b">${html}</div>`));
+const txt=s=>H(`<div style="font:17px/1.55 var(--ser)">${s}</div>`);
+const tr=(...c)=>el('tr',{},...c);const td=(x,cl)=>el('td',cl?{class:cl}:{},x);const th=(x,cl)=>el('th',cl?{class:cl}:{},x);
+function nav(ok,last){return el('div',{class:'row'},el('button',{class:'btn sec',onclick:()=>{S.step=Math.max(0,S.step-1);go()}},'← Quadro anterior'),last?el('span'):el('button',Object.assign({class:'btn',onclick:()=>{S.step++;go()}},(ok||S.livre)?{}:{disabled:true}),'Quadro seguinte →'))}
+function eq(active,text){const t=(k,s)=>el('span',{class:active.includes(k)?'on-'+(k==='fc'?'amb':k==='i'?'blu':'cor'):'dim'},s);const fr=(n,d)=>el('span',{class:'fr'},el('span',{},t('fc','FC'+n)),el('span',{},'(1 + ',t('i','i'),')',d));
+ return el('div',{class:'eq'},el('div',{class:'f'},el('span',{},'Valor do acionista ='),fr('₁',''),' + ',fr('₂','²'),' + … ',t('div','− dívida')),el('div',{class:'t'},text))}
+const dec=(opts,cur,ok,set)=>el('div',{class:'dec'},...opts.map(([t,v])=>el('button',{'aria-pressed':String(cur===v),onclick:()=>{if(!ok){set(v);rr()}}},t)));
+const conf=(ok,can,fn)=>el('div',{class:'row'},el('span',{class:'note'},ok?'Decisão registrada.':'Escolha e confirme.'),chip(ok?'Confirmada':'Confirmar decisão',ok,fn,ok||!can));
+
+// ===================== QUADROS =====================
+const T=[];
+
+// ---------- 0 ----------
+T.push({t:'Apresentação',r(){return el('div',{},
+ eq(['fc','i','div'],'A equação do valor, agora até a última linha: o que pertence ao acionista é o valor da operação menos a dívida.'),
+ el('h2',{},'Roteiro de análise'),
+ el('p',{class:'lead'},'Este roteiro organiza a análise do caso Vitta Cosméticos: quem paga a fila em cinco quadros, na ordem das perguntas do comitê. Cada quadro apresenta os dados do exhibit correspondente, o cálculo feito pela plataforma, com a fórmula à vista, uma explicação que pode ser aberta em cada passo e a decisão que o quadro exige. O comentário que segue cada decisão a discute à luz das Notas de Ensino 3. Percorra os quadros com o caso impresso: o valor do trabalho está em interpretar os números e defender a decisão em plenária.'),
+ el('div',{class:'card'},el('h3',{},'Identificação do grupo'),el('input',{type:'text',placeholder:'Grupo (ex.: Grupo 2)',value:S.grupo,oninput:e=>{S.grupo=e.target.value;save();const b=document.getElementById('btn-q1');if(b)b.disabled=!(S.grupo.trim()||S.livre)}})),
+ el('div',{class:'card'},el('h3',{},'Parâmetros do caso'),el('table',{},
+  tr(td('Custo de capital da Vitta'),td('12% a.a.','n'),td('Régua: R$ 1 de lucro recorrente ≈ R$ 5,5; R$ 1 de capital = R$ 1; R$ 1 de dívida = − R$ 1'),td('0,66 ÷ 0,12','n')),
+  tr(td('Compras por dia'),td('R$ 2,0 mi','n'),td('Receita por dia'),td('R$ 3,0 mi','n')),
+  tr(td('Prazo de pagamento hoje · proposta'),td('45 · 90 dias','n'),td('Taxa do risco sacado (Banco Meridional)'),td('11% a.a.','n')),
+  tr(td('EBITDA · dívida líquida'),td('220 · 500','n'),td('Limite: dívida ÷ EBITDA ≤ 2,5 (R$ 550 mi)'),td('2,27× hoje','n')),
+  tr(td('Investimento na linha premium masculina'),td('R$ 90 mi','n'),td('Prazo de pagamento usual do setor'),td('45 a 60 dias','n')))),
+ el('div',{class:'row'},el('span'),(()=>{const b=el('button',{class:'btn',id:'btn-q1',onclick:()=>{if(!S.grupo.trim())S.grupo='Grupo';S.step=1;go()}},'Quadro 1 →');b.disabled=!(S.grupo.trim()||S.livre);return b})()))}});
+
+// ---------- 1 ----------
+T.push({t:'Quadro 1 · Ciclo de caixa',r(){
+ const ciclo=30+45+90-45, giro=330;
+ const tb=el('table',{},tr(th('Componente'),th('Saldo (R$ mi)','n'),th('÷ valor por dia','n'),th('= dias','n'),th('Quem financia')),
+  ...Object.values(CC).map(c=>tr(td(c.n),td(calc(fmt(c.s,0)),'n'),td(fmt(c.v,1),'n'),td(calc(fmt(c.d,0)),'n'),td(c.q))),
+  tr(td(el('b',{},'Ciclo de caixa e capital de giro')),td(calc(mi(giro,0)),'n'),td('','n'),td(calc(ciclo+' dias'),'n'),td('')));
+ const passoA=el('div',{class:'card'},el('h3',{},'Passo A · O ciclo de caixa da Vitta'),
+  txt('<p style="margin:0 0 10px">O ciclo de caixa mede quantos dias o dinheiro fica fora do caixa, entre pagar o fornecedor e receber do cliente. São três esperas: a da mercadoria em estoque, a da Vitta pelo pagamento das redes e, subtraída das duas, a do fornecedor pelo pagamento da Vitta.</p><p style="margin:0 0 10px;text-align:center;font-size:19px"><b>Ciclo de caixa = dias de estoque + prazo de recebimento − prazo de pagamento</b></p>'),tb,
+  jn('Entenda o Passo A · dias, reais e quem financia','<p><b>De saldo a dias.</b> Cada saldo do balanço dividido pelo valor que passa por aquela etapa a cada dia dá o número de dias. O estoque e as contas a pagar andam ao ritmo das compras e do custo de produção, R$ 2,0 mi por dia; as contas a receber, ao ritmo da receita, R$ 3,0 mi por dia.</p><p><b>A conta.</b> 30 dias de insumos + 45 de produto acabado + 90 de recebimento − 45 de pagamento = 120 dias. Em reais: 60 + 90 + 270 − 90 = R$ 330 mi de capital de giro.</p><p><b>Quem financia.</b> Estoque e contas a receber são dinheiro da Vitta parado: R$ 420 mi. As contas a pagar são dinheiro dos fornecedores parado na Vitta: R$ 90 mi. Somado às fábricas (R$ 670 mi), o capital de giro compõe os R$ 1.000 mi de capital empregado.</p><p><b>Ligação com a Sessão 1.</b> Estoque é tempo de espera da mercadoria. O ciclo de caixa estende a ideia ao dinheiro: cada componente é uma espera, e toda espera é financiada por alguém.</p>'));
+ const dep=el('table',{},tr(th('Depois do Programa Parceiros'),th('Hoje','n'),th('Proposta','n'),th('Variação','n')),
+  tr(td('Prazo de pagamento da Vitta'),td('45 dias','n'),td(calc('90 dias'),'n'),td('+45 dias','n')),
+  tr(td('Ciclo de caixa da Vitta'),td('120 dias','n'),td(calc('75 dias'),'n'),td('−45 dias','n')),
+  tr(td('Capital de giro da Vitta'),td('R$ 330 mi','n'),td(calc('R$ 240 mi'),'n'),td('−R$ 90 mi','n')),
+  tr(td('Dias que a mercadoria passa em estoque'),td('75 dias','n'),td(calc('75 dias'),'n'),td('zero','n')),
+  tr(td('Dias que as redes levam para pagar'),td('90 dias','n'),td(calc('90 dias'),'n'),td('zero','n')));
+ const passoB=el('div',{class:'card'},el('h3',{},'Passo B · O que a proposta de Marcos muda'),
+  txt('<p style="margin:0 0 10px">Marcos propõe pagar em 90 dias. Cada dia a mais de prazo deixa R$ 2,0 mi no caixa: 45 dias × 2,0 = R$ 90 mi. O quadro mostra o que muda, e o que não muda.</p>'),dep);
+ const d1=el('div',{class:'card'},el('h3',{},'Decisão 1',el('span',{class:'sub'},'Com o Programa Parceiros, o que acontece com o capital imobilizado na cadeia inteira, somando a Vitta e seus fornecedores?')),
+  dec([['Diminui R$ 90 mi',0],['Não muda',1],['Aumenta',2]],S.q1.d,S.q1.ok,v=>S.q1.d=v),conf(S.q1.ok,S.q1.d!==null,()=>{S.q1.ok=true;rr()}));
+ let c=null;
+ if(S.q1.ok){const ps=[];
+  if(S.q1.d===1)ps.push('Correto: o capital da cadeia não muda. Nenhuma mercadoria circula mais depressa e nenhum cliente paga antes. Os R$ 90 mi que saem do capital de giro da Vitta entram, real por real, no capital de giro dos fornecedores, cujas contas a receber sobem de 45 para 90 dias.');
+  else if(S.q1.d===0)ps.push('A resposta olha apenas o balanço da Vitta. O capital de giro dela cai R$ 90 mi, mas esse valor não desaparece: o prazo de pagamento da Vitta é o prazo de recebimento dos fornecedores, e as contas a receber deles sobem exatamente R$ 90 mi. O capital da cadeia não muda; muda quem o carrega.');
+  else ps.push('O capital da cadeia não aumenta: ele apenas muda de lugar. Os R$ 90 mi saem do capital de giro da Vitta e entram no dos fornecedores. O que pode aumentar é o custo de carregá-lo, se o novo financiador tiver dinheiro mais caro; é o tema do Quadro 2.');
+  ps.push('O argumento da simetria, "as redes nos pagam em 90, por que pagamos em 45?", descreve corretamente a posição da Vitta: ela está espremida entre clientes que pagam tarde e fornecedores que recebem cedo. Mas não responde à pergunta que importa: quem, na cadeia, tem o dinheiro mais barato para carregar essa espera? As redes impõem 90 dias à Vitta porque podem; a pergunta do Quadro 2 é quanto custa à Vitta fazer o mesmo com quem a abastece.');
+  c=com(...ps)}
+ return el('div',{},eq(['fc'],'Quadro 1: o capital de giro é parte do fluxo de caixa. Quem o financia?'),
+  el('h2',{},'Quadro 1. O ciclo de caixa: quem espera pelo dinheiro'),el('p',{class:'lead'},'O Exhibit 1 traz os saldos de dezembro de 2026. Este quadro os converte em dias, mostra quem financia cada etapa e o que a proposta de Marcos altera.'),
+  passoA,passoB,d1,c,nav(S.q1.ok))}});
+
+// ---------- 2 ----------
+T.push({t:'Quadro 2 · Prazo é empréstimo',r(){
+ const D=desenho({p:{g1:90,g2:90,g3:90},prog:{g1:false,g2:false,g3:false},c:false});
+ const ganho=D.lib*KV;
+ const tA=el('table',{},tr(th('Grupo'),th('Compras por dia'),th('Conta: 45 dias a mais × compras por dia','f'),th('Capital transferido (R$ mi)','n'),th('Custo do dinheiro','n')),
+  ...GR.map(g=>tr(td(el('b',{},g.n)),td(mi(g.c)),td(`45 × ${fmt(g.c,1)}`,'f'),td(calc(fmt(D.g[g.k].lib,1)),'n'),td(pct(g.r),'n'))),
+  tr(td(el('b',{},'Total')),td(mi(2.0)),td('','f'),td(calc(fmt(D.lib,1)),'n'),td('Vitta: 12%','n')));
+ const tB=el('table',{},tr(th('Grupo'),th('Custo para o fornecedor: capital × custo do dinheiro dele','f'),th('A mais por ano (R$ mi)','n'),th('Ganho da Vitta: capital × 12%','n'),th('Saldo da cadeia (R$ mi/ano)','n')),
+  ...GR.map(g=>{const x=D.g[g.k];return tr(td(el('b',{},g.n)),td(`${fmt(x.lib,1)} × ${pct(g.r)}`,'f'),td(calc(fmt(x.d,2)),'n'),td(fmt(x.lib*KV,2),'n'),td(el('b',{style:'color:'+(x.cadeia>=0?'var(--grn)':'var(--red)')},sg(x.cadeia,2)),'n'))}),
+  tr(td(el('b',{},'Total')),td('','f'),td(calc(fmt(D.dc,2)),'n'),td(calc(fmt(ganho,2)),'n'),td(el('b',{style:'color:var(--red)'},sg(ganho-D.dc,2)),'n')));
+ const passoA=el('div',{class:'card'},el('h3',{},'Passo A · Quanto capital muda de mãos'),
+  txt('<p style="margin:0 0 10px">Considere primeiro o alongamento puro, de 45 para 90 dias, sem o banco. O prazo que a Vitta ganha é a espera que o fornecedor passa a carregar. O Exhibit 2 divide os fornecedores em três grupos, pelo custo do dinheiro de cada um.</p>'),tA);
+ const passoB=el('div',{class:'card'},el('h3',{},'Passo B · Quanto custa a quem passa a esperar'),
+  txt('<p style="margin:0 0 10px">A Vitta deixa de carregar R$ 90 mi, que ao seu custo de capital valem 12% ao ano. Cada grupo passa a carregar a sua parte, ao custo do próprio dinheiro. A cadeia ganha quando a espera vai para quem tem dinheiro mais barato do que a Vitta, e perde no caso contrário.</p>'),tB,
+  H('<p class="formula" style="margin-top:10px">Saldo da cadeia = capital transferido × (12% − custo do dinheiro do fornecedor). Positivo apenas no grupo 1.</p>'),
+  jn('Entenda o Passo B · por que o prazo é um empréstimo','<p><b>A ideia.</b> Quando a Vitta paga em 90 dias o que pagava em 45, o fornecedor financia mais 45 dias de vendas. É um empréstimo de R$ 90 mi à Vitta, sem contrato e sem juros declarados. O custo existe e é pago pelo fornecedor, à taxa a que ele se financia.</p><p><b>A conta, grupo a grupo.</b> Grandes: R$ 36 mi a 9% = R$ 3,2 mi por ano. Médios: R$ 31,5 mi a 16% = R$ 5,0 mi. Pequenos: R$ 22,5 mi a 26% = R$ 5,9 mi. Total: R$ 14,1 mi por ano, para a Vitta ganhar R$ 10,8 mi.</p><p><b>A regra.</b> Transferir uma espera cria valor para a cadeia quando quem passa a esperar tem dinheiro mais barato do que quem deixa de esperar. Só o grupo 1, a 9%, está nessa situação. Nos grupos 2 e 3, cada real que a Vitta ganha custa mais de um real ao fornecedor.</p><p><b>Erro comum.</b> Tratar o prazo como dinheiro grátis porque não há juros na fatura. O custo aparece depois, por outros caminhos: é o Passo C.</p>'));
+ // passo C
+ const rep=S.q2.rep, r=(rep??50)/100, perda=r*D.dc, val=D.lib-perda*REGUA;
+ const tC=el('table',{},tr(th('Grandeza'),th('Fórmula','f'),th('Valor','n')),
+  tr(td('Capital liberado, uma vez'),td('régua: R$ 1 de capital = R$ 1','f'),td(calc(sg(D.lib,0)),'n')),
+  tr(td('Custo adicional dos fornecedores que volta em preço, por ano'),td(`${fmt(r*100,0)}% × ${fmt(D.dc,1)}`,'f'),td(calc('−'+mi(perda,1)),'n')),
+  tr(td('Em valor'),td('× 5,5, porque se repete todo ano','f'),td(calc('−'+mi(perda*REGUA,0)),'n')),
+  tr(td(el('b',{},'Resultado pela régua')),td('capital liberado − margem perdida em valor','f'),td(el('b',{style:'color:'+(val>=0?'var(--grn)':'var(--red)')+';font-size:20px'},sg(val,0)),'n')));
+ const passoC=el('div',{class:'card'},el('h3',{},'Passo C · O que a régua diz, se a conta voltar no preço'),
+  txt('<p style="margin:0 0 10px">O custo imposto ao fornecedor não desaparece. Volta por três caminhos: o preço da próxima tabela, o serviço (menos estoque, menos prioridade) e a fragilidade de quem já tinha o caixa apertado. O primeiro pode ser medido pela régua: o capital liberado vale um por um, uma vez; a margem perdida vale cinco e meio por um, porque se repete.</p>'),
+  el('div',{class:'chips'},el('span',{class:'note',style:'align-self:center'},'Parcela do custo que os fornecedores repassam aos preços:'),...[0,25,50,100].map(v=>chip(v+'%',rep===v,()=>{if(!S.q2.ok){S.q2.rep=v;rr()}},S.q2.ok))),
+  rep===null?H('<p class="note">Escolha uma hipótese de repasse para ver a conta.</p>'):tC,
+  H(`<p class="formula" style="margin-top:10px">O terceiro caminho liga este quadro à Sessão 2. A janela de exposição nos frascos de vidro é de 75 dias e segue aberta até outubro; um episódio custa R$ ${EPIS} mi de margem. Cada ponto percentual a mais na chance anual de a Guará parar custa R$ 0,3 mi por ano, cerca de R$ 1,7 mi de valor.</p>`),
+  jn('Entenda o Passo C · capital de uma vez, margem para sempre','<p><b>A assimetria.</b> O alongamento libera R$ 90 mi uma vez. Se os fornecedores repassarem aos preços o custo de R$ 14,1 mi por ano, a Vitta perde essa margem todos os anos. Pela régua, R$ 14,1 mi por ano valem 14,1 × 5,5 ≈ R$ 78 mi. Com repasse integral, sobram R$ 12 mi dos 90.</p><p><b>Quem repassa.</b> O grupo 1 disse a Daniel que "prazo é preço" e que tratará do assunto na tabela de 2028. Os grupos 2 e 3 têm menos poder de negociação; quando não conseguem repassar, cortam o que podem, e o corte aparece como atraso, perda de qualidade ou parada.</p><p><b>A ligação com a Sessão 2.</b> Os fornecedores do grupo 3 são, quase todos, os de fonte única do mapa de janeiro. A Guará reconstruiu o forno com dinheiro a 2% ao mês. Um fornecedor mais apertado no caixa é um fornecedor com maior chance de parar, e a Sessão 2 mediu o preço de uma parada.</p><p><b>Erro comum.</b> Comparar os R$ 90 mi liberados com os R$ 14,1 mi de custo anual, como se fossem a mesma unidade. Um é capital, de uma vez; o outro é margem, por ano.</p>'));
+ const d2=el('div',{class:'card'},el('h3',{},'Decisão 2',el('span',{class:'sub'},'Com a hipótese de repasse escolhida no Passo C, o comitê registra a sua leitura do alongamento puro.')),
+  conf(S.q2.ok,rep!==null,()=>{S.q2.ok=true;rr()}));
+ let c=null;
+ if(S.q2.ok){const ps=[];
+  if(rep===0)ps.push('O grupo supôs que nenhum custo volta em preço. Nessa hipótese, a régua atribui ao alongamento os R$ 90 mi inteiros. É a leitura de Marcos, e ela depende de os fornecedores absorverem R$ 14,1 mi por ano sem reação. O grupo 1 já avisou que não absorverá; os outros dois têm menos escolha, e a conta volta pelos outros caminhos: serviço e fragilidade.');
+  else if(rep===100)ps.push(`Com repasse integral, o alongamento vale ${sg(val,0)} pela régua: quase todo o capital liberado é devolvido em margem. É a hipótese mais severa quanto ao preço, e ainda não inclui o risco de parada dos fornecedores do grupo 3.`);
+  else ps.push(`Com repasse de ${rep}%, o alongamento vale ${sg(val,0)} pela régua, bem menos do que os R$ 90 mi da mensagem de Marcos. A hipótese será usada no Quadro 3 para avaliar o desenho do programa.`);
+  ps.push('A conclusão do quadro é que o alongamento não é igual para todos. Com os fornecedores grandes, a cadeia ganha R$ 1,1 mi por ano: a espera foi para quem tem dinheiro mais barato que a Vitta. Com os médios e os pequenos, a cadeia perde R$ 4,4 mi por ano. Um programa uniforme trata como iguais situações opostas.');
+  c=com(...ps)}
+ return el('div',{},eq(['fc'],'Quadro 2: o capital de giro melhora o fluxo de caixa uma vez; a margem perdida o reduz todos os anos.'),
+  el('h2',{},'Quadro 2. Prazo é empréstimo'),el('p',{class:'lead'},'Este quadro calcula quanto capital o alongamento transfere a cada grupo de fornecedores, quanto isso custa a quem passa a esperar e o que a régua diz da troca.'),
+  passoA,passoB,passoC,d2,c,nav(S.q2.ok))}});
+
+// ---------- 3 ----------
+T.push({t:'Quadro 3 · O programa',r(){
+ const Q=S.q3,D=desenho(Q),r=repasse();
+ const libTot=D.lib+D.c, val=D.lib-r*D.dcPos*REGUA+D.valC;
+ const linha=g=>{const x=D.g[g.k];
+  const prazos=el('div',{class:'chips',style:'margin:0'},el('span',{class:'note',style:'align-self:center;min-width:150px'},'Prazo de pagamento'),...[45,60,75,90].map(v=>chip(v+' dias',Q.p[g.k]===v,()=>{if(!Q.ok){Q.p[g.k]=v;rr()}},Q.ok)));
+  const pr=el('div',{class:'chips',style:'margin:6px 0 0'},el('span',{class:'note',style:'align-self:center;min-width:150px'},'Risco sacado a 11%'),chip('Oferecer',Q.prog[g.k],()=>{if(!Q.ok){Q.prog[g.k]=true;rr()}},Q.ok),chip('Não oferecer',!Q.prog[g.k],()=>{if(!Q.ok){Q.prog[g.k]=false;rr()}},Q.ok));
+  const cel=(l,v)=>el('div',{style:'background:var(--bg3);border-radius:8px;padding:9px 12px'},el('div',{style:'font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.05em'},l),el('div',{style:'margin-top:3px'},v));
+  return el('div',{style:'border-top:1px solid var(--line);padding:14px 0'},
+   H(`<div style="margin:0 0 8px"><b style="font-size:19px">${g.n}</b> <span class="note">· ${g.q} · dinheiro a ${pct(g.r)} ao ano · compras de R$ ${fmt(g.c,1)} mi por dia</span></div>`),prazos,pr,
+   el('div',{style:'display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px'},
+    cel('Capital liberado',calc(mi(x.lib,1))),
+    cel('O que o fornecedor faz',x.pr?(x.ant?`Antecipa no ${ANT}.º dia`:'Não antecipa: o banco é mais caro'):(x.p>P0?'Carrega o prazo inteiro':'Nada muda')),
+    cel('Custo dele por ano: hoje → depois',calc(`${fmt(x.antes,1)} → ${fmt(x.dep,1)}`)),
+    cel('Ganho (+) ou perda (−) do fornecedor',el('b',{style:'font-size:19px;color:'+(x.d<=0.005?'var(--grn)':'var(--red)')},Math.abs(x.d)<0.005?'sem mudança':sg(-x.d,1)+' por ano'))))};
+ const tb=el('div',{},...GR.map(linha));
+ const passoA=el('div',{class:'card'},el('h3',{},'Passo A · Desenhe o programa, grupo a grupo'),
+  txt('<p style="margin:0 0 10px">O quadro abre com a proposta de Marcos: 90 dias para todos, com o risco sacado do Banco Meridional. Altere o prazo de cada grupo e a oferta do programa, e observe o que acontece com cada fornecedor. Dentro do programa, o fornecedor carrega a fatura até o quinto dia, ao custo do seu dinheiro, e paga 11% ao ano ao banco sobre os dias antecipados; quem tem dinheiro mais barato que 11% não antecipa.</p>'),tb,
+  jn('Entenda o Passo A · de onde vem o ganho do risco sacado','<p><b>O mecanismo.</b> A Vitta confirma a fatura ao banco. O banco oferece ao fornecedor a antecipação, cobrando a taxa correspondente ao risco da Vitta, 11% ao ano. No vencimento, a Vitta paga ao banco. O fornecedor troca o seu financiador, caro, pelo financiador da Vitta, barato.</p><p><b>A conta do fornecedor pequeno, a 90 dias.</b> Hoje ele carrega 45 dias × 0,5 = R$ 22,5 mi a 26%: R$ 5,9 mi por ano. No programa, carrega 5 dias (R$ 2,5 mi a 26% = 0,65) e antecipa 85 dias (R$ 42,5 mi a 11% = 4,7): R$ 5,3 mi por ano. Fica R$ 0,5 mi melhor do que hoje, mesmo com o prazo dobrado.</p><p><b>A conta do fornecedor grande.</b> Ele se financia a 9% e não tem motivo para antecipar a 11%. Para ele, o programa é apenas um prazo maior: carrega 90 dias em vez de 45 e perde R$ 3,2 mi por ano.</p><p><b>O ganho tem uma única origem.</b> É a diferença entre o custo do dinheiro do fornecedor e a taxa do banco. Quanto mais caro o dinheiro do fornecedor, maior o ganho; se o dinheiro dele é mais barato que o do banco, não há ganho algum.</p><p><b>Quem fica com o ganho.</b> O prazo define a repartição. Com 90 dias, a Vitta fica com quase todo o ganho do grupo 3. Com 45 dias e o programa, o ganho fica inteiro com o fornecedor, que passa a pagar 11% em vez de 26%: R$ 3,0 mi por ano a menos, justamente nos fornecedores de fonte única.</p>'));
+ const cOpt=el('div',{class:'opt'},el('label',{class:Q.c?'on':''},el('input',Object.assign({type:'checkbox',onchange:e=>{if(!Q.ok){Q.c=e.target.checked;rr()}}},Q.c?{checked:''}:{},Q.ok?{disabled:''}:{})),H('<div><b>Incluir o caminho de Renata: encurtar a fila</b><br><span class="note">Produto acabado de 45 para 30 dias (15 × 2,0 = R$ 30 mi) e recebimento de 90 para 85 dias (5 × 3,0 = R$ 15 mi). Investimento de R$ 3 mi e custo de R$ 2 mi por ano. Efeito completo em 18 meses; cerca de R$ 15 mi até dezembro de 2027.</span></div>')));
+ const passoB=el('div',{class:'card'},el('h3',{},'Passo B · O caminho que não transfere a espera'),
+  txt('<p style="margin:0 0 10px">Os caminhos A e B mudam quem carrega o dinheiro. O de Renata reduz a espera: menos dias de produto acabado, menos faturas contestadas pelas redes. Pela régua, vale o capital liberado menos o investimento e menos o custo anual em valor: 45 − 3 − 2 × 5,5 = +R$ 31 mi.</p>'),cOpt);
+ const falta=INV-libTot;
+ const res=el('div',{class:'card'},el('h3',{},'Resultado do desenho'),
+  el('div',{class:'kpis'},kpi('Capital liberado nos fornecedores',mi(D.lib,1),D.lib>0?'amb':''),kpi('Capital liberado pelo caminho de Renata',mi(D.c,0),D.c?'grn':''),kpi('Total · meta de R$ 90 mi',mi(libTot,1),libTot>=INV?'grn':'cor'),kpi('Fornecedores: custo a mais por ano',mi(D.dcPos,1),D.dcPos>0.05?'red':'grn')),
+  el('table',{},tr(th('Grandeza'),th('Fórmula','f'),th('Valor','n')),
+   tr(td('Capital liberado nos fornecedores'),td('soma dos grupos; vale um por um','f'),td(calc(sg(D.lib,1)),'n')),
+   tr(td('Margem que volta em preço, em valor'),td(`${fmt(r*100,0)}% (Quadro 2) × ${fmt(D.dcPos,1)} × 5,5`,'f'),td(calc((r*D.dcPos>0.005?'−':'')+mi(r*D.dcPos*REGUA,1)),'n')),
+   tr(td('Caminho de Renata'),td('45 − 3 − 2 × 5,5','f'),td(calc(Q.c?sg(D.valC,0):'não incluído'),'n')),
+   tr(td(el('b',{},'Valor do desenho pela régua')),td('','f'),td(el('b',{style:'color:'+(val>=0?'var(--grn)':'var(--red)')+';font-size:20px'},sg(val,0)),'n')),
+   tr(td('O que falta para os R$ 90 mi da linha masculina'),td('90 − capital liberado total','f'),td(calc(falta>0.05?mi(falta,1):'nada'),'n'))),
+  H('<p class="formula" style="margin-top:10px">O que faltar será coberto com dívida nova; o Quadro 4 mostra o efeito sobre o limite dos bancos. Os fornecedores que ganham com o programa não reduzem preços nesta conta: o ganho deles aparece como cadeia mais sólida.</p>'));
+ const d3=el('div',{class:'card'},el('h3',{},'Decisão 3',el('span',{class:'sub'},'Este é o desenho que o grupo leva ao comitê?')),conf(Q.ok,true,()=>{Q.ok=true;rr()}),
+  Q.ok?el('div',{class:'row'},el('span'),chip('Reabrir o desenho',false,()=>{Q.ok=false;S.q4.ok=false;S.q5.ok=false;S.q5.fechado=false;rr()},false)):null);
+ let c=null;
+ if(Q.ok){const ps=[],g=D.g,unif=GR.every(x=>Q.p[x.k]===90&&Q.prog[x.k]);
+  if(unif)ps.push('O grupo manteve a proposta de Marcos: 90 dias para todos, com o banco. O programa resolve o problema do grupo 3, que fica ligeiramente melhor do que hoje, mas não o dos outros: os médios perdem R$ 2,1 mi por ano e os grandes, que não antecipam, R$ 3,2 mi. A proposta libera os R$ 90 mi inteiros; o Quadro 4 mostra a que preço no balanço.');
+  else{
+   if(g.g3.p>P0&&!g.g3.pr)ps.push('O grupo alongou o prazo dos fornecedores pequenos sem lhes oferecer o banco. É a combinação mais arriscada do quadro: são os fornecedores de dinheiro mais caro e de fonte única, e passam a carregar mais dias a 26% ao ano. A Guará descreveu a Daniel o que faria nessa situação.');
+   else if(g.g3.p===P0&&g.g3.pr)ps.push('O grupo manteve os fornecedores pequenos em 45 dias e lhes ofereceu o programa. Eles passam a financiar-se a 11% em vez de 26% e ganham R$ 3,0 mi por ano. A Vitta não libera capital neste grupo, mas fortalece exatamente os fornecedores de fonte única do mapa de janeiro: é o risco sacado usado como proteção, e não como fonte de caixa.');
+   else if(g.g3.d<=0.005)ps.push('No desenho do grupo, os fornecedores pequenos não ficam piores do que hoje. É a condição mínima para alongar o prazo de quem tem fonte única.');
+   else ps.push(`No desenho do grupo, os fornecedores pequenos perdem ${mi(g.g3.d,1)} por ano. São os de fonte única; o quadro permite reduzir o prazo deles ou oferecer o banco.`);
+   if(g.g1.p>P0)ps.push(`O grupo alongou o prazo dos grandes para ${g.g1.p} dias. É o único grupo em que a cadeia ganha com o alongamento, porque o dinheiro deles, a 9%, é mais barato que o da Vitta. Eles já avisaram que tratarão do prazo na tabela de preços; a negociação é sobre quanto dos ${mi(g.g1.lib*KV,1)} por ano de ganho da Vitta fica com cada lado.`);
+   if(g.g2.d>0.05)ps.push(`Os fornecedores médios perdem ${mi(g.g2.d,1)} por ano neste desenho. Dois deles pediram um prazo intermediário: a 60 dias, com o banco, o custo deles cai abaixo do de hoje.`);}
+  if(Q.c)ps.push('O grupo incluiu o caminho de Renata. É o único que não aparece no balanço de mais ninguém: a espera deixa de existir. Libera menos e demora mais, e por isso completa os outros caminhos em vez de substituí-los.');
+  else ps.push('O grupo não incluiu o caminho de Renata. Vale registrar o motivo para a plenária: é o único que encurta a fila, e a régua lhe atribui cerca de R$ 31 mi.');
+  if(falta>0.05)ps.push(`Faltam ${mi(falta,1)} para o investimento. O Quadro 4 mostra se cabem no limite dos bancos.`);
+  c=com(...ps)}
+ return el('div',{},eq(['fc'],'Quadro 3: trocar o financiador muda o custo de carregar o capital; encurtar a fila reduz o capital.'),
+  el('h2',{},'Quadro 3. Trocar o financiador ou encurtar a fila'),el('p',{class:'lead'},'O Exhibit 3 traz o programa do banco e os três caminhos. Este quadro permite desenhar o programa por grupo de fornecedores e compará-lo com a contraproposta de Renata.'),
+  passoA,passoB,res,d3,c,nav(Q.ok))}});
+
+// ---------- 4 ----------
+T.push({t:'Quadro 4 · Fornecedor ou dívida',r(){
+ const D=desenho(S.q3);
+ const divNova=Math.max(0,INV-D.lib-D.cAno), dA=DIV+divNova, dBlo=dA+D.rLo, dBhi=dA+D.rHi;
+ const rt=(d,e)=>d/e, cor=x=>x>COV?'var(--red)':'var(--grn)';
+ const cel=(d,e)=>el('b',{style:'color:'+cor(rt(d,e))},fmt(rt(d,e),2)+'×');
+ const tA=el('table',{},tr(th('Grandeza'),th('Fórmula','f'),th('Valor (R$ mi)','n')),
+  tr(td('Investimento na linha masculina'),td('Exhibit 4','f'),td(calc(fmt(INV,0)),'n')),
+  tr(td('Capital liberado nos fornecedores'),td('Quadro 3','f'),td(calc('−'+fmt(D.lib,1)),'n')),
+  tr(td('Caminho de Renata, até dezembro de 2027'),td(S.q3.c?'um terço dos R$ 45 mi':'não incluído','f'),td(calc(D.cAno?'−'+fmt(D.cAno,0):'0'),'n')),
+  tr(td(el('b',{},'Dívida nova necessária em 2027')),td('o que faltar','f'),td(calc(fmt(divNova,1)),'n')),
+  tr(td('Obrigações no programa do banco além do prazo atual'),td('grupos com risco sacado: dias acima de 45 × compras por dia','f'),td(calc(fmt(D.rHi,1)),'n')),
+  tr(td('Das quais, além do prazo usual do setor'),td('dias acima de 60 × compras por dia','f'),td(calc(fmt(D.rLo,1)),'n')));
+ const passoA=el('div',{class:'card'},el('h3',{},'Passo A · De onde vem o dinheiro da linha masculina'),
+  txt('<p style="margin:0 0 10px">O quadro parte do desenho do Quadro 3. O que os fornecedores e o caminho de Renata não cobrirem em 2027 será dívida nova. A parte do prazo que depende do banco é o valor que a auditoria considera candidato a reclassificação: entre o que excede o prazo usual do setor (60 dias) e o que excede o prazo de hoje (45 dias).</p>'),tA);
+ const thw=(x,w)=>el('th',{style:'text-align:right;white-space:normal;width:'+w},x);
+ const tB=el('table',{},tr(el('th',{style:'width:34%'},'Dezembro de 2027'),thw('Leitura A: tudo é fornecedores','22%'),thw('Leitura B: o que excede 60 dias é dívida','22%'),thw('Leitura B: o que excede 45 dias é dívida','22%')),
+  tr(td('Dívida líquida (R$ mi)'),td(calc(fmt(dA,1)),'n'),td(calc(fmt(dBlo,1)),'n'),td(calc(fmt(dBhi,1)),'n')),
+  tr(td('Dívida ÷ EBITDA de R$ 220 mi · limite 2,5'),td(cel(dA,EBITDA),'n'),td(cel(dBlo,EBITDA),'n'),td(cel(dBhi,EBITDA),'n')),
+  tr(td(`No ano de uma parada nos frascos (EBITDA de ${EBITDA-EPIS})`),td(cel(dA,EBITDA-EPIS),'n'),td(cel(dBlo,EBITDA-EPIS),'n'),td(cel(dBhi,EBITDA-EPIS),'n')),
+  tr(td('Folga até o limite de R$ 550 mi'),td(calc(sg(550-dA,1)),'n'),td(calc(sg(550-dBlo,1)),'n'),td(calc(sg(550-dBhi,1)),'n')));
+ const passoB=el('div',{class:'card'},el('h3',{},'Passo B · A mesma operação, lida de duas formas'),
+  txt('<p style="margin:0 0 10px">A operação da Vitta é a mesma nas três colunas: as mesmas fábricas, o mesmo estoque, as mesmas compras. Muda a leitura do que a Vitta deve ao banco entre o prazo usual e o novo prazo. O contrato de financiamento define dívida como obrigação de natureza financeira, "qualquer que seja a sua denominação contábil".</p>'),tB,
+  H('<p class="formula" style="margin-top:10px">Em verde, dentro do limite de 2,5 vezes; em vermelho, acima. A terceira linha repete o teste da Sessão 2: a janela dos frascos segue aberta até outubro, e uma parada típica tira R$ 30 mi do EBITDA.</p>'),
+  jn('Entenda o Passo B · por que a classificação decide','<p><b>Duas naturezas de obrigação.</b> Contas a pagar a fornecedores nascem da compra, vencem em prazos usuais e reduzem o capital empregado. Dívida financeira é subtraída do valor da operação para se chegar ao valor do acionista, real por real.</p><p><b>Onde o risco sacado fica.</b> Enquanto o programa apenas permite ao fornecedor antecipar uma fatura que a Vitta pagaria no prazo de sempre, a obrigação continua comercial. Quando o prazo se estende muito além do usual, o credor no vencimento é o banco e a extensão depende de uma linha de crédito, a obrigação tem a substância de um empréstimo. É o que diz a nota preliminar da auditoria.</p><p><b>As perguntas de Helena.</b> A quem a Vitta deve entre o dia 45 e o dia 90? Ao banco, para as faturas antecipadas. O que acontece se o banco não renovar? Os fornecedores voltam a carregar o prazo ao próprio custo, ou exigem o prazo antigo, e a Vitta precisa do valor em caixa de uma vez. A auditoria aceita como fornecedores? Para a parcela dentro do prazo usual, provavelmente; para o excedente, a nota indica que não.</p><p><b>O paradoxo da proposta.</b> Marcos buscou o dinheiro nos fornecedores para não ultrapassar o limite de 2,5 vezes. Se o excedente for lido como dívida, a proposta original leva a relação a 2,55 ou 2,68, o mesmo resultado que ele queria evitar, com a diferença de que o mercado o descobriria depois.</p><p><b>Erro comum.</b> Tratar a classificação como questão contábil, sem efeito econômico. A operação não muda, mas mudam o retorno sobre o capital, a alavancagem e a folga com os bancos, três premissas de qualquer avaliação da empresa.</p>'));
+ const d4=el('div',{class:'card'},el('h3',{},'Decisão 4',el('span',{class:'sub'},'Como o comitê trata, perante o conselho e os bancos, a parcela do programa que excede o prazo usual?')),
+  dec([['Registra tudo como fornecedores, como sugere o banco',0],['Divulga o programa e trata o excedente como dívida',1],['Redesenha o programa para caber no prazo do setor',2]],S.q4.d,S.q4.ok,v=>S.q4.d=v),conf(S.q4.ok,S.q4.d!==null,()=>{S.q4.ok=true;rr()}));
+ let c=null;
+ if(S.q4.ok){const ps=[];const rompeA=rt(dA,EBITDA)>COV,rompeB=rt(dBhi,EBITDA)>COV,rompeLo=rt(dBlo,EBITDA)>COV;
+  if(S.q4.d===0)ps.push('O grupo seguiu a classificação sugerida pelo banco. Ela é a mais favorável aos indicadores e a mais frágil: depende de a auditoria aceitá-la, de os bancos credores não invocarem a definição contratual de dívida e de o Meridional renovar a linha. A nova norma de divulgação, em vigor desde 2024, obriga a Vitta a informar em nota o tamanho do programa e os prazos; o leitor do balanço fará a própria conta.');
+  else if(S.q4.d===1)ps.push('O grupo decidiu registrar a operação pelo que ela é. O conselho passa a ver a dívida na leitura conservadora, e a decisão sobre a linha masculina é tomada com o número que os bancos usariam. É a resposta que Helena pediu: saber o que a proposta é antes de discutir se é boa.');
+  else ps.push('O grupo preferiu redesenhar o programa para que nenhum prazo exceda o usual do setor. A obrigação mantém a natureza comercial, e a pergunta da classificação deixa de existir. O preço é liberar menos capital nos fornecedores; para conferir, volte ao Quadro 3 e limite os prazos com banco a 60 dias.');
+  if(rompeB&&!rompeA)ps.push(`Com o desenho do Quadro 3, a relação fica em ${fmt(rt(dA,EBITDA),2)} vezes na leitura A e chega a ${fmt(rt(dBhi,EBITDA),2)} na leitura mais conservadora, acima do limite${rompeLo?'; rompe o limite mesmo considerando só o excedente sobre 60 dias':''}. A folga que a leitura A mostra não existe para quem lê o contrato dos bancos.`);
+  else if(rompeA)ps.push(`Com o desenho do Quadro 3, a dívida nova necessária já leva a relação a ${fmt(rt(dA,EBITDA),2)} vezes na leitura A, acima do limite. O investimento não cabe em 2027 nesse desenho: é preciso liberar mais capital sem banco, incluir o caminho de Renata ou fasear a linha masculina.`);
+  else ps.push(`Com o desenho do Quadro 3, a relação fica entre ${fmt(rt(dA,EBITDA),2)} e ${fmt(rt(dBhi,EBITDA),2)} vezes, dentro do limite nas duas leituras. A decisão não depende da classificação, o que é a melhor posição para levar ao conselho.`);
+  if(rt(dBhi,EBITDA-EPIS)>COV)ps.push(`No ano de uma parada nos frascos, a relação iria a ${fmt(rt(dBhi,EBITDA-EPIS),2)} vezes na leitura conservadora. Até outubro, quando a padronização fecha a janela, a Vitta está exposta ao pior encontro das duas sessões: uma parada que reduz o EBITDA no mesmo ano em que o banco reavalia a linha.`);
+  c=com(...ps)}
+ return el('div',{},eq(['div'],'Quadro 4: o que se subtrai do valor da operação. R$ 1 de dívida vale R$ 1 a menos para o acionista.'),
+  el('h2',{},'Quadro 4. Fornecedor ou dívida'),el('p',{class:'lead'},'O Exhibit 4 traz os dados financeiros, o compromisso com os bancos e a nota da auditoria. Este quadro calcula a dívida ao fim de 2027 com o desenho do grupo, nas leituras possíveis da operação.'),
+  passoA,passoB,d4,c,nav(S.q4.ok))}});
+
+// ---------- 5 ----------
+const IND=[
+ {k:'pmp',n:'Prazo médio de pagamento, comparado ao do setor',cam:'Quem financia',bom:true},
+ {k:'prog',n:'Parcela das contas a pagar em programas com bancos',cam:'Quem financia',bom:true},
+ {k:'div2',n:'Dívida ÷ EBITDA nas duas leituras do programa',cam:'Financeira',bom:true},
+ {k:'jan',n:'Janela de exposição dos fornecedores críticos, em dias',cam:'Operacional',bom:true},
+ {k:'cdf',n:'Custo do dinheiro dos fornecedores de fonte única',cam:'Processo',bom:true},
+ {k:'ccc',n:'Ciclo de caixa, por componente',cam:'Operacional',bom:true},
+ {k:'fat',n:'Faturas contestadas pelas redes',cam:'Processo',bom:true},
+ {k:'giro',n:'Capital de giro total',cam:'Financeira',bom:false,por:'esconde quem financia: cai tanto quando a fila encurta quanto quando muda de mãos'},
+ {k:'preco',n:'Preço médio de compra',cam:'Processo',bom:false,por:'premia o comprador pelo preço e ignora o prazo e o capital que a decisão transfere'},
+ {k:'ebitda',n:'EBITDA do trimestre',cam:'Financeira',bom:false,por:'não se altera com o programa; é o indicador que deixaria tudo passar'}];
+T.push({t:'Quadro 5 · Painel e recomendação',r(){
+ const Q=S.q5,D=desenho(S.q3),r=repasse();
+ const divNova=Math.max(0,INV-D.lib-D.cAno),dA=DIV+divNova,dBhi=dA+D.rHi;
+ const n=Object.values(Q.ind).filter(Boolean).length;
+ const opt=el('div',{class:'opt',style:'grid-template-columns:repeat(auto-fit,minmax(340px,1fr))'},...IND.map(i=>el('label',{class:Q.ind[i.k]?'on':''},el('input',Object.assign({type:'checkbox',onchange:e=>{if(Q.ok)return;if(e.target.checked&&n>=4){e.target.checked=false;return}Q.ind[i.k]=e.target.checked;rr()}},Q.ind[i.k]?{checked:''}:{},Q.ok?{disabled:''}:{})),el('div',{},i.n))));
+ const passoA=el('div',{class:'card'},el('h3',{},'Passo A · Os quatro números que o conselho recebe todo trimestre'),
+  txt('<p style="margin:0 0 10px">As Notas de Ensino 3 propõem um painel em três camadas, ligadas por causa e efeito: indicadores de processo, que antecipam o resultado; indicadores operacionais, que medem o equilíbrio entre serviço, custo e caixa; e indicadores financeiros, que mostram o resultado para quem financia a empresa. A sessão acrescenta uma linha: quem financia a cadeia. Escolha quatro indicadores.</p>'),opt,
+  el('div',{class:'row'},el('span',{class:'note'},`${n} de 4 escolhidos.`),chip(Q.ok?'Confirmada':'Confirmar painel',Q.ok,()=>{if(n===4){Q.ok=true;rr()}},Q.ok||n!==4)));
+ let c=null,rec=null;
+ if(Q.ok){const sel=IND.filter(i=>Q.ind[i.k]),cams=new Set(sel.filter(i=>i.bom).map(i=>i.cam)),ruins=sel.filter(i=>!i.bom),ps=[];
+  ps.push(`O painel do grupo cobre ${cams.size} das quatro frentes: ${['Processo','Operacional','Financeira','Quem financia'].map(x=>x+(cams.has(x)?' (sim)':' (não)')).join(', ')}. Um bom painel tem ao menos um indicador de cada camada e a linha de quem financia a cadeia, de modo que um movimento no resultado financeiro possa ser rastreado até a sua causa operacional.`);
+  ruins.forEach(i=>ps.push(`<b>${i.n}</b> é um indicador conhecido, mas pouco útil aqui: ${i.por}.`));
+  if(!cams.has('Quem financia'))ps.push('Falta a linha que esta sessão acrescenta. Sem o prazo de pagamento comparado ao setor, ou a parcela das contas a pagar que depende de bancos, o conselho da Vitta veria o capital de giro melhorar e não saberia por quê. Foi o que faltou aos conselhos das empresas que Helena tinha em mente.');
+  if(!ruins.length&&cams.size===4)ps.push('O painel liga as quatro frentes. Com ele, o conselho distingue uma melhora de capital de giro que vem da operação de uma que vem do financiamento, e vê a exposição dos fornecedores críticos ao lado do prazo que a empresa lhes impõe.');
+  c=com(...ps);
+  // recomendação
+  const G=D.g,nm={g1:'grandes',g2:'médios',g3:'pequenos e especializados'};
+  const partes=GR.map(g=>{const x=G[g.k];return `${nm[g.k]}: ${x.p} dias${x.pr?', com o programa do banco':', sem o banco'}`}).join('; ');
+  const trat=['registrando o programa como fornecedores','divulgando o programa e tratando como dívida a parcela que excede o prazo usual','limitando os prazos com banco ao usual do setor'][S.q4.d??1];
+  const rasc=()=>`Recomendamos financiar a linha premium masculina da seguinte forma. Prazos de pagamento aos fornecedores: ${partes}. ${S.q3.c?'Incluímos o programa de Renata para encurtar a fila, que libera R$ 45 milhões em dezoito meses sem passar pelo balanço de ninguém. ':''}O desenho libera ${mi(D.lib+D.c,1).replace(' mi',' milhões')} de capital${D.dcPos>0.05?` e impõe aos fornecedores ${mi(D.dcPos,1).replace(' mi',' milhões')} por ano de custo adicional`:' sem custo adicional para nenhum grupo de fornecedores'}. ${divNova>0.05?`Os ${mi(divNova,1).replace(' mi',' milhões')} restantes serão dívida nova. `:''}A relação entre dívida e EBITDA ficará em ${fmt(dA/EBITDA,2)} vezes, ou ${fmt(dBhi/EBITDA,2)} na leitura mais conservadora do programa, para um limite de 2,5. Propomos seguir ${trat}. O conselho receberá todo trimestre: ${sel.map(i=>i.n.startsWith('EBITDA')?i.n:i.n[0].toLowerCase()+i.n.slice(1)).join('; ')}.`;
+  if(!Q.fechado&&(!Q.frase||Q.frase===Q.auto)){Q.frase=rasc();Q.auto=Q.frase;save()}
+  const ta=el('textarea',{oninput:e=>{Q.frase=e.target.value;save()}});ta.value=Q.frase;ta.disabled=Q.fechado;ta.style.minHeight='260px';
+  rec=el('div',{class:'card'},el('h3',{},'Passo B · A recomendação que Marcos, Renata e Helena assinam'),
+   txt('<p style="margin:0 0 10px">O rascunho abaixo foi montado com as escolhas do grupo nos Quadros 3, 4 e 5. Editem à vontade: é o texto que o grupo apresenta em plenária.</p>'),ta,
+   el('div',{class:'row'},Q.fechado?el('span',{class:'note'},'Recomendação concluída.'):chip('Refazer o rascunho',false,()=>{Q.frase=rasc();Q.auto=Q.frase;rr()},false),chip(Q.fechado?'Concluída':'Concluir',Q.fechado,()=>{Q.fechado=true;rr()},Q.fechado)));
+ }
+ let fim=null;
+ if(Q.fechado){const val=D.lib-r*D.dcPos*REGUA+D.valC;
+  fim=el('div',{class:'card',style:'border-left:5px solid var(--amb)'},el('h3',{},'Resumo para a plenária · '+(S.grupo||'Grupo')),
+   el('div',{class:'kpis'},kpi('Capital liberado',mi(D.lib+D.c,1),'amb'),kpi('Fornecedores: custo a mais/ano',mi(D.dcPos,1),D.dcPos>0.05?'red':'grn'),kpi('Valor pela régua',sg(val,0),val>=0?'grn':'red'),kpi('Dívida ÷ EBITDA',fmt(dA/EBITDA,2)+'× a '+fmt(dBhi/EBITDA,2)+'×',dBhi/EBITDA>COV?'red':'grn')),
+   el('table',{},tr(th('Grupo de fornecedores'),th('Prazo','n'),th('Banco','n'),th('Ganho (+) ou perda (−) por ano','n')),...GR.map(g=>{const x=D.g[g.k];return tr(td(g.n),td(x.p+' dias','n'),td(x.pr?'Sim':'Não','n'),td(el('b',{style:'color:'+(x.d<=0.005?'var(--grn)':'var(--red)')},Math.abs(x.d)<0.005?'0,0':sg(-x.d,1)),'n'))})),
+   txt('<p style="margin:12px 0 0">Na plenária, o grupo apresenta esta tela e a recomendação, e responde à pergunta de Cláudia: como ter a linha masculina, os fornecedores de pé e um balanço que dispense explicações.</p>'));
+ }
+ return el('div',{},eq(['fc','i','div'],'Quadro 5: o painel mantém sob observação as premissas do fluxo de caixa, do capital e da dívida.'),
+  el('h2',{},'Quadro 5. O painel do conselho e a recomendação'),el('p',{class:'lead'},'Helena pediu que a proposta viesse acompanhada do que o conselho passaria a acompanhar. Este quadro monta o painel e, com as decisões dos quadros anteriores, a recomendação do comitê.'),
+  passoA,c,rec,fim,nav(false,true))}});
+
+// ===================== NAVEGAÇÃO =====================
+function go(){save();window.scrollTo(0,0);rr()}
+function rr(){save();
+ const st=document.getElementById('steps');st.innerHTML='';
+ T.forEach((t,i)=>st.append(el('span',{class:i===S.step?'cur':(i<S.step?'done':''),onclick:()=>{if(i<=S.step||i===0||S.livre){S.step=i;go()}}},t.t)));
+ const m=document.getElementById('main');m.innerHTML='';m.append(T[Math.max(0,Math.min(S.step,T.length-1))].r());
+ const c=document.getElementById('livre');if(c)c.checked=!!S.livre;
+}
+document.getElementById('livre').onchange=e=>{S.livre=e.target.checked;rr()};
+document.getElementById('zerar').onclick=()=>{if(document.getElementById('zerar').dataset.c==='1'){S=JSON.parse(JSON.stringify(DEF));go()}else{document.getElementById('zerar').dataset.c='1';document.getElementById('zerar').textContent='Clique de novo para confirmar'}};
+rr();
+</script>
+</body>
+</html>
